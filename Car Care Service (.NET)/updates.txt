@@ -1,0 +1,22 @@
+﻿ 	
+UI:
+	this.BackColor = Color.FromArgb(29, 29, 66);
+v1:
+
+     مسلسل اسم العميل رقم التليفون رقم العربية 
+	  ١- محمد صلاح 010000 س ع ص ٧٢١٣
+	 كل حاجة والسعر موجود اهو
+	 ويبقي في اوبشن ان اضيف خانة جديدة باسم وسعر جديد
+	* وطباعة ريسيت
+
+
+	* also add services  for monitary estimate (checkboxes for single input service) //default x1
+
+
+	colors button
+
+
+
+
+
+
