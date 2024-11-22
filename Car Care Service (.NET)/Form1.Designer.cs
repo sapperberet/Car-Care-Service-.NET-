@@ -334,6 +334,7 @@ namespace Car_Care_Service__.NET_
             this.label7.Size = new System.Drawing.Size(93, 29);
             this.label7.TabIndex = 19;
             this.label7.Text = "الخصومات";
+            this.label7.Click += new System.EventHandler(this.label7_Click_1);
             // 
             // textBox3
             // 

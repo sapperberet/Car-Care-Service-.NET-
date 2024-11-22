@@ -390,6 +390,11 @@ namespace Car_Care_Service__.NET_
         {
 
         }
+
+        private void label7_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
