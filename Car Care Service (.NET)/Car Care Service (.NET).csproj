@@ -124,6 +124,11 @@
       <DependentUpon>RoundButton.cs</DependentUpon>
     </Compile>
     <Compile Include="RoundControl.Designer.cs" />
+    <Compile Include="RoundControl1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RoundControl.resx</DependentUpon>
+    </Compile>
     <Compile Include="RoundControls.cs" />
     <Compile Include="SaveExcel.cs" />
     <EmbeddedResource Include="CustomControl1.resx">
@@ -151,7 +156,10 @@
     <EmbeddedResource Include="RoundButton.resx">
       <DependentUpon>RoundButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RoundControl.resx" />
+    <EmbeddedResource Include="RoundControl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RoundControl1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Car Wash Service.csproj" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

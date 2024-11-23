@@ -13,6 +13,9 @@ using System.Security.AccessControl;
 
 using System.Data.SqlClient;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Control = System.Windows.Forms.Control;
+using System.Text.RegularExpressions;
 
 
 
@@ -39,6 +42,9 @@ namespace Car_Care_Service__.NET_
             button2.FlatStyle = FlatStyle.Flat;
             button2.FlatAppearance.BorderSize = 0;
             //button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+            textBox2.MaxLength = 11;
+            txtCarID.MaxLength = 13;
+
 
         }
 
@@ -313,10 +319,7 @@ namespace Car_Care_Service__.NET_
         {
 
         }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            // Example custom SQL query
+        
             string query = "" +@"                SELECT 
                     t.TransactionID AS ID,
                     c.Name AS CustomerName,
@@ -345,6 +348,9 @@ namespace Car_Care_Service__.NET_
                 
                 ;
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // Example custom SQL query
             // Load the data when the form loads
             LoadData(query);
         }
@@ -353,35 +359,308 @@ namespace Car_Care_Service__.NET_
         {
             try
             {
-                // Create a connection
+                
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    // Open the connection
+                    
                     connection.Open();
 
-                    // Create a SqlDataAdapter with the custom query
+                    
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(customQuery, connection);
 
-                    // Fill a DataTable
+                    
                     DataTable dataTable = new DataTable();
                     dataAdapter.Fill(dataTable);
 
-                    // Bind the DataTable to the DataGridView
+                    
                     dataGridView1.DataSource = dataTable;
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions
+                
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    displayData.LoadData(dataGridView1);
-        //}
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string insertQuery = @"INSERT INTO Transactions (CustomerID, CarID, CurrentDate, Total, COM, SaleID, Notes) 
+                                   VALUES (@CustomerID, @CarID, @CurrentDate, @Total, @COM, @SaleID, @Notes)";
+                    using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                    {
+                        // Example parameters (replace with your input controls)
+                        command.Parameters.AddWithValue("@CustomerID", txtCustomerID.Text);
+                        command.Parameters.AddWithValue("@CarID", txtCarID.Text);
+                        command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        command.Parameters.AddWithValue("@Total", txtTotal.Text);
+                        command.Parameters.AddWithValue("@COM", txtVehicleType.Text);
+                        command.Parameters.AddWithValue("@SaleID", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadData(query); // Reload data
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string updateQuery = @"UPDATE Transactions 
+                                   SET Total = @Total, Notes = @Notes 
+                                   WHERE TransactionID = @TransactionID";
+                    using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                    {
+                        // Example parameters
+                        command.Parameters.AddWithValue("@Total", txtTotal.Text);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadData(query); // Reload data
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this record?",
+                                                      "Confirm Deletion",
+                                                      MessageBoxButtons.YesNo,
+                                                      MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        string deleteQuery = "DELETE FROM Transactions WHERE TransactionID = @TransactionID";
+                        using (SqlCommand command = new SqlCommand(deleteQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show("Record deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadData(query); // Reload data
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void label6_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+ 
+
+        private void label7_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_3(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //int number = 0;
+        //int letter = 0;
+        private int letterCount = 0;
+        private int numberCount = 0;
+
+        private void txtCarID_TextChanged(object sender, EventArgs e)
+        {
+            //Control ctrl = (sender as Control);
+
+            //string s =ctrl.Text;
+            //ctrl.Text = "q"; 
+            //foreach (char c in s) {
+            //    if (number < 4 && (c >= '0' && c <= '9'))
+            //    {
+            //        ctrl.Text += "a";
+            //        number++;
+            //    }
+            //    else if (letter < 3 && (c >= '\u0600' && c <= '\u06FF'))
+            //    {
+            //        //ctrl.Text += c;
+            //        letter++;
+            //    }
+
+            //}
+            string input = txtCarID.Text;
+
+            // Validate input
+            if (IsValidInput(input))
+            {
+                txtCarID.BackColor = System.Drawing.Color.LightGreen; // Change background to indicate success
+            }
+            else
+            {
+                txtCarID.BackColor = System.Drawing.Color.LightCoral; // Change background to indicate failure
+            }
+
+
+
+            //string value = string.Concat(ctrl
+            //  .Text
+            //  .Where(c => c >= '0' && c <= '9'));
+
+            //if (value != ctrl.Text)
+            //    ctrl.Text = value;
+        }
+        private bool IsValidInput(string input)
+        {
+            // Regular expression to check for at least 3 letters and 4 numbers
+            string pattern = @"^(?=(.*[^A-Za-z0-9!-/:-@[-`{-~]){3,})(?=(.*\d){4,}).+$";
+            return Regex.IsMatch(input, pattern);
+        }
+
+
+
+        private void txtTotal_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged_1(object sender, EventArgs e)
+        {
+            Control ctrl = (sender as Control);
+
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => c >= '0' && c <= '9'));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+        }
+
+        private void txtCustomerID_TextChanged(object sender, EventArgs e)
+        {
+            //var textboxSender = (TextBox)sender;
+            //var cursorPosition = textboxSender.SelectionStart;
+            //textboxSender.Text = Regex.Replace(textboxSender.Text, @"/[^A-Za-z0-9!-/:-@[-`{-~]/g", "");
+            //textboxSender.SelectionStart = cursorPosition;
+            Control ctrl = (sender as Control);
+
+            //string value = string.Concat(ctrl
+            //  .Text
+            //  .Where(c => c >= '\u0600' && c <= '\u06FF' || c >= '\u0750' && c <= '\u077F' || c==' '));
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => Char.IsLetter(c) ));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+
+        }
+
+        private void elipseControl1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+  
+
+        private void txtVehicleType_Leave(object sender, EventArgs e)
+        {
+            // Get the text box reference
+            TextBox txtBox = sender as TextBox;
+
+            // Ensure the control is a valid TextBox
+            if (txtBox != null)
+            {
+                // Get the current text in the TextBox
+                string inputText = txtBox.Text.Trim();
+
+                // Check if the text is either "سيارة" or "سكوتر"
+                if (inputText == "سيارة" || inputText == "سكوتر")
+                {
+                    // Input is valid; no action needed
+                }
+                else
+                {
+                    // Clear the invalid input
+                    txtBox.Text = string.Empty;
+
+                    // Notify the user about the issue
+                    MessageBox.Show("الرجاء إدخال قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void txtVehicleType_TextChanged(object sender, EventArgs e)
+        {
+            // Reference the ComboBox
+            ComboBox comboBox = sender as ComboBox;
+
+            if (comboBox != null)
+            {
+                string inputText = comboBox.Text.Trim(); // Get the current text
+
+                // Check if the text is either "سيارة" or "سكوتر"
+                if (inputText == "سيارة" || inputText == "سكوتر")
+                {
+                    // Valid input, do nothing
+                }
+                else
+                {
+                    // Clear the invalid input
+                    comboBox.Text = string.Empty;
+
+                    // Notify the user about the error
+                    MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void txtTotal_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
@@ -390,11 +669,125 @@ namespace Car_Care_Service__.NET_
         {
 
         }
-
-        private void label7_Click_1(object sender, EventArgs e)
+        private void txtSaleID_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ComboBox ctrl = (sender as ComboBox);
 
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => c >= '0' && c <= '9'));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
         }
+
+        private void txtSaleID_Leave(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+
+            if (comboBox != null)
+            {
+                string inputText = comboBox.Text.Trim();
+
+                // Check if the input is a valid integer
+                if (int.TryParse(inputText, out int value))
+                {
+                    // Ensure the value is within the allowed range
+                    if (value >= 0 && value <= 100)
+                    {
+                        // Valid input, do nothing
+                        return;
+                    }
+                }
+
+                // If invalid, clear the text and notify the user
+                comboBox.Text = "0" ;
+                MessageBox.Show("الرجاء إدخال قيمة رقمية بين 0 و 100 فقط", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void txtCarID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char keyChar = e.KeyChar;
+
+            // Allow backspace (handled in KeyDown) and new lines
+            if (keyChar == '\b')
+            {
+                return;
+            }
+
+            if (char.IsLetter(keyChar))
+            {
+                // Allow letters if we haven't reached 3 yet
+                if (letterCount < 3)
+                {
+                    letterCount++;
+                }
+                else
+                {
+                    e.Handled = true; // Reject input
+                }
+            }
+            else if (char.IsDigit(keyChar))
+            {
+                // Allow numbers if we haven't reached 4 yet
+                if (numberCount < 4)
+                {
+                    numberCount++;
+                }
+                else
+                {
+                    e.Handled = true; // Reject input
+                }
+            }
+            else
+            {
+                // Reject any non-alphanumeric character
+                e.Handled = true;
+            }
+        }
+
+        private void txtCarID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                int cursorPosition = txtCarID.SelectionStart;
+
+                // If the cursor is within the text, find the character to be deleted
+                if (cursorPosition > 0 && cursorPosition <= txtCarID.Text.Length)
+                {
+                    char deletedChar;
+
+                    // Handle Backspace (deletes the character before the cursor)
+                    if (e.KeyCode == Keys.Back)
+                    {
+                        deletedChar = txtCarID.Text[cursorPosition - 1];
+                    }
+                    // Handle Delete (deletes the character at the cursor position)
+                    else
+                    {
+                        if (cursorPosition == txtCarID.Text.Length)
+                            return; // No character to delete
+                        deletedChar = txtCarID.Text[cursorPosition];
+                    }
+
+                    // Adjust the counts based on the deleted character
+                    if (char.IsLetter(deletedChar))
+                    {
+                        letterCount--;
+                    }
+                    else if (char.IsDigit(deletedChar))
+                    {
+                        numberCount--;
+                    }
+                }
+            }
+        }
+        //private void HandleBackspace()
+        //{
+
+        //}
+
     }
 }
 
