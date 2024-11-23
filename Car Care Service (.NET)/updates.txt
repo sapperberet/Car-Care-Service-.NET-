@@ -14,7 +14,13 @@ v1:
 
 
 	colors button
+	
+	Simplify the Data tabel :
+		make labels for results visible or not !!! 
 
+	use checkboxlist for multi_value where a label calculates the summation
+	
+	search if no input (SELECT * FROM @TABLE@)
 
 
 

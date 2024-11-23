@@ -16,6 +16,10 @@ using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Control = System.Windows.Forms.Control;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Vml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 
 
@@ -25,10 +29,28 @@ namespace Car_Care_Service__.NET_
 {
     public partial class Form1 : Form
     {
-        //DisplayData displayData = new DisplayData();
+        
         BindingSource TransactionsBS = new BindingSource();
 
         Bitmap memoryImage;
+        private readonly Dictionary<string, int> operationPrices = new Dictionary<string, int>
+        {
+            { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 40 },
+
+
+
+
+
+
+            { "غسيل داخلي وخارجي وموتور كيماوي", 30 },
+            { "غسیل داخلي وخارجي", 50 },
+            { "غسیل موتور كيماوي", 25 },
+            { "غسيل خارجي", 100 },
+            { "غسيل داخلي", 20 },
+            { "اسکوتر", 20 }
+        };
+
+        private int totalPrice = 0;
 
         public Form1()
         {
@@ -45,6 +67,13 @@ namespace Car_Care_Service__.NET_
             textBox2.MaxLength = 11;
             txtCarID.MaxLength = 13;
 
+            foreach (var operation in operationPrices.Keys)
+            {
+                checkedListBox1.Items.Add(operation);
+            }
+
+            // Subscribe to ItemCheck event
+            checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 
         }
 
@@ -320,32 +349,33 @@ namespace Car_Care_Service__.NET_
 
         }
         
-            string query = "" +@"                SELECT 
-                    t.TransactionID AS ID,
-                    c.Name AS CustomerName,
-                    c.Telephone AS Phone,
-                    t.CarID,
-                    t.CurrentDate,
-                    t.Total AS Total,
-                    t.COM AS VehicleType,
-                    STRING_AGG(s.ServiceName + ' (' + CAST(s.Price AS NVARCHAR) + ' LE)', ', ') AS Services,
-                    sa.SaleDescription AS Deal,
-                    sa.DiscountPercentage AS Discount,
-                    t.Notes
-                FROM 
-                    Transactions t
-                JOIN 
-                    Customers c ON t.CustomerID = c.CustomerID
-                JOIN 
-                    TransactionServices ts ON t.TransactionID = ts.TransactionID
-                JOIN 
-                    Services s ON ts.ServiceID = s.ServiceID
-                JOIN 
-                    Sales sa ON t.SaleID = sa.SaleID
-                GROUP BY 
-                    t.TransactionID, c.Name, c.Telephone, t.CarID, t.CurrentDate, t.Total, t.COM, sa.SaleDescription, sa.DiscountPercentage, t.Notes;
-            "
-                
+            //string query = "" +@"                SELECT 
+            //        t.TransactionID AS ID,
+            //        c.Name AS CustomerName,
+            //        c.Telephone AS Phone,
+            //        t.CarID,
+            //        t.CurrentDate,
+            //        t.Total AS Total,
+            //        t.COM AS VehicleType,
+            //        STRING_AGG(s.ServiceName + ' (' + CAST(s.Price AS NVARCHAR) + ' LE)', ', ') AS Services,
+            //        sa.SaleDescription AS Deal,
+            //        sa.DiscountPercentage AS Discount,
+            //        t.Notes
+            //    FROM 
+            //        Transactions t
+            //    JOIN 
+            //        Customers c ON t.CustomerID = c.CustomerID
+            //    JOIN 
+            //        TransactionServices ts ON t.TransactionID = ts.TransactionID
+            //    JOIN 
+            //        Services s ON ts.ServiceID = s.ServiceID
+            //    JOIN 
+            //        Sales sa ON t.SaleID = sa.SaleID
+            //    GROUP BY 
+            //        t.TransactionID, c.Name, c.Telephone, t.CarID, t.CurrentDate, t.Total, t.COM, sa.SaleDescription, sa.DiscountPercentage, t.Notes;
+            //"
+            string query = "SELECT * FROM CarWashServices"
+
                 ;
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -388,18 +418,25 @@ namespace Car_Care_Service__.NET_
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string insertQuery = @"INSERT INTO Transactions (CustomerID, CarID, CurrentDate, Total, COM, SaleID, Notes) 
-                                   VALUES (@CustomerID, @CarID, @CurrentDate, @Total, @COM, @SaleID, @Notes)";
-                    using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                    string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Discount, Total, Notes) " +
+                       "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Discount, @Total, @Notes)";
+                    
                     {
                         // Example parameters (replace with your input controls)
-                        command.Parameters.AddWithValue("@CustomerID", txtCustomerID.Text);
-                        command.Parameters.AddWithValue("@CarID", txtCarID.Text);
+                        SqlCommand command = new SqlCommand(insertQuery, connection);
+                        
+                        
+
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2);
+                        command.Parameters.AddWithValue("@CarID", txtCarID);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType);
                         command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@Total", txtTotal.Text);
-                        command.Parameters.AddWithValue("@COM", txtVehicleType.Text);
-                        command.Parameters.AddWithValue("@SaleID", txtSaleID.Text);
-                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        command.Parameters.AddWithValue("@Services", checkedListBox1);
+                        command.Parameters.AddWithValue("@Discount", txtSaleID);
+                        command.Parameters.AddWithValue("@Total", label8);
+                        command.Parameters.AddWithValue("@Notes", txtNotes);
+
 
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -419,15 +456,27 @@ namespace Car_Care_Service__.NET_
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string updateQuery = @"UPDATE Transactions 
-                                   SET Total = @Total, Notes = @Notes 
-                                   WHERE TransactionID = @TransactionID";
+                    //string updateQuery = @"UPDATE Transactions 
+                    //               SET Total = @Total, Notes = @Notes 
+                    //               WHERE TransactionID = @TransactionID";
+                    string updateQuery = "UPDATE CarWashServices SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
+                       "VehicleType = @VehicleType, Services = @Services, Discount = @Discount, Total = @Total, Notes = @Notes " +
+                       "WHERE ID = @ID";
+
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
                     {
                         // Example parameters
-                        command.Parameters.AddWithValue("@Total", txtTotal.Text);
-                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
-                        command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                        //command.Parameters.AddWithValue("@Total", label8.Text);
+                        //command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2);
+                        command.Parameters.AddWithValue("@CarID", txtCarID);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType);
+                        command.Parameters.AddWithValue("@Services", checkedListBox1);
+                        command.Parameters.AddWithValue("@Discount", txtSaleID);
+                        command.Parameters.AddWithValue("@Total", label8);
+                        command.Parameters.AddWithValue("@Notes", txtNotes);
 
                         connection.Open();
                         command.ExecuteNonQuery();
@@ -453,10 +502,10 @@ namespace Car_Care_Service__.NET_
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string deleteQuery = "DELETE FROM Transactions WHERE TransactionID = @TransactionID";
+                        string deleteQuery = "DELETE FROM CarWashServices WHERE ID = @ID";
                         using (SqlCommand command = new SqlCommand(deleteQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                            command.Parameters.AddWithValue("@ID", ID.Text);
 
                             connection.Open();
                             command.ExecuteNonQuery();
@@ -611,7 +660,7 @@ namespace Car_Care_Service__.NET_
         private void txtVehicleType_Leave(object sender, EventArgs e)
         {
             // Get the text box reference
-            TextBox txtBox = sender as TextBox;
+            System.Windows.Forms.TextBox txtBox = sender as System.Windows.Forms.TextBox;
 
             // Ensure the control is a valid TextBox
             if (txtBox != null)
@@ -783,12 +832,52 @@ namespace Car_Care_Service__.NET_
                 }
             }
         }
+
+        private void label4_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            string operation = checkedListBox1.Items[e.Index].ToString();
+
+            // Adjust the total price based on the check state
+            if (e.NewValue == CheckState.Checked)
+            {
+                totalPrice += operationPrices[operation];
+            }
+            else if (e.NewValue == CheckState.Unchecked)
+            {
+                totalPrice -= operationPrices[operation];
+            }
+
+            // Update the label
+            label8.Text = $"{totalPrice}";
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkedListBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+    }
         //private void HandleBackspace()
         //{
 
         //}
 
-    }
+    
 }
 
 
