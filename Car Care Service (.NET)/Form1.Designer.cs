@@ -233,6 +233,7 @@ namespace Car_Care_Service__.NET_
             this.textBox5.TabIndex = 26;
             this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged_2);
+            this.textBox5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox5_KeyDown);
             // 
             // dataGridView1
             // 
@@ -429,6 +430,7 @@ namespace Car_Care_Service__.NET_
             this.button7.Size = new System.Drawing.Size(49, 48);
             this.button7.TabIndex = 33;
             this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // label8
             // 

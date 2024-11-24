@@ -83,8 +83,69 @@ namespace Car_Care_Service__.NET_
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            LoadCustomers();
+            InitializeDatabaseConnection();
         }
+        private void InitializeDatabaseConnection()
+        {
+            string databasePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    MessageBox.Show("Database connected successfully!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
+
+        private void LoadCustomers(string searchQuery = "")
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query;
+
+                    
+                    if (string.IsNullOrWhiteSpace(searchQuery))
+                    {
+                        query = "SELECT * FROM CarWashServices";
+                    }
+                    else
+                    {
+                        query = "SELECT * FROM CarWashServices WHERE CustomerName LIKE @SearchQuery";
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrWhiteSpace(searchQuery))
+                        {
+                            cmd.Parameters.AddWithValue("@SearchQuery", $"%{searchQuery}%");
+                        }
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            System.Data.DataTable dataTable = new System.Data.DataTable();
+                            adapter.Fill(dataTable);
+                            dataGridView1.DataSource = dataTable;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
         //1280; 720
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -350,7 +411,23 @@ namespace Car_Care_Service__.NET_
 
         private void textBox5_TextChanged_2(object sender, EventArgs e)
         {
+            //var textboxSender = (TextBox)sender;
+            //var cursorPosition = textboxSender.SelectionStart;
+            //textboxSender.Text = Regex.Replace(textboxSender.Text, @"/[^A-Za-z0-9!-/:-@[-`{-~]/g", "");
+            //textboxSender.SelectionStart = cursorPosition;
+            Control ctrl = (sender as Control);
 
+            //string value = string.Concat(ctrl
+            //  .Text
+            //  .Where(c => c >= '\u0600' && c <= '\u06FF' || c >= '\u0750' && c <= '\u077F' || c==' '));
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => Char.IsLetter(c)));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            string searchQuery = textBox5.Text.Trim();
+            LoadCustomers(searchQuery);
         }
         
             //string query = "" +@"                SELECT 
@@ -388,7 +465,10 @@ namespace Car_Care_Service__.NET_
             // Load the data when the form loads
             LoadData(query);
         }
-        private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"J:\\Visual Studio\\Car Care Service (.NET)\\Car Care Service (.NET)\\Database.mdf\";Integrated Security=True";
+        string databasePath => System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
+        string connectionString => $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+
+        //private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"J:\\Visual Studio\\Car Care Service (.NET)\\Car Care Service (.NET)\\Database.mdf\";Integrated Security=True";
         //string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CarWashServices"].ConnectionString;
         private void LoadData(string customQuery)
         {
@@ -1127,6 +1207,18 @@ namespace Car_Care_Service__.NET_
                 // Reject any non-alphanumeric character
                 e.Handled = true;
             }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            string searchQuery = textBox5.Text.Trim();
+            LoadCustomers(searchQuery);
+
+        }
+
+        private void textBox5_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
         //private void HandleBackspace()
