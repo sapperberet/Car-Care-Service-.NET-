@@ -62,8 +62,8 @@ namespace Car_Care_Service__.NET_
             this.button7 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             this.ID = new System.Windows.Forms.TextBox();
+            this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -215,7 +215,7 @@ namespace Car_Care_Service__.NET_
             this.button3.Location = new System.Drawing.Point(26, 549);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(281, 52);
-            this.button3.TabIndex = 4;
+            this.button3.TabIndex = 9;
             this.button3.Text = "اضافة";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.btnCreate_Click);
@@ -255,7 +255,7 @@ namespace Car_Care_Service__.NET_
             this.txtNotes.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtNotes.Size = new System.Drawing.Size(170, 67);
-            this.txtNotes.TabIndex = 12;
+            this.txtNotes.TabIndex = 8;
             // 
             // label4
             // 
@@ -310,7 +310,7 @@ namespace Car_Care_Service__.NET_
             this.txtVehicleType.Name = "txtVehicleType";
             this.txtVehicleType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtVehicleType.Size = new System.Drawing.Size(134, 28);
-            this.txtVehicleType.TabIndex = 25;
+            this.txtVehicleType.TabIndex = 6;
             this.txtVehicleType.TextChanged += new System.EventHandler(this.txtVehicleType_TextChanged);
             this.txtVehicleType.Leave += new System.EventHandler(this.txtVehicleType_Leave);
             // 
@@ -338,9 +338,10 @@ namespace Car_Care_Service__.NET_
             this.txtSaleID.Name = "txtSaleID";
             this.txtSaleID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtSaleID.Size = new System.Drawing.Size(130, 28);
-            this.txtSaleID.TabIndex = 20;
+            this.txtSaleID.TabIndex = 5;
             this.txtSaleID.Text = "0";
             this.txtSaleID.SelectedIndexChanged += new System.EventHandler(this.txtSaleID_SelectedIndexChanged);
+            this.txtSaleID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSaleID_KeyPress);
             this.txtSaleID.Leave += new System.EventHandler(this.txtSaleID_Leave);
             // 
             // label7
@@ -360,10 +361,11 @@ namespace Car_Care_Service__.NET_
             // 
             this.txtCarID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
             this.txtCarID.Location = new System.Drawing.Point(26, 222);
+            this.txtCarID.MaxLength = 13;
             this.txtCarID.Name = "txtCarID";
             this.txtCarID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtCarID.Size = new System.Drawing.Size(281, 32);
-            this.txtCarID.TabIndex = 10;
+            this.txtCarID.TabIndex = 4;
             this.txtCarID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtCarID.TextChanged += new System.EventHandler(this.txtCarID_TextChanged);
             this.txtCarID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCarID_KeyDown);
@@ -376,7 +378,7 @@ namespace Car_Care_Service__.NET_
             this.txtCustomerID.Name = "txtCustomerID";
             this.txtCustomerID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtCustomerID.Size = new System.Drawing.Size(281, 32);
-            this.txtCustomerID.TabIndex = 6;
+            this.txtCustomerID.TabIndex = 2;
             this.txtCustomerID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtCustomerID.TextChanged += new System.EventHandler(this.txtCustomerID_TextChanged);
             // 
@@ -387,7 +389,7 @@ namespace Car_Care_Service__.NET_
             this.textBox2.Name = "textBox2";
             this.textBox2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.textBox2.Size = new System.Drawing.Size(281, 32);
-            this.textBox2.TabIndex = 9;
+            this.textBox2.TabIndex = 3;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged_1);
             // 
@@ -447,21 +449,20 @@ namespace Car_Care_Service__.NET_
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.Font = new System.Drawing.Font("Noto Serif Hebrew", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "غسيل كامل للسيارة و كيماوي موتور ، صالون",
-            "غسيل داخلي وخارجي وموتور كيماوي",
-            "غسیل داخلي وخارجي",
-            "غسیل موتور كيماوي",
-            "غسيل خارجي",
-            "غسيل داخلي",
-            "اسکوتر"});
             this.checkedListBox1.Location = new System.Drawing.Point(26, 344);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkedListBox1.Size = new System.Drawing.Size(281, 84);
-            this.checkedListBox1.TabIndex = 37;
+            this.checkedListBox1.TabIndex = 7;
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged_1);
+            // 
+            // ID
+            // 
+            this.ID.Location = new System.Drawing.Point(0, 55);
+            this.ID.Name = "ID";
+            this.ID.Size = new System.Drawing.Size(26, 32);
+            this.ID.TabIndex = 1;
             // 
             // elipseControl1
             // 
@@ -475,13 +476,6 @@ namespace Car_Care_Service__.NET_
             this.elipseControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.elipseControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.elipseControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
-            // 
-            // ID
-            // 
-            this.ID.Location = new System.Drawing.Point(0, 55);
-            this.ID.Name = "ID";
-            this.ID.Size = new System.Drawing.Size(26, 32);
-            this.ID.TabIndex = 3;
             // 
             // Form1
             // 
