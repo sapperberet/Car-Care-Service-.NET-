@@ -37,19 +37,20 @@ namespace Car_Care_Service__.NET_
         //Bitmap memoryImage;
         private readonly Dictionary<string, int> operationPrices = new Dictionary<string, int>
         {
-            { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450 },
+            { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
+            { "غسيل سقف كيماوي", 200/2 },
 
 
 
 
 
 
-            { " غسيل داخلي وخارجي وموتور كيماوي", 170 },
-            { " غسیل داخلي وخارجي", 135 },
-            { " غسیل موتور كيماوي", 60 },
-            { " غسيل خارجي", 70 },
-            { " غسيل داخلي", 70 },
-            { " اسکوتر", 50 }
+            { " غسيل داخلي وخارجي وموتور كيماوي", 170 / 2 },
+            { " غسیل داخلي وخارجي", 135 /2 },
+            { " غسیل موتور كيماوي", 60 / 2 },
+            { " غسيل خارجي", 70 /2 },
+            { " غسيل داخلي", 70 / 2 },
+            { " اسکوتر", 50 / 2 }
         };
 
         private int totalPrice = 0;
@@ -606,8 +607,9 @@ namespace Car_Care_Service__.NET_
                             //command.Parameters.AddWithValue("@Total", label8.Text);
                             ;
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100))- decimal.Parse(Costs.Text);
-                            
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100)))- decimal.Parse(Costs.Text);
+                        
+
                             command.Parameters.AddWithValue("@Total", total);
                             command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                             txtCustomerID.Text = "";
@@ -674,7 +676,8 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@Services", cb);
                         command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text);
+                        
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -1251,7 +1254,9 @@ namespace Car_Care_Service__.NET_
 
             
             label8.Text = $"{totalPrice}";
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+           // decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text);
+            
             label14.Text = $"{fs}";
         }
 
@@ -1471,7 +1476,8 @@ namespace Car_Care_Service__.NET_
 
             if (value != ctrl.Text)
                 ctrl.Text = value;
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100))))  - decimal.Parse(Costs.Text);
             label14.Text = $"{fs}";
         }
 
@@ -1484,7 +1490,8 @@ namespace Car_Care_Service__.NET_
 
             if (value != ctrl.Text)
                 ctrl.Text = value;
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100))))  - decimal.Parse(Costs.Text);
             label14.Text = $"{fs}";
         }
     }
