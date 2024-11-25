@@ -189,6 +189,7 @@
     <Content Include="assets\Actions-document-save-icon.png" />
     <Content Include="assets\Actions-list-remove-icon.png" />
     <Content Include="assets\Actions-page-zoom-icon.png" />
+    <None Include="assets\IMG-20241125-WA0018.jpg" />
     <Content Include="assets\pngtree-vector-print-icon-png-image_3994913.jpg" />
     <Content Include="assets\print.ico" />
     <Content Include="assets\print.png" />

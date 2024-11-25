@@ -50,6 +50,7 @@ namespace Car_Care_Service__.NET_
             this.Date = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.button3 = new System.Windows.Forms.Button();
@@ -75,7 +76,7 @@ namespace Car_Care_Service__.NET_
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -83,12 +84,13 @@ namespace Car_Care_Service__.NET_
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label1.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             label1.Location = new System.Drawing.Point(112, 189);
@@ -101,7 +103,7 @@ namespace Car_Care_Service__.NET_
             // label2
             // 
             label2.AutoSize = true;
-            label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label2.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             label2.Location = new System.Drawing.Point(128, 118);
@@ -113,7 +115,7 @@ namespace Car_Care_Service__.NET_
             // label3
             // 
             label3.AutoSize = true;
-            label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label3.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             label3.Location = new System.Drawing.Point(128, 55);
@@ -125,13 +127,14 @@ namespace Car_Care_Service__.NET_
             // 
             // btnExportToExcel
             // 
-            this.btnExportToExcel.BackColor = System.Drawing.Color.Black;
+            this.btnExportToExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnExportToExcel.FlatAppearance.BorderSize = 4;
             this.btnExportToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportToExcel.Font = new System.Drawing.Font("Georgia", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExportToExcel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(85)))), ((int)(((byte)(70)))));
+            this.btnExportToExcel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.btnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("btnExportToExcel.Image")));
             this.btnExportToExcel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExportToExcel.Location = new System.Drawing.Point(1087, 0);
+            this.btnExportToExcel.Location = new System.Drawing.Point(1109, 3);
             this.btnExportToExcel.Margin = new System.Windows.Forms.Padding(0);
             this.btnExportToExcel.Name = "btnExportToExcel";
             this.btnExportToExcel.Size = new System.Drawing.Size(141, 61);
@@ -144,10 +147,10 @@ namespace Car_Care_Service__.NET_
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.Black;
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Georgia", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(85)))), ((int)(((byte)(70)))));
+            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button2.Location = new System.Drawing.Point(11, 0);
@@ -162,7 +165,7 @@ namespace Car_Care_Service__.NET_
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.Black;
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.panel2.Controls.Add(this.Costs);
             this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.label11);
@@ -229,7 +232,7 @@ namespace Car_Care_Service__.NET_
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Black;
+            this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.label9.Font = new System.Drawing.Font("MV Boli", 15F);
             this.label9.ForeColor = System.Drawing.Color.AliceBlue;
             this.label9.Location = new System.Drawing.Point(716, 32);
@@ -242,7 +245,7 @@ namespace Car_Care_Service__.NET_
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.Black;
+            this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.label10.Font = new System.Drawing.Font("MV Boli", 15F);
             this.label10.ForeColor = System.Drawing.Color.AliceBlue;
             this.label10.Location = new System.Drawing.Point(716, 3);
@@ -276,10 +279,10 @@ namespace Car_Care_Service__.NET_
             // 
             // button4
             // 
-            this.button4.BackColor = System.Drawing.Color.Black;
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Georgia", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.ForeColor = System.Drawing.Color.Black;
+            this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
             this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button4.Location = new System.Drawing.Point(1203, 0);
@@ -289,46 +292,61 @@ namespace Car_Care_Service__.NET_
             this.button4.TabIndex = 3;
             this.button4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button4.UseVisualStyleBackColor = false;
+            this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.textBox3);
             this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.button4);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1262, 55);
+            this.panel1.Size = new System.Drawing.Size(1258, 55);
             this.panel1.TabIndex = 7;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
             // 
+            // textBox3
+            // 
+            this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox3.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.textBox3.ForeColor = System.Drawing.Color.Lime;
+            this.textBox3.Location = new System.Drawing.Point(433, 7);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(237, 41);
+            this.textBox3.TabIndex = 5;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged_1);
+            // 
             // button5
             // 
-            this.button5.BackColor = System.Drawing.Color.Black;
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.ForeColor = System.Drawing.Color.Black;
+            this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.button5.Image = ((System.Drawing.Image)(resources.GetObject("button5.Image")));
             this.button5.Location = new System.Drawing.Point(1140, 7);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(60, 40);
             this.button5.TabIndex = 4;
             this.button5.UseVisualStyleBackColor = false;
+            this.button5.Visible = false;
             this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(191)))), ((int)(((byte)(184)))));
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(113)))));
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(150)))), ((int)(((byte)(20)))));
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(62)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
             this.button3.FlatAppearance.BorderSize = 4;
             this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(113)))));
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Sakkal Majalla", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(85)))), ((int)(((byte)(95)))));
+            this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.button3.Location = new System.Drawing.Point(26, 549);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(281, 52);
@@ -380,7 +398,7 @@ namespace Car_Care_Service__.NET_
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label4.Font = new System.Drawing.Font("Noto Kufi Arabic", 12F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(199, 485);
@@ -393,7 +411,7 @@ namespace Car_Care_Service__.NET_
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label5.Font = new System.Drawing.Font("Noto Kufi Arabic", 11F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.Black;
@@ -402,11 +420,12 @@ namespace Car_Care_Service__.NET_
             this.label5.Size = new System.Drawing.Size(117, 41);
             this.label5.TabIndex = 15;
             this.label5.Text = "نوع الخدمة";
+            this.label5.Click += new System.EventHandler(this.label5_Click_1);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label6.Font = new System.Drawing.Font("Noto Kufi Arabic", 10F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.Black;
             this.label6.Location = new System.Drawing.Point(40, 254);
@@ -468,7 +487,7 @@ namespace Car_Care_Service__.NET_
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label7.Font = new System.Drawing.Font("Noto Kufi Arabic", 10F, System.Drawing.FontStyle.Bold);
             this.label7.ForeColor = System.Drawing.Color.Black;
             this.label7.Location = new System.Drawing.Point(200, 254);
@@ -557,7 +576,7 @@ namespace Car_Care_Service__.NET_
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label8.Font = new System.Drawing.Font("MV Boli", 12F);
             this.label8.ForeColor = System.Drawing.Color.AliceBlue;
             this.label8.Location = new System.Drawing.Point(158, 438);
@@ -604,7 +623,7 @@ namespace Car_Care_Service__.NET_
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label14.Font = new System.Drawing.Font("MV Boli", 12F);
             this.label14.ForeColor = System.Drawing.Color.AliceBlue;
             this.label14.Location = new System.Drawing.Point(0, 438);
@@ -616,7 +635,7 @@ namespace Car_Care_Service__.NET_
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label13.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             this.label13.ForeColor = System.Drawing.Color.Black;
             this.label13.Location = new System.Drawing.Point(204, 436);
@@ -628,7 +647,7 @@ namespace Car_Care_Service__.NET_
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.label15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label15.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             this.label15.ForeColor = System.Drawing.Color.Black;
             this.label15.Location = new System.Drawing.Point(75, 436);
@@ -637,20 +656,18 @@ namespace Car_Care_Service__.NET_
             this.label15.TabIndex = 41;
             this.label15.Text = "الإجمالي";
             // 
-            // textBox3
+            // pictureBox1
             // 
-            this.textBox3.BackColor = System.Drawing.SystemColors.WindowText;
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox3.ForeColor = System.Drawing.Color.Purple;
-            this.textBox3.Location = new System.Drawing.Point(433, 14);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(237, 25);
-            this.textBox3.TabIndex = 5;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged_1);
+            this.pictureBox1.Location = new System.Drawing.Point(81, 14);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
             // 
             // elipseControl1
             // 
-            this.elipseControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.elipseControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.elipseControl1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.elipseControl1.Location = new System.Drawing.Point(0, 43);
             this.elipseControl1.Name = "elipseControl1";
             this.elipseControl1.Size = new System.Drawing.Size(1267, 758);
@@ -663,10 +680,10 @@ namespace Car_Care_Service__.NET_
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1262, 673);
+            this.ClientSize = new System.Drawing.Size(1258, 669);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
@@ -698,20 +715,19 @@ namespace Car_Care_Service__.NET_
             this.Controls.Add(this.elipseControl1);
             this.Font = new System.Drawing.Font("MV Boli", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1280, 720);
             this.Name = "Form1";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ON ROAD (Car Care)";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -762,6 +778,7 @@ namespace Car_Care_Service__.NET_
         private Label label13;
         private Label label15;
         private TextBox textBox3;
+        private PictureBox pictureBox1;
     }
 
 }

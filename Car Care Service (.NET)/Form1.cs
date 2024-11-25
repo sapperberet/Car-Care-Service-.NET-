@@ -1515,6 +1515,11 @@ namespace Car_Care_Service__.NET_
 
             }
         }
+
+        private void label5_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
         //private void HandleBackspace()
         //{
