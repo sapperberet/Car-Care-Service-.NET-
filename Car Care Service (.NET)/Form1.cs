@@ -37,9 +37,9 @@ namespace Car_Care_Service__.NET_
         //Bitmap memoryImage;
         private readonly Dictionary<string, int> operationPrices = new Dictionary<string, int>
         {
+            { "اشتراك شهري", 500/2 },
             { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
             { "غسيل سقف كيماوي", 200/2 },
-
 
 
 
