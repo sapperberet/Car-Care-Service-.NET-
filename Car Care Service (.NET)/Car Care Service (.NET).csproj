@@ -197,11 +197,11 @@
     <Content Include="Car Wash Service.csproj.user" />
     <Content Include="Car Wash Service.sln" />
     <Content Include="Database.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Database_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Database.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ElipseControl.bmp" />
     <Content Include="icon-car-icon-car-repair-icon-MUazAEQQ.jpg" />

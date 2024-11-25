@@ -34,7 +34,7 @@ namespace Car_Care_Service__.NET_
         
         BindingSource TransactionsBS = new BindingSource();
 
-        Bitmap memoryImage;
+        //Bitmap memoryImage;
         private readonly Dictionary<string, int> operationPrices = new Dictionary<string, int>
         {
             { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450 },
@@ -56,7 +56,9 @@ namespace Car_Care_Service__.NET_
 
         public Form1()
         {
+            //AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
             InitializeComponent();
+
             this.Load += MainForm_Load;
             //this.BackColor = Color.FromArgb(29, 29, 66);
             btnExportToExcel.TabStop = false;
@@ -76,20 +78,86 @@ namespace Car_Care_Service__.NET_
                 checkedListBox1.Items.Add(operation);
             }
 
-            // Subscribe to ItemCheck event
+            Costs.Text = "0";
             checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 
         }
+
+
+
+        private void btnDailyTotal_Click(object sender, EventArgs e)
+        {
+            string selectedDate = Date.Text;
+            if (!IsValidDate(Date.Text))
+            {
+                MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.", "wrong input format", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string query = "SELECT SUM(Total) - SUM(Costs) AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
+                    object result = cmd.ExecuteScalar();
+                    label9.Text = $"{result ?? 0} : الدخل اليومي";
+                }
+            }
+        }
+
+        private void btnMonthlyTotal_Click(object sender, EventArgs e)
+        {
+
+            // Validate date input
+            if (!IsValidDate(Date.Text))
+            {
+                MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.");
+                return;
+            }
+
+            string selectedDate = Date.Text; // e.g., "24/11/2024"
+            DateTime date = DateTime.Parse(selectedDate);
+            string query = @"
+                SELECT SUM(Total) - SUM(Costs) AS MonthlyTotal 
+                FROM CarWashServices 
+                WHERE YEAR(CurrentDate) = @SelectedYear AND MONTH(CurrentDate) = @SelectedMonth";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SelectedYear", date.Year);
+                    cmd.Parameters.AddWithValue("@SelectedMonth", date.Month);
+                    object result = cmd.ExecuteScalar();
+                    label10.Text = $"{result ?? 0} : الدخل الشهري";
+                }
+            }
+        }
+        private bool IsValidDate(string input)
+        {
+            return DateTime.TryParseExact(input, "dd/MM/yyyy",
+                                          System.Globalization.CultureInfo.InvariantCulture,
+                                          System.Globalization.DateTimeStyles.None, out _);
+        }
+
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadCustomers();
             InitializeDatabaseConnection();
+            //FetchDailyAndMonthlyTotals();
         }
         private void InitializeDatabaseConnection()
         {
-            string databasePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+            //string databasePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
+            //string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+            //string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
             try
             {
@@ -147,10 +215,10 @@ namespace Car_Care_Service__.NET_
         }
 
         //1280; 720
-        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            e.Graphics.DrawImage(memoryImage, 0, 0);
-        }
+        //private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+        //{
+        //    e.Graphics.DrawImage(memoryImage, 0, 0);
+        //}
 
   
         private void elipseControl1_Click(object sender, EventArgs e)
@@ -316,7 +384,7 @@ namespace Car_Care_Service__.NET_
 
             //printDocument1.Print();
 
-            SaveExcel exporter = new SaveExcel(dataGridView1); // Pass the DataGridView
+            SaveExcel exporter = new SaveExcel(dataGridView1); 
             exporter.ExportToExcel();
 
         }
@@ -461,14 +529,18 @@ namespace Car_Care_Service__.NET_
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Example custom SQL query
-            // Load the data when the form loads
             LoadData(query);
         }
-        string databasePath => System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
-        string connectionString => $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+        //string databasePath => System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
+        //string connectionString => $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
+        //string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
         //private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"J:\\Visual Studio\\Car Care Service (.NET)\\Car Care Service (.NET)\\Database.mdf\";Integrated Security=True";
+        
+        private string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
+
+
+        //private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Database.mdf\";Integrated Security=True";
         //string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CarWashServices"].ConnectionString;
         private void LoadData(string customQuery)
         {
@@ -489,11 +561,12 @@ namespace Car_Care_Service__.NET_
 
                     
                     dataGridView1.DataSource = dataTable;
+                    
                 }
             }
             catch (Exception ex)
             {
-                
+                System.Console.Write("tsk");
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -507,11 +580,11 @@ namespace Car_Care_Service__.NET_
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Discount, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Discount, @Total, @Notes)";
+                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Discount, Costs, Total, Notes) " +
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Discount, @Costs, @Total, @Notes)";
 
                         {
-                            // Example parameters (replace with your input controls)
+                            
                             SqlCommand command = new SqlCommand(insertQuery, connection);
 
 
@@ -528,16 +601,19 @@ namespace Car_Care_Service__.NET_
                         }
                         ;
 
-                        command.Parameters.AddWithValue("@Services", cb);
+                            command.Parameters.AddWithValue("@Services", cb);
                             command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
                             //command.Parameters.AddWithValue("@Total", label8.Text);
-                            decimal total = decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100);
+                            ;
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100))- decimal.Parse(Costs.Text);
+                            
                             command.Parameters.AddWithValue("@Total", total);
                             command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                             txtCustomerID.Text = "";
                             textBox2.Text = "";
                             txtCarID.Text = "";
-                            txtVehicleType.Text = "";
+                            Costs.Text = "0";
                         for (int i = 0; i < checkedListBox1.Items.Count; i++)
                         {
                             checkedListBox1.SetItemChecked(i, false);
@@ -545,7 +621,9 @@ namespace Car_Care_Service__.NET_
                         ;
                         txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
-                        txtSaleID.Text = "";
+                        textBox1.Text = "";
+                        txtVehicleType.Text = "";
+                        txtSaleID.Text = "0";
                             txtNotes.Text = "";
                             label8.Text = "0";
 
@@ -554,7 +632,7 @@ namespace Car_Care_Service__.NET_
                         }
                     }
                     MessageBox.Show("Record added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadData(query); // Reload data
+                    LoadData(query); 
                 }
                 catch (Exception ex)
                 {
@@ -573,12 +651,12 @@ namespace Car_Care_Service__.NET_
                     //               SET Total = @Total, Notes = @Notes 
                     //               WHERE TransactionID = @TransactionID";
                     string updateQuery = "UPDATE CarWashServices SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
-                       "VehicleType = @VehicleType, Services = @Services, Discount = @Discount, Total = @Total, Notes = @Notes " +
+                       "VehicleType = @VehicleType, Services = @Services, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
                        "WHERE ID = @ID";
 
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
                     {
-                        // Example parameters
+                        
                         //command.Parameters.AddWithValue("@Total", label8.Text);
                         //command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
@@ -595,7 +673,8 @@ namespace Car_Care_Service__.NET_
                         ;
                         command.Parameters.AddWithValue("@Services", cb);
                         command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
-                        decimal total = decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100);
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -609,7 +688,9 @@ namespace Car_Care_Service__.NET_
                         ;
                         txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
-                        txtSaleID.Text = "";
+                        textBox1.Text = "";
+                        txtSaleID.Text = "0";
+                        Costs.Text = "0";
                         txtNotes.Text = "";
                         label8.Text = "0";
                         connection.Open();
@@ -617,7 +698,7 @@ namespace Car_Care_Service__.NET_
                     }
                 }
                 MessageBox.Show("Record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadData(query); // Reload data
+                LoadData(query); 
             }
             catch (Exception ex)
             {
@@ -644,9 +725,10 @@ namespace Car_Care_Service__.NET_
                             connection.Open();
                             command.ExecuteNonQuery();
                         }
+                        ID.Text = "";
                     }
                     MessageBox.Show("Record deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadData(query); // Reload data
+                    LoadData(query); 
                 }
             }
             catch (Exception ex)
@@ -695,8 +777,10 @@ namespace Car_Care_Service__.NET_
 
         //int number = 0;
         //int letter = 0;
-        private int letterCount = 0;
-        private int numberCount = 0;
+        private int nletterCount = 4;
+        private int nnumberCount = 0;
+        private int lletterCount = 0;
+        private int lnumberCount = 4;
 
         private void txtCarID_TextChanged(object sender, EventArgs e)
         {
@@ -719,14 +803,20 @@ namespace Car_Care_Service__.NET_
             //}
             string input = txtCarID.Text;
 
-            // Validate input
-            if (IsValidInput(input) || (letterCount > 0 &&   numberCount > 0))
+            if (textBox1.TextLength == 0)
             {
-                txtCarID.BackColor = System.Drawing.Color.LightGreen; // Change background to indicate success
+                textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
             }
             else
             {
-                txtCarID.BackColor = System.Drawing.Color.LightCoral; // Change background to indicate failure
+                if (IsValidInput(input) || (nletterCount > 0 && nnumberCount > 0))
+                {
+                    txtCarID.BackColor = System.Drawing.Color.LightGreen;
+                }
+                else
+                {
+                    txtCarID.BackColor = System.Drawing.Color.LightCoral;
+                }
             }
 
 
@@ -740,7 +830,7 @@ namespace Car_Care_Service__.NET_
         }
         private bool IsValidInput(string input)
         {
-            // Regular expression to check for at least 3 letters and 4 numbers
+            
             string pattern = @"^(?=(.*[^A-Za-z0-9!-/:-@[-`{-~]){1,3})(?=(.*\d){1,4}).+$";
             return Regex.IsMatch(input, pattern);
         }
@@ -764,19 +854,19 @@ namespace Car_Care_Service__.NET_
                 ctrl.Text = value;
             string input = textBox2.Text;
 
-            // Validate input
+            
             if (IsValidInput2(input))
             {
-                textBox2.BackColor = System.Drawing.Color.LightGreen; // Change background to indicate success
+                textBox2.BackColor = System.Drawing.Color.LightGreen;
             }
             else
             {
-                textBox2.BackColor = System.Drawing.Color.LightCoral; // Change background to indicate failure
+                textBox2.BackColor = System.Drawing.Color.LightCoral;
             }
         }
         private bool IsValidInput2(string input)
         {
-            // Regular expression to check for at least 3 letters and 4 numbers
+            
             string pattern = @"([0-9]{11})";
             return Regex.IsMatch(input, pattern);
         }
@@ -794,7 +884,7 @@ namespace Car_Care_Service__.NET_
             //  .Where(c => c >= '\u0600' && c <= '\u06FF' || c >= '\u0750' && c <= '\u077F' || c==' '));
             string value = string.Concat(ctrl
               .Text
-              .Where(c => Char.IsLetter(c) ));
+              .Where(c => Char.IsLetter(c) || c=='\u0020' ));
 
             if (value != ctrl.Text)
                 ctrl.Text = value;
@@ -810,26 +900,26 @@ namespace Car_Care_Service__.NET_
 
         private void txtVehicleType_Leave(object sender, EventArgs e)
         {
-            // Get the text box reference
+            
             System.Windows.Forms.TextBox txtBox = sender as System.Windows.Forms.TextBox;
 
-            // Ensure the control is a valid TextBox
+            
             if (txtBox != null)
             {
-                // Get the current text in the TextBox
+                
                 string inputText = txtBox.Text.Trim();
 
-                // Check if the text is either "سيارة" or "سكوتر"
+                
                 if (inputText == "سيارة" || inputText == "سكوتر")
                 {
-                    // Input is valid; no action needed
+                    
                 }
                 else
                 {
-                    // Clear the invalid input
+                    
                     txtBox.Text = string.Empty;
 
-                    // Notify the user about the issue
+                    
                     MessageBox.Show("الرجاء إدخال قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -837,24 +927,23 @@ namespace Car_Care_Service__.NET_
 
         private void txtVehicleType_TextChanged(object sender, EventArgs e)
         {
-            // Reference the ComboBox
+           
             ComboBox comboBox = sender as ComboBox;
 
             if (comboBox != null)
             {
-                string inputText = comboBox.Text.Trim(); // Get the current text
+                string inputText = comboBox.Text.Trim(); 
 
-                // Check if the text is either "سيارة" or "سكوتر"
+                
                 if (inputText == "سيارة" || inputText == "سكوتر")
                 {
-                    // Valid input, do nothing
+                    
                 }
                 else
                 {
-                    // Clear the invalid input
+                   
                     comboBox.Text = string.Empty;
 
-                    // Notify the user about the error
                     MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -871,14 +960,14 @@ namespace Car_Care_Service__.NET_
         }
         private void txtSaleID_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox ctrl = (sender as ComboBox);
+            //ComboBox ctrl = (sender as ComboBox);
 
-            string value = string.Concat(ctrl
-              .Text
-              .Where(c => c >= '0' && c <= '9'));
+            //string value = string.Concat(ctrl
+            //  .Text
+            //  .Where(c => c >= '0' && c <= '9'));
 
-            if (value != ctrl.Text)
-                ctrl.Text = value;
+            //if (value != ctrl.Text)
+            //    ctrl.Text = value;
         }
 
         private void txtSaleID_Leave(object sender, EventArgs e)
@@ -889,18 +978,18 @@ namespace Car_Care_Service__.NET_
             {
                 string inputText = comboBox.Text.Trim();
 
-                // Check if the input is a valid integer
+               
                 if (int.TryParse(inputText, out int value))
                 {
-                    // Ensure the value is within the allowed range
+                    
                     if (value >= 0 && value <= 100)
                     {
-                        // Valid input, do nothing
+                        
                         return;
                     }
                 }
 
-                // If invalid, clear the text and notify the user
+                
                 comboBox.Text = "0" ;
                 MessageBox.Show("الرجاء إدخال قيمة رقمية بين 0 و 100 فقط", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -910,7 +999,6 @@ namespace Car_Care_Service__.NET_
         //{
         //    char keyChar = e.KeyChar;
 
-        //    // Allow backspace (handled in KeyDown) and new lines
         //    if (keyChar == '\b' || keyChar == '\u0020')
         //    {
         //        return;
@@ -918,31 +1006,31 @@ namespace Car_Care_Service__.NET_
 
         //    if (char.IsLetter(keyChar))
         //    {
-        //        // Allow letters if we haven't reached 3 yet
+        
         //        if (letterCount < 3)
         //        {
         //            letterCount++;
         //        }
         //        else
         //        {
-        //            e.Handled = true; // Reject input
+        //            e.Handled = true; 
         //        }
         //    }
         //    else if (char.IsDigit(keyChar))
         //    {
-        //        // Allow numbers if we haven't reached 4 yet
+        //        
         //        if (numberCount < 4)
         //        {
         //            numberCount++;
         //        }
         //        else
         //        {
-        //            e.Handled = true; // Reject input
+        //            e.Handled = true; 
         //        }
         //    }
         //    else
         //    {
-        //        // Reject any non-alphanumeric character
+        //        
         //        e.Handled = true;
         //    }
         //}
@@ -950,40 +1038,40 @@ namespace Car_Care_Service__.NET_
         //{
         //    char keyChar = e.KeyChar;
 
-        //    // Allow backspace
+        //    
         //    if (keyChar == '\b')
         //    {
         //        if (txtCarID.Text.Length > 0)
         //        {
-        //            // Remove the last character and the preceding space
+        //            
         //            int cursorPosition = txtCarID.SelectionStart;
         //            if (cursorPosition > 1 && txtCarID.Text[cursorPosition - 1] == ' ')
         //            {
         //                txtCarID.Text = txtCarID.Text.Remove(cursorPosition - 2, 2);
-        //                txtCarID.SelectionStart = cursorPosition - 2; // Adjust the cursor position
+        //                txtCarID.SelectionStart = cursorPosition - 2; 
         //            }
         //            else if (cursorPosition > 0)
         //            {
         //                txtCarID.Text = txtCarID.Text.Remove(cursorPosition - 1, 1);
-        //                txtCarID.SelectionStart = cursorPosition - 1; // Adjust the cursor position
+        //                txtCarID.SelectionStart = cursorPosition - 1; 
         //            }
         //        }
-        //        e.Handled = true; // Prevent default backspace behavior
+        //        e.Handled = true;
         //        return;
         //    }
 
-        //    // Allow letters and numbers only
+        //    
         //    if (char.IsLetterOrDigit(keyChar))
         //    {
-        //        // Append the character and a space
+        //        
         //        int cursorPosition = txtCarID.SelectionStart;
         //        txtCarID.Text = txtCarID.Text.Insert(cursorPosition, keyChar + " ");
-        //        txtCarID.SelectionStart = cursorPosition + 2; // Move cursor past the character and space
-        //        e.Handled = true; // Prevent default character handling
+        //        txtCarID.SelectionStart = cursorPosition + 2; 
+        //        e.Handled = true; 
         //    }
         //    else
         //    {
-        //        // Reject any non-alphanumeric character
+        //        
         //        e.Handled = true;
         //    }
         //}
@@ -993,25 +1081,25 @@ namespace Car_Care_Service__.NET_
         //    {
         //        int cursorPosition = txtCarID.SelectionStart;
 
-        //        // If the cursor is within the text, find the character to be deleted
+        //       
         //        if (cursorPosition > 0 && cursorPosition <= txtCarID.Text.Length)
         //        {
         //            char deletedChar;
 
-        //            // Handle Backspace (deletes the character before the cursor)
+        //            
         //            if (e.KeyCode == Keys.Back)
         //            {
         //                deletedChar = txtCarID.Text[cursorPosition - 1];
         //            }
-        //            // Handle Delete (deletes the character at the cursor position)
+        //            
         //            else
         //            {
         //                if (cursorPosition == txtCarID.Text.Length)
-        //                    return; // No character to delete
+        //                    return; 
         //                deletedChar = txtCarID.Text[cursorPosition];
         //            }
 
-        //            // Adjust the counts based on the deleted character
+        //           
         //            if (char.IsLetter(deletedChar))
         //            {
         //                letterCount--;
@@ -1027,57 +1115,58 @@ namespace Car_Care_Service__.NET_
         {
             char keyChar = e.KeyChar;
 
-            // Allow backspace
+            
             if (keyChar == '\b')
             {
-                return; // Handle deletion logic in KeyDown
+                return; 
             }
 
-            // Allow letters within the maximum limit
+            
             if (char.IsLetter(keyChar))
             {
-                if (letterCount < 3) // Maximum of 3 letters
+                if (nletterCount < 3) 
                 {
-                    letterCount++;
+                    nletterCount++;
                 }
                 else
                 {
-                    e.Handled = true; // Reject input
+                    e.Handled = true; 
                     return;
                 }
             }
-            // Allow digits within the maximum limit
+            
             else if (char.IsDigit(keyChar))
             {
-                if (numberCount < 4) // Maximum of 4 numbers
+                if (nnumberCount < 4) 
                 {
-                    numberCount++;
+                    nnumberCount++;
                 }
                 else
                 {
-                    e.Handled = true; // Reject input
+                    e.Handled = true;
                     return;
                 }
             }
             else
             {
-                // Reject any non-alphanumeric character
+               
                 e.Handled = true;
                 return;
             }
 
-            // Append the character and a space
+            
             int cursorPosition = txtCarID.SelectionStart;
             txtCarID.Text = txtCarID.Text.Insert(cursorPosition, keyChar + " ");
-            txtCarID.SelectionStart = cursorPosition + 2; // Move cursor past the character and space
-            e.Handled = true; // Prevent default character handling
+            txtCarID.SelectionStart = cursorPosition + 2; 
+            e.Handled = true; 
         }
 
         private void txtCarID_KeyDown(object sender, KeyEventArgs e)
-        {
+        {   
+            
             if (txtCarID.Text.Length == 0) {
-                letterCount = 0;
-                numberCount = 0;
+                
+                nnumberCount = 0;
 
                     }
 
@@ -1085,12 +1174,12 @@ namespace Car_Care_Service__.NET_
             {
                 int cursorPosition = txtCarID.SelectionStart;
 
-                // If the cursor is within the text, find the character to be deleted
+                
                 if (cursorPosition > 0 && cursorPosition <= txtCarID.Text.Length)
                 {
                     char deletedChar;
 
-                    // Handle Backspace (deletes the character before the cursor)
+                    
                     if (e.KeyCode == Keys.Back)
                     {
                         if (cursorPosition > 1 && txtCarID.Text[cursorPosition - 1] == ' ')
@@ -1106,7 +1195,7 @@ namespace Car_Care_Service__.NET_
                             txtCarID.SelectionStart = cursorPosition - 1;
                         }
                     }
-                    // Handle Delete (deletes the character at the cursor position)
+                    
                     else
                     {
                         if (cursorPosition < txtCarID.Text.Length - 1 && txtCarID.Text[cursorPosition + 1] == ' ')
@@ -1122,18 +1211,18 @@ namespace Car_Care_Service__.NET_
                         txtCarID.SelectionStart = cursorPosition;
                     }
 
-                    // Adjust the counts based on the deleted character
+                    
                     if (char.IsLetter(deletedChar))
                     {
-                        letterCount--;
+                        nletterCount--;
                     }
                     else if (char.IsDigit(deletedChar))
                     {
-                        numberCount--;
+                        nnumberCount--;
                     }
                 }
 
-                e.Handled = true; // Prevent default deletion behavior
+                e.Handled = true; 
             }
         }
         private void label4_Click_1(object sender, EventArgs e)
@@ -1150,7 +1239,7 @@ namespace Car_Care_Service__.NET_
         {
             string operation = checkedListBox1.Items[e.Index].ToString();
 
-            // Adjust the total price based on the check state
+            
             if (e.NewValue == CheckState.Checked)
             {
                 totalPrice += operationPrices[operation];
@@ -1160,8 +1249,10 @@ namespace Car_Care_Service__.NET_
                 totalPrice -= operationPrices[operation];
             }
 
-            // Update the label
+            
             label8.Text = $"{totalPrice}";
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            label14.Text = $"{fs}";
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -1178,7 +1269,7 @@ namespace Car_Care_Service__.NET_
         {
             char keyChar = e.KeyChar;
 
-            // Allow backspace (handled in KeyDown) and new lines
+            
             if (keyChar == '\b' )
             {
                 return;
@@ -1186,25 +1277,26 @@ namespace Car_Care_Service__.NET_
 
             if (char.IsLetter(keyChar))
             {
-                // Allow letters if we haven't reached 3 yet
-            
-               
-                    e.Handled = true; // Reject input
-               
+
+
+
+                e.Handled = true;
+
             }
             else if (char.IsDigit(keyChar))
             {
                 int x = int.Parse(txtSaleID.Text) + keyChar - '0';
-                if (x>=100)
+                if (x > 100)
                 {
 
-                   e.Handled = true; 
+                    //e.Handled = true;
+                    txtSaleID.Text = "";
                 }
-               
+                
             }
             else
             {
-                // Reject any non-alphanumeric character
+                
                 e.Handled = true;
             }
         }
@@ -1219,6 +1311,181 @@ namespace Car_Care_Service__.NET_
         private void textBox5_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+            string input = textBox1.Text;
+
+            if (textBox1.TextLength == 0) {
+                textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+            }
+            else
+            {
+
+           
+            if (IsValidInput(input) || (lletterCount > 0 && lnumberCount > 0))
+            {
+                textBox1.BackColor = System.Drawing.Color.LightGreen;
+            }
+            else
+            {
+                textBox1.BackColor = System.Drawing.Color.LightCoral;
+            }
+            }
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (textBox1.Text.Length == 0)
+            {
+                lletterCount = 0;
+                
+
+            }
+
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                int cursorPosition = textBox1.SelectionStart;
+
+
+                if (cursorPosition > 0 && cursorPosition <= textBox1.Text.Length)
+                {
+                    char deletedChar;
+
+
+                    if (e.KeyCode == Keys.Back)
+                    {
+                        if (cursorPosition > 1 && textBox1.Text[cursorPosition - 1] == ' ')
+                        {
+                            deletedChar = textBox1.Text[cursorPosition - 2];
+                            textBox1.Text = textBox1.Text.Remove(cursorPosition - 2, 2);
+                            textBox1.SelectionStart = cursorPosition - 2;
+                        }
+                        else
+                        {
+                            deletedChar = textBox1.Text[cursorPosition - 1];
+                            textBox1.Text = textBox1.Text.Remove(cursorPosition - 1, 1);
+                            textBox1.SelectionStart = cursorPosition - 1;
+                        }
+                    }
+
+                    else
+                    {
+                        if (cursorPosition < textBox1.Text.Length - 1 && textBox1.Text[cursorPosition + 1] == ' ')
+                        {
+                            deletedChar = textBox1.Text[cursorPosition];
+                            textBox1.Text = textBox1.Text.Remove(cursorPosition, 2);
+                        }
+                        else
+                        {
+                            deletedChar = textBox1.Text[cursorPosition];
+                            textBox1.Text = textBox1.Text.Remove(cursorPosition, 1);
+                        }
+                        textBox1.SelectionStart = cursorPosition;
+                    }
+
+
+                    if (char.IsLetter(deletedChar))
+                    {
+                        lletterCount--;
+                    }
+                    else if (char.IsDigit(deletedChar))
+                    {
+                        lnumberCount--;
+                    }
+                }
+
+                e.Handled = true;
+            }
+
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char keyChar = e.KeyChar;
+
+
+            if (keyChar == '\b')
+            {
+                return;
+            }
+
+
+            if (char.IsLetter(keyChar) && !(keyChar >='a' && keyChar <= 'z')&& !(keyChar >= 'A' && keyChar <= 'Z'))
+            {
+                if (lletterCount < 3)
+                {
+                    lletterCount++;
+                }
+                else
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            else if (char.IsDigit(keyChar))
+            {
+                if (lnumberCount < 4)
+                {
+                    lnumberCount++;
+                }
+                else
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+            else
+            {
+
+                e.Handled = true;
+                return;
+            }
+
+
+            int cursorPosition = textBox1.SelectionStart;
+            textBox1.Text = textBox1.Text.Insert(cursorPosition, keyChar + " ");
+            textBox1.SelectionStart = cursorPosition + 2;
+            e.Handled = true;
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Costs_TextChanged(object sender, EventArgs e)
+        {
+            Control ctrl = (sender as Control);
+            string value = string.Concat(ctrl
+                .Text
+                 .Where(c => Char.IsDigit(c) || c == '\u0020'));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            label14.Text = $"{fs}";
+        }
+
+        private void txtSaleID_TextChanged(object sender, EventArgs e)
+        {
+            Control ctrl = (sender as Control);
+            string value = string.Concat(ctrl
+                .Text
+                 .Where(c => Char.IsDigit(c) || c == '\u0020'));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            label14.Text = $"{fs}";
         }
     }
         //private void HandleBackspace()
