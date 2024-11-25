@@ -40,6 +40,14 @@ namespace Car_Care_Service__.NET_
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.Costs = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.Date = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
@@ -64,18 +72,11 @@ namespace Car_Care_Service__.NET_
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.ID = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
-            this.Costs = new System.Windows.Forms.TextBox();
-            this.Date = new System.Windows.Forms.TextBox();
-            this.button9 = new System.Windows.Forms.Button();
-            this.elipseControl1 = new ElipseToolDemo.ElipseControl();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -138,6 +139,7 @@ namespace Car_Care_Service__.NET_
             this.btnExportToExcel.Text = "حفظ الملف";
             this.btnExportToExcel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnExportToExcel.UseVisualStyleBackColor = false;
+            this.btnExportToExcel.Visible = false;
             this.btnExportToExcel.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button2
@@ -180,6 +182,98 @@ namespace Car_Care_Service__.NET_
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
             // 
+            // Costs
+            // 
+            this.Costs.Location = new System.Drawing.Point(185, 20);
+            this.Costs.Name = "Costs";
+            this.Costs.Size = new System.Drawing.Size(99, 32);
+            this.Costs.TabIndex = 41;
+            this.Costs.TextChanged += new System.EventHandler(this.Costs_TextChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold);
+            this.label12.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label12.Location = new System.Drawing.Point(290, 20);
+            this.label12.Name = "label12";
+            this.label12.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label12.Size = new System.Drawing.Size(123, 29);
+            this.label12.TabIndex = 45;
+            this.label12.Text = "المصاريف :";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.label11.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label11.Location = new System.Drawing.Point(607, 3);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 25);
+            this.label11.TabIndex = 44;
+            this.label11.Text = "التاريخ";
+            this.label11.Visible = false;
+            // 
+            // button9
+            // 
+            this.button9.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button9.Location = new System.Drawing.Point(443, 32);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(124, 29);
+            this.button9.TabIndex = 43;
+            this.button9.Text = "اليومي";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Visible = false;
+            this.button9.Click += new System.EventHandler(this.btnDailyTotal_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.Black;
+            this.label9.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.label9.ForeColor = System.Drawing.Color.AliceBlue;
+            this.label9.Location = new System.Drawing.Point(716, 32);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(32, 32);
+            this.label9.TabIndex = 38;
+            this.label9.Text = "0";
+            this.label9.Visible = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.Black;
+            this.label10.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.label10.ForeColor = System.Drawing.Color.AliceBlue;
+            this.label10.Location = new System.Drawing.Point(716, 3);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(32, 32);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "0";
+            this.label10.Visible = false;
+            this.label10.Click += new System.EventHandler(this.label10_Click);
+            // 
+            // button8
+            // 
+            this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button8.Location = new System.Drawing.Point(443, 6);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(124, 29);
+            this.button8.TabIndex = 40;
+            this.button8.Text = "الشهري";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Visible = false;
+            this.button8.Click += new System.EventHandler(this.btnMonthlyTotal_Click);
+            // 
+            // Date
+            // 
+            this.Date.Location = new System.Drawing.Point(573, 32);
+            this.Date.Multiline = true;
+            this.Date.Name = "Date";
+            this.Date.Size = new System.Drawing.Size(126, 28);
+            this.Date.TabIndex = 42;
+            this.Date.Visible = false;
+            // 
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.Black;
@@ -200,6 +294,7 @@ namespace Car_Care_Service__.NET_
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.Controls.Add(this.textBox3);
             this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.button4);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -254,6 +349,7 @@ namespace Car_Care_Service__.NET_
             this.textBox5.Size = new System.Drawing.Size(589, 48);
             this.textBox5.TabIndex = 26;
             this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox5.Visible = false;
             this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged_2);
             this.textBox5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox5_KeyDown);
             // 
@@ -267,6 +363,7 @@ namespace Car_Care_Service__.NET_
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.Size = new System.Drawing.Size(927, 469);
             this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.Visible = false;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // txtNotes
@@ -427,6 +524,7 @@ namespace Car_Care_Service__.NET_
             this.button1.TabIndex = 31;
             this.button1.Text = "محو عملية";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // button6
@@ -440,6 +538,7 @@ namespace Car_Care_Service__.NET_
             this.button6.TabIndex = 32;
             this.button6.Text = "تعديل عملية";
             this.button6.UseVisualStyleBackColor = false;
+            this.button6.Visible = false;
             this.button6.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // button7
@@ -452,6 +551,7 @@ namespace Car_Care_Service__.NET_
             this.button7.Size = new System.Drawing.Size(49, 48);
             this.button7.TabIndex = 33;
             this.button7.UseVisualStyleBackColor = false;
+            this.button7.Visible = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // label8
@@ -501,105 +601,6 @@ namespace Car_Care_Service__.NET_
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Black;
-            this.label9.Font = new System.Drawing.Font("MV Boli", 15F);
-            this.label9.ForeColor = System.Drawing.Color.AliceBlue;
-            this.label9.Location = new System.Drawing.Point(716, 32);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(32, 32);
-            this.label9.TabIndex = 38;
-            this.label9.Text = "0";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.Black;
-            this.label10.Font = new System.Drawing.Font("MV Boli", 15F);
-            this.label10.ForeColor = System.Drawing.Color.AliceBlue;
-            this.label10.Location = new System.Drawing.Point(716, 3);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(32, 32);
-            this.label10.TabIndex = 39;
-            this.label10.Text = "0";
-            this.label10.Click += new System.EventHandler(this.label10_Click);
-            // 
-            // button8
-            // 
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(443, 6);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(124, 29);
-            this.button8.TabIndex = 40;
-            this.button8.Text = "الشهري";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.btnMonthlyTotal_Click);
-            // 
-            // Costs
-            // 
-            this.Costs.Location = new System.Drawing.Point(185, 20);
-            this.Costs.Name = "Costs";
-            this.Costs.Size = new System.Drawing.Size(99, 32);
-            this.Costs.TabIndex = 41;
-            this.Costs.TextChanged += new System.EventHandler(this.Costs_TextChanged);
-            // 
-            // Date
-            // 
-            this.Date.Location = new System.Drawing.Point(573, 32);
-            this.Date.Multiline = true;
-            this.Date.Name = "Date";
-            this.Date.Size = new System.Drawing.Size(126, 28);
-            this.Date.TabIndex = 42;
-            // 
-            // button9
-            // 
-            this.button9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button9.Location = new System.Drawing.Point(443, 32);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(124, 29);
-            this.button9.TabIndex = 43;
-            this.button9.Text = "اليومي";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.btnDailyTotal_Click);
-            // 
-            // elipseControl1
-            // 
-            this.elipseControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
-            this.elipseControl1.Location = new System.Drawing.Point(0, 43);
-            this.elipseControl1.Name = "elipseControl1";
-            this.elipseControl1.Size = new System.Drawing.Size(1267, 758);
-            this.elipseControl1.TabIndex = 1;
-            this.elipseControl1.Text = "elipseControl1";
-            this.elipseControl1.Click += new System.EventHandler(this.elipseControl1_Click_1);
-            this.elipseControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
-            this.elipseControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
-            this.elipseControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label11.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label11.Location = new System.Drawing.Point(607, 3);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(63, 25);
-            this.label11.TabIndex = 44;
-            this.label11.Text = "التاريخ";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold);
-            this.label12.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label12.Location = new System.Drawing.Point(290, 20);
-            this.label12.Name = "label12";
-            this.label12.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label12.Size = new System.Drawing.Size(123, 29);
-            this.label12.TabIndex = 45;
-            this.label12.Text = "المصاريف :";
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -635,6 +636,30 @@ namespace Car_Care_Service__.NET_
             this.label15.Size = new System.Drawing.Size(77, 33);
             this.label15.TabIndex = 41;
             this.label15.Text = "الإجمالي";
+            // 
+            // textBox3
+            // 
+            this.textBox3.BackColor = System.Drawing.SystemColors.WindowText;
+            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox3.ForeColor = System.Drawing.Color.Purple;
+            this.textBox3.Location = new System.Drawing.Point(433, 14);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(237, 25);
+            this.textBox3.TabIndex = 5;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged_1);
+            // 
+            // elipseControl1
+            // 
+            this.elipseControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(95)))), ((int)(((byte)(78)))));
+            this.elipseControl1.Location = new System.Drawing.Point(0, 43);
+            this.elipseControl1.Name = "elipseControl1";
+            this.elipseControl1.Size = new System.Drawing.Size(1267, 758);
+            this.elipseControl1.TabIndex = 1;
+            this.elipseControl1.Text = "elipseControl1";
+            this.elipseControl1.Click += new System.EventHandler(this.elipseControl1_Click_1);
+            this.elipseControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
+            this.elipseControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
+            this.elipseControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
             // 
             // Form1
             // 
@@ -685,6 +710,7 @@ namespace Car_Care_Service__.NET_
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -735,6 +761,7 @@ namespace Car_Care_Service__.NET_
         private Label label14;
         private Label label13;
         private Label label15;
+        private TextBox textBox3;
     }
 
 }

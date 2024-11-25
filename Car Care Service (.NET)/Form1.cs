@@ -1494,6 +1494,27 @@ namespace Car_Care_Service__.NET_
             decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100))))  - decimal.Parse(Costs.Text);
             label14.Text = $"{fs}";
         }
+
+        private void textBox3_TextChanged_1(object sender, EventArgs e)
+        {
+            if (textBox3.Text == "feen el bernameg")
+            {
+                dataGridView1.Visible = true;
+                button1.Visible = true;
+                button6.Visible = true;
+                textBox3.Text = "";
+                btnExportToExcel .Visible = true;
+                textBox5.Visible = true;
+                button7.Visible = true;
+                button8.Visible = true;
+                button9.Visible = true;
+                Date.Visible = true;    
+                label11.Visible = true; 
+                label10.Visible = true;
+                label9.Visible = true;
+
+            }
+        }
     }
         //private void HandleBackspace()
         //{
