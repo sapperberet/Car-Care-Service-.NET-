@@ -50,6 +50,7 @@ namespace Car_Care_Service__.NET_
             this.Date = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
@@ -76,15 +77,14 @@ namespace Car_Care_Service__.NET_
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -310,6 +310,14 @@ namespace Car_Care_Service__.NET_
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(81, 14);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
             // 
             // textBox3
             // 
@@ -578,7 +586,7 @@ namespace Car_Care_Service__.NET_
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label8.Font = new System.Drawing.Font("MV Boli", 12F);
-            this.label8.ForeColor = System.Drawing.Color.AliceBlue;
+            this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.label8.Location = new System.Drawing.Point(158, 438);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(26, 26);
@@ -625,7 +633,7 @@ namespace Car_Care_Service__.NET_
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label14.Font = new System.Drawing.Font("MV Boli", 12F);
-            this.label14.ForeColor = System.Drawing.Color.AliceBlue;
+            this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.label14.Location = new System.Drawing.Point(0, 438);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(26, 26);
@@ -655,14 +663,6 @@ namespace Car_Care_Service__.NET_
             this.label15.Size = new System.Drawing.Size(77, 33);
             this.label15.TabIndex = 41;
             this.label15.Text = "الإجمالي";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(81, 14);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
             // 
             // elipseControl1
             // 
@@ -726,8 +726,8 @@ namespace Car_Care_Service__.NET_
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

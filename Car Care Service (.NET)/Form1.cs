@@ -22,6 +22,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Vml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Runtime.CompilerServices;
 
 
 
@@ -537,12 +538,19 @@ namespace Car_Care_Service__.NET_
         //string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
         //private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"J:\\Visual Studio\\Car Care Service (.NET)\\Car Care Service (.NET)\\Database.mdf\";Integrated Security=True";
-        
-        private string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
 
+        //private string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
+        //private string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True";
+        private string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ss"].ConnectionString;
+
+        //private string connectionString = "Data Source=DESKTOP-VL1LIMA\\toxic;AttachDbFilename=\"J:\\VISUAL STUDIO\\CAR CARE SERVICE(.NET)\\CAR CARE SERVICE(.NET)\\BIN\\RELEASE\\DATABASE.MDF\";Integrated Security=True";
+
+
+
+        //private string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\CarCareService\Data\Database.mdf;Integrated Security=True";
 
         //private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Database.mdf\";Integrated Security=True";
-        //string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CarWashServices"].ConnectionString;
+        //string connData Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\CarCareService\Data\Database.mdf;Integrated Security=True;ectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CarWashServices"].ConnectionString;
         private void LoadData(string customQuery)
         {
             try
