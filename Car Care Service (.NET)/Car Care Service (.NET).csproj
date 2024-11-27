@@ -108,6 +108,11 @@
     <Compile Include="CustomControl2.Designer.cs">
       <DependentUpon>CustomControl2.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DisplayData.cs" />
     <Compile Include="ElipseControl.cs">
       <SubType>Component</SubType>
@@ -118,6 +123,14 @@
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HashKeyList.cs" />
+    <Compile Include="HashKeyManager.cs" />
+    <Compile Include="HashKeyPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HashKeyPrompt.Designer.cs">
+      <DependentUpon>HashKeyPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +158,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HashKeyPrompt.resx">
+      <DependentUpon>HashKeyPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -163,6 +179,17 @@
       <LastGenOutput>RoundControl1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Car Wash Service.csproj" />
+    <None Include="DatabaseDataSet.xsc">
+      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DatabaseDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DatabaseDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DatabaseDataSet.xss">
+      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

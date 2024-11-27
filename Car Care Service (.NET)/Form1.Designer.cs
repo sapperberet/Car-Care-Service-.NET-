@@ -77,6 +77,7 @@ namespace Car_Care_Service__.NET_
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -93,7 +94,7 @@ namespace Car_Care_Service__.NET_
             label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label1.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label1.Location = new System.Drawing.Point(112, 189);
+            label1.Location = new System.Drawing.Point(1055, 194);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(104, 33);
             label1.TabIndex = 28;
@@ -106,7 +107,7 @@ namespace Car_Care_Service__.NET_
             label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label2.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label2.Location = new System.Drawing.Point(128, 118);
+            label2.Location = new System.Drawing.Point(1071, 123);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(110, 33);
             label2.TabIndex = 29;
@@ -118,7 +119,7 @@ namespace Car_Care_Service__.NET_
             label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             label3.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label3.Location = new System.Drawing.Point(128, 55);
+            label3.Location = new System.Drawing.Point(1071, 60);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(100, 33);
             label3.TabIndex = 30;
@@ -128,13 +129,14 @@ namespace Car_Care_Service__.NET_
             // btnExportToExcel
             // 
             this.btnExportToExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnExportToExcel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.btnExportToExcel.FlatAppearance.BorderSize = 4;
             this.btnExportToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportToExcel.Font = new System.Drawing.Font("Georgia", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExportToExcel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.btnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("btnExportToExcel.Image")));
             this.btnExportToExcel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExportToExcel.Location = new System.Drawing.Point(1109, 3);
+            this.btnExportToExcel.Location = new System.Drawing.Point(9, 3);
             this.btnExportToExcel.Margin = new System.Windows.Forms.Padding(0);
             this.btnExportToExcel.Name = "btnExportToExcel";
             this.btnExportToExcel.Size = new System.Drawing.Size(141, 61);
@@ -148,15 +150,17 @@ namespace Car_Care_Service__.NET_
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.button2.FlatAppearance.BorderSize = 4;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Georgia", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button2.Location = new System.Drawing.Point(11, 0);
+            this.button2.Location = new System.Drawing.Point(1109, 3);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(141, 61);
+            this.button2.Size = new System.Drawing.Size(148, 61);
             this.button2.TabIndex = 2;
             this.button2.Text = "طباعة الريسيت";
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -187,9 +191,12 @@ namespace Car_Care_Service__.NET_
             // 
             // Costs
             // 
-            this.Costs.Location = new System.Drawing.Point(185, 20);
+            this.Costs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.Costs.Font = new System.Drawing.Font("Noto Sans", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Costs.Location = new System.Drawing.Point(873, 24);
             this.Costs.Name = "Costs";
-            this.Costs.Size = new System.Drawing.Size(99, 32);
+            this.Costs.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.Costs.Size = new System.Drawing.Size(90, 28);
             this.Costs.TabIndex = 41;
             this.Costs.TextChanged += new System.EventHandler(this.Costs_TextChanged);
             // 
@@ -198,7 +205,7 @@ namespace Car_Care_Service__.NET_
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold);
             this.label12.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label12.Location = new System.Drawing.Point(290, 20);
+            this.label12.Location = new System.Drawing.Point(969, 24);
             this.label12.Name = "label12";
             this.label12.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label12.Size = new System.Drawing.Size(123, 29);
@@ -210,7 +217,7 @@ namespace Car_Care_Service__.NET_
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.label11.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label11.Location = new System.Drawing.Point(607, 3);
+            this.label11.Location = new System.Drawing.Point(588, 3);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(63, 25);
             this.label11.TabIndex = 44;
@@ -220,7 +227,7 @@ namespace Car_Care_Service__.NET_
             // button9
             // 
             this.button9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button9.Location = new System.Drawing.Point(443, 32);
+            this.button9.Location = new System.Drawing.Point(707, 28);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(124, 29);
             this.button9.TabIndex = 43;
@@ -233,24 +240,27 @@ namespace Car_Care_Service__.NET_
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.label9.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.label9.ForeColor = System.Drawing.Color.AliceBlue;
-            this.label9.Location = new System.Drawing.Point(716, 32);
+            this.label9.Location = new System.Drawing.Point(207, 29);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(32, 32);
+            this.label9.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label9.Size = new System.Drawing.Size(27, 29);
             this.label9.TabIndex = 38;
             this.label9.Text = "0";
             this.label9.Visible = false;
+            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.label10.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.label10.ForeColor = System.Drawing.Color.AliceBlue;
-            this.label10.Location = new System.Drawing.Point(716, 3);
+            this.label10.Location = new System.Drawing.Point(207, -4);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(32, 32);
+            this.label10.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label10.Size = new System.Drawing.Size(27, 29);
             this.label10.TabIndex = 39;
             this.label10.Text = "0";
             this.label10.Visible = false;
@@ -259,7 +269,7 @@ namespace Car_Care_Service__.NET_
             // button8
             // 
             this.button8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button8.Location = new System.Drawing.Point(443, 6);
+            this.button8.Location = new System.Drawing.Point(707, 2);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(124, 29);
             this.button8.TabIndex = 40;
@@ -270,12 +280,16 @@ namespace Car_Care_Service__.NET_
             // 
             // Date
             // 
-            this.Date.Location = new System.Drawing.Point(573, 32);
+            this.Date.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.Date.Location = new System.Drawing.Point(557, 29);
             this.Date.Multiline = true;
             this.Date.Name = "Date";
             this.Date.Size = new System.Drawing.Size(126, 28);
             this.Date.TabIndex = 42;
             this.Date.Visible = false;
+            this.Date.TextChanged += new System.EventHandler(this.Date_TextChanged);
+            //this.Date.Enter += new System.EventHandler(this.Date_Enter);
+            this.Date.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Date_KeyPress);
             // 
             // button4
             // 
@@ -355,7 +369,7 @@ namespace Car_Care_Service__.NET_
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Sakkal Majalla", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button3.Location = new System.Drawing.Point(26, 549);
+            this.button3.Location = new System.Drawing.Point(969, 554);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(281, 52);
             this.button3.TabIndex = 9;
@@ -368,7 +382,7 @@ namespace Car_Care_Service__.NET_
             this.textBox5.BackColor = System.Drawing.Color.AliceBlue;
             this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox5.Font = new System.Drawing.Font("MV Boli", 23F);
-            this.textBox5.Location = new System.Drawing.Point(661, 71);
+            this.textBox5.Location = new System.Drawing.Point(362, 71);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
             this.textBox5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -383,9 +397,10 @@ namespace Car_Care_Service__.NET_
             // 
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(323, 124);
+            this.dataGridView1.Location = new System.Drawing.Point(24, 124);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.Size = new System.Drawing.Size(927, 469);
             this.dataGridView1.TabIndex = 4;
@@ -395,12 +410,12 @@ namespace Car_Care_Service__.NET_
             // txtNotes
             // 
             this.txtNotes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.txtNotes.Location = new System.Drawing.Point(26, 476);
+            this.txtNotes.Location = new System.Drawing.Point(969, 513);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtNotes.Size = new System.Drawing.Size(170, 67);
+            this.txtNotes.Size = new System.Drawing.Size(170, 35);
             this.txtNotes.TabIndex = 8;
             // 
             // label4
@@ -409,7 +424,7 @@ namespace Car_Care_Service__.NET_
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label4.Font = new System.Drawing.Font("Noto Kufi Arabic", 12F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(199, 485);
+            this.label4.Location = new System.Drawing.Point(1142, 508);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(115, 43);
             this.label4.TabIndex = 13;
@@ -423,7 +438,7 @@ namespace Car_Care_Service__.NET_
             this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label5.Font = new System.Drawing.Font("Noto Kufi Arabic", 11F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(124, 310);
+            this.label5.Location = new System.Drawing.Point(1067, 315);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(117, 41);
             this.label5.TabIndex = 15;
@@ -436,7 +451,7 @@ namespace Car_Care_Service__.NET_
             this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label6.Font = new System.Drawing.Font("Noto Kufi Arabic", 10F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(40, 254);
+            this.label6.Location = new System.Drawing.Point(983, 259);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(112, 37);
             this.label6.TabIndex = 24;
@@ -453,7 +468,7 @@ namespace Car_Care_Service__.NET_
             this.txtVehicleType.Items.AddRange(new object[] {
             "سيارة",
             "سكوتر"});
-            this.txtVehicleType.Location = new System.Drawing.Point(26, 289);
+            this.txtVehicleType.Location = new System.Drawing.Point(969, 294);
             this.txtVehicleType.Name = "txtVehicleType";
             this.txtVehicleType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtVehicleType.Size = new System.Drawing.Size(134, 28);
@@ -467,6 +482,7 @@ namespace Car_Care_Service__.NET_
             this.txtSaleID.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.HistoryList;
             this.txtSaleID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
             this.txtSaleID.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.txtSaleID.Font = new System.Drawing.Font("Noto Sans", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSaleID.FormatString = "N2";
             this.txtSaleID.FormattingEnabled = true;
             this.txtSaleID.Items.AddRange(new object[] {
@@ -481,10 +497,10 @@ namespace Car_Care_Service__.NET_
             "80",
             "90",
             "100"});
-            this.txtSaleID.Location = new System.Drawing.Point(177, 289);
+            this.txtSaleID.Location = new System.Drawing.Point(1120, 294);
             this.txtSaleID.Name = "txtSaleID";
             this.txtSaleID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtSaleID.Size = new System.Drawing.Size(130, 28);
+            this.txtSaleID.Size = new System.Drawing.Size(130, 31);
             this.txtSaleID.TabIndex = 5;
             this.txtSaleID.Text = "0";
             this.txtSaleID.SelectedIndexChanged += new System.EventHandler(this.txtSaleID_SelectedIndexChanged);
@@ -498,7 +514,7 @@ namespace Car_Care_Service__.NET_
             this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label7.Font = new System.Drawing.Font("Noto Kufi Arabic", 10F, System.Drawing.FontStyle.Bold);
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(200, 254);
+            this.label7.Location = new System.Drawing.Point(1143, 259);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(97, 37);
             this.label7.TabIndex = 19;
@@ -508,7 +524,7 @@ namespace Car_Care_Service__.NET_
             // txtCarID
             // 
             this.txtCarID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.txtCarID.Location = new System.Drawing.Point(26, 222);
+            this.txtCarID.Location = new System.Drawing.Point(969, 227);
             this.txtCarID.MaxLength = 13;
             this.txtCarID.Name = "txtCarID";
             this.txtCarID.Size = new System.Drawing.Size(144, 32);
@@ -521,7 +537,7 @@ namespace Car_Care_Service__.NET_
             // txtCustomerID
             // 
             this.txtCustomerID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.txtCustomerID.Location = new System.Drawing.Point(26, 87);
+            this.txtCustomerID.Location = new System.Drawing.Point(969, 92);
             this.txtCustomerID.Name = "txtCustomerID";
             this.txtCustomerID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtCustomerID.Size = new System.Drawing.Size(281, 32);
@@ -532,7 +548,7 @@ namespace Car_Care_Service__.NET_
             // textBox2
             // 
             this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.textBox2.Location = new System.Drawing.Point(26, 154);
+            this.textBox2.Location = new System.Drawing.Point(969, 159);
             this.textBox2.Name = "textBox2";
             this.textBox2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.textBox2.Size = new System.Drawing.Size(281, 32);
@@ -545,7 +561,7 @@ namespace Car_Care_Service__.NET_
             this.button1.BackColor = System.Drawing.Color.AliceBlue;
             this.button1.Font = new System.Drawing.Font("Noto Naskh Arabic", 15F, System.Drawing.FontStyle.Bold);
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(488, 71);
+            this.button1.Location = new System.Drawing.Point(189, 71);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(167, 48);
             this.button1.TabIndex = 31;
@@ -559,7 +575,7 @@ namespace Car_Care_Service__.NET_
             this.button6.BackColor = System.Drawing.Color.AliceBlue;
             this.button6.Font = new System.Drawing.Font("Noto Naskh Arabic", 15F, System.Drawing.FontStyle.Bold);
             this.button6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button6.Location = new System.Drawing.Point(323, 71);
+            this.button6.Location = new System.Drawing.Point(24, 71);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(159, 48);
             this.button6.TabIndex = 32;
@@ -573,7 +589,7 @@ namespace Car_Care_Service__.NET_
             this.button7.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
-            this.button7.Location = new System.Drawing.Point(1201, 71);
+            this.button7.Location = new System.Drawing.Point(902, 71);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(49, 48);
             this.button7.TabIndex = 33;
@@ -585,11 +601,11 @@ namespace Car_Care_Service__.NET_
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.label8.Font = new System.Drawing.Font("MV Boli", 12F);
+            this.label8.Font = new System.Drawing.Font("Noto Sans", 12F);
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.label8.Location = new System.Drawing.Point(158, 438);
+            this.label8.Location = new System.Drawing.Point(1123, 482);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(26, 26);
+            this.label8.Size = new System.Drawing.Size(24, 30);
             this.label8.TabIndex = 36;
             this.label8.Text = "0";
             this.label8.Click += new System.EventHandler(this.label8_Click);
@@ -600,25 +616,27 @@ namespace Car_Care_Service__.NET_
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.Font = new System.Drawing.Font("Noto Serif Hebrew", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(26, 344);
+            this.checkedListBox1.Location = new System.Drawing.Point(969, 349);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkedListBox1.Size = new System.Drawing.Size(281, 84);
+            this.checkedListBox1.Size = new System.Drawing.Size(281, 124);
             this.checkedListBox1.TabIndex = 7;
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged_1);
             // 
             // ID
             // 
-            this.ID.Location = new System.Drawing.Point(0, 55);
+            this.ID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.ID.Location = new System.Drawing.Point(1236, 54);
             this.ID.Name = "ID";
             this.ID.Size = new System.Drawing.Size(26, 32);
             this.ID.TabIndex = 1;
+            this.ID.TextChanged += new System.EventHandler(this.ID_TextChanged);
             // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.textBox1.Location = new System.Drawing.Point(166, 222);
+            this.textBox1.Location = new System.Drawing.Point(1109, 227);
             this.textBox1.MaxLength = 13;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(141, 32);
@@ -632,13 +650,14 @@ namespace Car_Care_Service__.NET_
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.label14.Font = new System.Drawing.Font("MV Boli", 12F);
+            this.label14.Font = new System.Drawing.Font("Noto Sans", 12F);
             this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.label14.Location = new System.Drawing.Point(0, 438);
+            this.label14.Location = new System.Drawing.Point(975, 482);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(26, 26);
+            this.label14.Size = new System.Drawing.Size(24, 30);
             this.label14.TabIndex = 39;
             this.label14.Text = "0";
+            this.label14.Click += new System.EventHandler(this.label14_Click);
             // 
             // label13
             // 
@@ -646,11 +665,12 @@ namespace Car_Care_Service__.NET_
             this.label13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label13.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(204, 436);
+            this.label13.Location = new System.Drawing.Point(1181, 475);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(113, 33);
+            this.label13.Size = new System.Drawing.Size(69, 33);
             this.label13.TabIndex = 40;
-            this.label13.Text = "حساب الخدمة";
+            this.label13.Text = " الخدمة";
+            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // label15
             // 
@@ -658,11 +678,19 @@ namespace Car_Care_Service__.NET_
             this.label15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label15.Font = new System.Drawing.Font("Noto Kufi Arabic", 9F, System.Drawing.FontStyle.Bold);
             this.label15.ForeColor = System.Drawing.Color.Black;
-            this.label15.Location = new System.Drawing.Point(75, 436);
+            this.label15.Location = new System.Drawing.Point(1036, 477);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(77, 33);
             this.label15.TabIndex = 41;
             this.label15.Text = "الإجمالي";
+            this.label15.Click += new System.EventHandler(this.label15_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Location = new System.Drawing.Point(1120, 477);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(2, 35);
+            this.panel3.TabIndex = 42;
             // 
             // elipseControl1
             // 
@@ -684,6 +712,7 @@ namespace Car_Care_Service__.NET_
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1258, 669);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
@@ -779,6 +808,7 @@ namespace Car_Care_Service__.NET_
         private Label label15;
         private TextBox textBox3;
         private PictureBox pictureBox1;
+        private Panel panel3;
     }
 
 }

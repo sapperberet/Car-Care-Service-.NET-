@@ -45,9 +45,9 @@ namespace Car_Care_Service__.NET_
 
 
 
-
             { " غسيل داخلي وخارجي وموتور كيماوي", 170 / 2 },
             { " غسیل داخلي وخارجي", 135 /2 },
+            { "تنظيف جنوط كيماوي", 60/2 },
             { " غسیل موتور كيماوي", 60 / 2 },
             { " غسيل خارجي", 70 /2 },
             { " غسيل داخلي", 70 / 2 },
@@ -153,8 +153,36 @@ namespace Car_Care_Service__.NET_
         {
             LoadCustomers();
             InitializeDatabaseConnection();
+            fs();
+
             //FetchDailyAndMonthlyTotals();
         }
+        private void fs() {
+
+            string userKey = PromptForHashKey();
+            string validKey = "12345"; // Replace this with your actual hash key
+
+            if (string.IsNullOrWhiteSpace(userKey) || userKey != validKey)
+            {
+                MessageBox.Show("Invalid or no hash key provided. The program will now exit.",
+                                "Access Denied",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                this.Close(); // Close the application
+            }
+        }
+        private string PromptForHashKey()
+        {
+            using (var hashKeyPrompt = new HashKeyPrompt())
+            {
+                if (hashKeyPrompt.ShowDialog() == DialogResult.OK)
+                {
+                    return hashKeyPrompt.HashKey; // Assume HashKeyPrompt has a `HashKey` property
+                }
+            }
+            return null;
+        }
+
         private void InitializeDatabaseConnection()
         {
             //string databasePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
@@ -1505,7 +1533,7 @@ namespace Car_Care_Service__.NET_
 
         private void textBox3_TextChanged_1(object sender, EventArgs e)
         {
-            if (textBox3.Text == "feen el bernameg")
+            if (textBox3.Text == "3108")
             {
                 dataGridView1.Visible = true;
                 button1.Visible = true;
@@ -1528,6 +1556,57 @@ namespace Car_Care_Service__.NET_
         {
 
         }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ID_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Date_TextChanged(object sender, EventArgs e)
+        {
+
+            Control ctrl = (sender as Control);
+
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => c >= '0' && c <= '9' || c == '/'));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            string input = textBox2.Text;
+        }
+
+        private void Date_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //char keyChar = e.KeyChar;
+            //if (keyChar == '\u2386')
+            //{
+            //    e.Handled=false;
+            //    //return;
+            //}
+        }
+
+
     }
         //private void HandleBackspace()
         //{
