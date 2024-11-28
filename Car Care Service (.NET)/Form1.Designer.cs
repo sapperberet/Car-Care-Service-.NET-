@@ -199,6 +199,7 @@ namespace Car_Care_Service__.NET_
             this.Costs.Size = new System.Drawing.Size(90, 28);
             this.Costs.TabIndex = 41;
             this.Costs.TextChanged += new System.EventHandler(this.Costs_TextChanged);
+            this.Costs.Enter += new System.EventHandler(this.Costs_Enter);
             // 
             // label12
             // 
@@ -288,7 +289,6 @@ namespace Car_Care_Service__.NET_
             this.Date.TabIndex = 42;
             this.Date.Visible = false;
             this.Date.TextChanged += new System.EventHandler(this.Date_TextChanged);
-            //this.Date.Enter += new System.EventHandler(this.Date_Enter);
             this.Date.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Date_KeyPress);
             // 
             // button4
@@ -505,6 +505,7 @@ namespace Car_Care_Service__.NET_
             this.txtSaleID.Text = "0";
             this.txtSaleID.SelectedIndexChanged += new System.EventHandler(this.txtSaleID_SelectedIndexChanged);
             this.txtSaleID.TextChanged += new System.EventHandler(this.txtSaleID_TextChanged);
+            this.txtSaleID.Enter += new System.EventHandler(this.txtSaleID_Enter);
             this.txtSaleID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSaleID_KeyPress);
             this.txtSaleID.Leave += new System.EventHandler(this.txtSaleID_Leave);
             // 

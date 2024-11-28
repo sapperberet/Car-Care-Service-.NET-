@@ -23,6 +23,9 @@ using DocumentFormat.OpenXml.Vml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Runtime.CompilerServices;
+using System.Net.Http;
+
+
 
 
 
@@ -84,6 +87,7 @@ namespace Car_Care_Service__.NET_
             checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 
         }
+ 
 
 
 
@@ -1309,6 +1313,7 @@ namespace Car_Care_Service__.NET_
         private void txtSaleID_KeyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
+            
 
             
             if (keyChar == '\b' )
@@ -1505,11 +1510,13 @@ namespace Car_Care_Service__.NET_
 
         private void Costs_TextChanged(object sender, EventArgs e)
         {
+            if (Costs.Text.Length == 0) { 
+            Costs.Text = "0";
+            }
             Control ctrl = (sender as Control);
             string value = string.Concat(ctrl
                 .Text
                  .Where(c => Char.IsDigit(c) || c == '\u0020'));
-
             if (value != ctrl.Text)
                 ctrl.Text = value;
             //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
@@ -1519,11 +1526,14 @@ namespace Car_Care_Service__.NET_
 
         private void txtSaleID_TextChanged(object sender, EventArgs e)
         {
+            if (txtSaleID.Text.Length == 0)
+            {
+                txtSaleID.Text = "0";
+            }
             Control ctrl = (sender as Control);
             string value = string.Concat(ctrl
                 .Text
                  .Where(c => Char.IsDigit(c) || c == '\u0020'));
-
             if (value != ctrl.Text)
                 ctrl.Text = value;
             //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
@@ -1606,7 +1616,24 @@ namespace Car_Care_Service__.NET_
             //}
         }
 
+        private void Costs_Enter(object sender, EventArgs e)
+        {
+             System.Windows.Forms.TextBox Costs = sender as System.Windows.Forms.TextBox;
+            if (Costs != null && Costs.Text.Length == 1) {
+                Costs.SelectAll();
+            }
 
+
+        }
+
+        private void txtSaleID_Enter(object sender, EventArgs e)
+        {
+            System.Windows.Forms.TextBox txtSaleID = sender as System.Windows.Forms.TextBox;
+            if (txtSaleID != null && txtSaleID.Text.Length == 1)
+            {
+                txtSaleID.SelectAll();
+            }
+        }
     }
         //private void HandleBackspace()
         //{
