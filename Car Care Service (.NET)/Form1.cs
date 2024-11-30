@@ -42,16 +42,16 @@ namespace Car_Care_Service__.NET_
         //Bitmap memoryImage;
         private readonly Dictionary<string, double> operationPrices = new Dictionary<string, double>
         {
-            { "اشتراك شهري", 500/2 },
-            { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
-            { "غسيل سقف كيماوي", 200/2 },
+            { " اشتراك شهري", 500/2 },
+            { " غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
+            { " غسيل سقف كيماوي", 200/2 },
 
 
 
 
             { " غسيل داخلي وخارجي وموتور كيماوي", 170 / 2 },
             { " غسیل داخلي وخارجي", 67.5 },
-            { "تنظيف جنوط كيماوي", 60/2 },
+            { " تنظيف جنوط كيماوي", 60/2 },
             { " غسیل موتور كيماوي", 60 / 2 },
             { " غسيل خارجي", 70 /2 },
             { " غسيل داخلي", 70 / 2 },
@@ -112,7 +112,7 @@ namespace Car_Care_Service__.NET_
                 return;
             }
 
-            string query = "SELECT SUM(Total) - SUM(Costs) AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
+            string query = "SELECT SUM(Total)  AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -140,7 +140,7 @@ namespace Car_Care_Service__.NET_
             string selectedDate = Date.Text; // e.g., "24/11/2024"
             DateTime date = DateTime.Parse(selectedDate);
             string query = @"
-                SELECT SUM(Total) - SUM(Costs) AS MonthlyTotal 
+                SELECT SUM(Total)  AS MonthlyTotal 
                 FROM CarWashServices 
                 WHERE YEAR(CurrentDate) = @SelectedYear AND MONTH(CurrentDate) = @SelectedMonth";
 
@@ -698,8 +698,13 @@ namespace Car_Care_Service__.NET_
                             command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
                             string cb = "";
                         for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
-                        {
-                            cb += checkedListBox1.Items[i];
+                        {   
+                            cb += checkedListBox1.CheckedItems[i];
+                            if(i < checkedListBox1.CheckedItems.Count - 1)
+                            {
+
+                               cb += " / ";
+                            }
                         }
                         ;
 
@@ -1756,6 +1761,11 @@ namespace Car_Care_Service__.NET_
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
         {
 
         }
