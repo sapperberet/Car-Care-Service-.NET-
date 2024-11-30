@@ -24,6 +24,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Runtime.CompilerServices;
 using System.Net.Http;
+using System.Reflection.Emit;
 
 
 
@@ -39,7 +40,7 @@ namespace Car_Care_Service__.NET_
         BindingSource TransactionsBS = new BindingSource();
 
         //Bitmap memoryImage;
-        private readonly Dictionary<string, int> operationPrices = new Dictionary<string, int>
+        private readonly Dictionary<string, double> operationPrices = new Dictionary<string, double>
         {
             { "اشتراك شهري", 500/2 },
             { "غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
@@ -49,7 +50,7 @@ namespace Car_Care_Service__.NET_
 
 
             { " غسيل داخلي وخارجي وموتور كيماوي", 170 / 2 },
-            { " غسیل داخلي وخارجي", 135 /2 },
+            { " غسیل داخلي وخارجي", 67.5 },
             { "تنظيف جنوط كيماوي", 60/2 },
             { " غسیل موتور كيماوي", 60 / 2 },
             { " غسيل خارجي", 70 /2 },
@@ -57,7 +58,7 @@ namespace Car_Care_Service__.NET_
             { " اسکوتر", 50 / 2 }
         };
 
-        private int totalPrice = 0;
+        private double totalPrice = 0;
 
         public Form1()
         {
@@ -86,8 +87,19 @@ namespace Car_Care_Service__.NET_
             Costs.Text = "0";
             checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 
+            Timer timer = new Timer();
+            timer.Interval = 1000; // Update every 1 second
+            timer.Tick += Timer_Tick;
+            timer.Start();
+
         }
- 
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Update the label with the current time
+            //label9.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            label9.Text = DateTime.Now.ToString("dd/MM/yy H:mm:ss");
+        }
 
 
 
@@ -109,7 +121,8 @@ namespace Car_Care_Service__.NET_
                 {
                     cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
                     object result = cmd.ExecuteScalar();
-                    label9.Text = $"{result ?? 0} : الدخل اليومي";
+                    MessageBox.Show($"{result ?? 0}", "الدخل اليومي", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //label9.Text = $"{result ?? 0} : الدخل اليومي";
                 }
             }
         }
@@ -139,7 +152,8 @@ namespace Car_Care_Service__.NET_
                     cmd.Parameters.AddWithValue("@SelectedYear", date.Year);
                     cmd.Parameters.AddWithValue("@SelectedMonth", date.Month);
                     object result = cmd.ExecuteScalar();
-                    label10.Text = $"{result ?? 0} : الدخل الشهري";
+                    MessageBox.Show($"{result ?? 0}" , "الدخل الشهري" , MessageBoxButtons.OK , MessageBoxIcon.Information);
+                    //label10.Text = $"{result ?? 0} : الدخل الشهري";
                 }
             }
         }
@@ -158,7 +172,7 @@ namespace Car_Care_Service__.NET_
             LoadCustomers();
             InitializeDatabaseConnection();
             fs();
-
+            
             //FetchDailyAndMonthlyTotals();
         }
         private void fs() {
@@ -247,6 +261,46 @@ namespace Car_Care_Service__.NET_
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+        private void LoadTelephone(string searchQuery = "")
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query;
+
+
+                    if (string.IsNullOrWhiteSpace(searchQuery))
+                    {
+                        query = "SELECT * FROM CarWashServices";
+                    }
+                    else
+                    {
+                        query = "SELECT * FROM CarWashServices WHERE PhoneNumber LIKE @SearchQuery";
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrWhiteSpace(searchQuery))
+                        {
+                            cmd.Parameters.AddWithValue("@SearchQuery", $"%{searchQuery}%");
+                        }
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            System.Data.DataTable dataTable = new System.Data.DataTable();
+                            adapter.Fill(dataTable);
+                            dataGridView1.DataSource = dataTable;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
 
         //1280; 720
         //private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
@@ -254,7 +308,7 @@ namespace Car_Care_Service__.NET_
         //    e.Graphics.DrawImage(memoryImage, 0, 0);
         //}
 
-  
+
         private void elipseControl1_Click(object sender, EventArgs e)
         {
 
@@ -621,8 +675,8 @@ namespace Car_Care_Service__.NET_
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Discount, Costs, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Discount, @Costs, @Total, @Notes)";
+                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
 
                         {
                             
@@ -632,7 +686,14 @@ namespace Car_Care_Service__.NET_
 
                             command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
                             command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
-                            command.Parameters.AddWithValue("@CarID", txtCarID.Text);
+                        
+                        
+                        
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+
+
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text+  tsk);
+                            command.Parameters.AddWithValue("@Profit", label8.Text);
                             command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
                             command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
                             string cb = "";
@@ -663,6 +724,7 @@ namespace Car_Care_Service__.NET_
                         ;
                         txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox1.Text = "";
                         txtVehicleType.Text = "";
                         txtSaleID.Text = "0";
@@ -693,7 +755,7 @@ namespace Car_Care_Service__.NET_
                     //               SET Total = @Total, Notes = @Notes 
                     //               WHERE TransactionID = @TransactionID";
                     string updateQuery = "UPDATE CarWashServices SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
-                       "VehicleType = @VehicleType, Services = @Services, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
                        "WHERE ID = @ID";
 
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
@@ -704,7 +766,9 @@ namespace Car_Care_Service__.NET_
                         //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
                         command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
                         command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
-                        command.Parameters.AddWithValue("@CarID", txtCarID.Text);
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text + tsk );
+                        command.Parameters.AddWithValue("@Profit", label8.Text);
                         command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
                         command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
                         string cb = "";
@@ -731,6 +795,7 @@ namespace Car_Care_Service__.NET_
                         ;
                         txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox1.Text = "";
                         txtSaleID.Text = "0";
                         Costs.Text = "0";
@@ -1556,9 +1621,14 @@ namespace Car_Care_Service__.NET_
                 button9.Visible = true;
                 Date.Visible = true;    
                 label11.Visible = true; 
-                label10.Visible = true;
-                label9.Visible = true;
-
+                //label10.Visible = true;
+                //label9.Visible = true;
+                button10.Visible = true;
+                textBox4.Visible = true;
+                textBox3.Visible = false;
+                button11.Visible = true;
+                label12.Visible = true;
+                Costs.Visible = true;   
             }
         }
 
@@ -1567,10 +1637,7 @@ namespace Car_Care_Service__.NET_
 
         }
 
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
+      
 
         private void ID_TextChanged(object sender, EventArgs e)
         {
@@ -1633,6 +1700,64 @@ namespace Car_Care_Service__.NET_
             {
                 txtSaleID.SelectAll();
             }
+        }
+
+        private void txtNotes_TextChanged(object sender, EventArgs e)
+        {
+
+
+
+
+
+        }
+
+        private void textBox4_TextChanged_1(object sender, EventArgs e)
+        {
+                       //var textboxSender = (TextBox)sender;
+            //var cursorPosition = textboxSender.SelectionStart;
+            //textboxSender.Text = Regex.Replace(textboxSender.Text, @"/[^A-Za-z0-9!-/:-@[-`{-~]/g", "");
+            //textboxSender.SelectionStart = cursorPosition;
+            Control ctrl = (sender as Control);
+
+            //string value = string.Concat(ctrl
+            //  .Text
+            //  .Where(c => c >= '\u0600' && c <= '\u06FF' || c >= '\u0750' && c <= '\u077F' || c==' '));
+            string value = string.Concat(ctrl
+              .Text
+              .Where(c => Char.IsDigit(c)));
+
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            string searchQuery = textBox4.Text.Trim();
+            LoadTelephone(searchQuery);
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            textBox3.Text = "";
+            dataGridView1.Visible = false;
+            button1.Visible = false;
+            button6.Visible = false;
+            btnExportToExcel.Visible = false;
+            textBox5.Visible = false;
+            button7.Visible = false;
+            button8.Visible = false;
+            button9.Visible = false;
+            Date.Visible = false;
+            label11.Visible = false;
+            //label10.Visible = false;
+            //label9.Visible = false;
+            button10.Visible = false;
+            textBox4.Visible = false;
+            textBox3.Visible = true;
+            button11.Visible = false;
+            label12.Visible = false;
+            Costs.Visible = false;
+        }
+
+        private void panel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
         }
     }
         //private void HandleBackspace()

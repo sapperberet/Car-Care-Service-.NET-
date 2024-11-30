@@ -31,7 +31,7 @@ public static class HashKeyManager
     public static bool ValidateAndRemoveHashKey(string hashKey)
     {
         var hashKeys = LoadHashKeys();
-        string a = "";
+        //string a = "";
         //foreach (var key in hashKeys)
         //{
         //    a += key;

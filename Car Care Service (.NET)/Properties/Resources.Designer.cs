@@ -143,6 +143,26 @@ namespace Car_Care_Service__.NET_.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IMG_20241125_WA00181 {
+            get {
+                object obj = ResourceManager.GetObject("IMG-20241125-WA00181", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Log_Out_icon {
+            get {
+                object obj = ResourceManager.GetObject("Log-Out-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap pngtree_vector_print_icon_png_image_3994913 {
             get {
                 object obj = ResourceManager.GetObject("pngtree_vector_print_icon_png_image_3994913", resourceCulture);
