@@ -113,6 +113,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateForm.Designer.cs">
+      <DependentUpon>DateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DisplayData.cs" />
     <Compile Include="ElipseControl.cs">
       <SubType>Component</SubType>
@@ -151,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControl2.resx">
       <DependentUpon>CustomControl2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DateForm.resx">
+      <DependentUpon>DateForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ElipseControl.resx">
       <DependentUpon>ElipseControl.cs</DependentUpon>
@@ -218,6 +227,7 @@
     <Content Include="assets\Actions-page-zoom-icon.png" />
     <None Include="assets\IMG-20241125-WA0018.jpg" />
     <None Include="assets\Log-Out-icon.png" />
+    <Content Include="assets\Calendar-2-icon %281%29.ico" />
     <Content Include="assets\pngtree-vector-print-icon-png-image_3994913.jpg" />
     <Content Include="assets\print.ico" />
     <Content Include="assets\print.png" />

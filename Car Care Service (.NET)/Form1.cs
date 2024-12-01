@@ -76,6 +76,7 @@ namespace Car_Care_Service__.NET_
             //button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             textBox2.MaxLength = 11;
             txtCarID.MaxLength = 13;
+            Date.MaxLength = 10;
             dataGridView1.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             dataGridView1.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -105,57 +106,57 @@ namespace Car_Care_Service__.NET_
 
         private void btnDailyTotal_Click(object sender, EventArgs e)
         {
-            string selectedDate = Date.Text;
-            if (!IsValidDate(Date.Text))
-            {
-                MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.", "wrong input format", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            //string selectedDate = Date.Text;
+            //if (!IsValidDate(Date.Text))
+            //{
+            //    MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.", "wrong input format", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    return;
+            //}
 
-            string query = "SELECT SUM(Total)  AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
+            //string query = "SELECT SUM(Total)  AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
-                    object result = cmd.ExecuteScalar();
-                    MessageBox.Show($"{result ?? 0}", "الدخل اليومي", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //label9.Text = $"{result ?? 0} : الدخل اليومي";
-                }
-            }
+            //using (SqlConnection conn = new SqlConnection(connectionString))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand(query, conn))
+            //    {
+            //        cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
+            //        object result = cmd.ExecuteScalar();
+            //        MessageBox.Show($"{result ?? 0}", "الدخل اليومي", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //        //label9.Text = $"{result ?? 0} : الدخل اليومي";
+            //    }
+            //}
         }
 
         private void btnMonthlyTotal_Click(object sender, EventArgs e)
         {
 
-            // Validate date input
-            if (!IsValidDate(Date.Text))
-            {
-                MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.");
-                return;
-            }
+            //// Validate date input
+            //if (!IsValidDate(Date.Text))
+            //{
+            //    MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.");
+            //    return;
+            //}
 
-            string selectedDate = Date.Text; // e.g., "24/11/2024"
-            DateTime date = DateTime.Parse(selectedDate);
-            string query = @"
-                SELECT SUM(Total)  AS MonthlyTotal 
-                FROM CarWashServices 
-                WHERE YEAR(CurrentDate) = @SelectedYear AND MONTH(CurrentDate) = @SelectedMonth";
+            //string selectedDate = Date.Text; // e.g., "24/11/2024"
+            //DateTime date = DateTime.Parse(selectedDate);
+            //string query = @"
+            //    SELECT SUM(Total)  AS MonthlyTotal 
+            //    FROM CarWashServices 
+            //    WHERE YEAR(CurrentDate) = @SelectedYear AND MONTH(CurrentDate) = @SelectedMonth";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@SelectedYear", date.Year);
-                    cmd.Parameters.AddWithValue("@SelectedMonth", date.Month);
-                    object result = cmd.ExecuteScalar();
-                    MessageBox.Show($"{result ?? 0}" , "الدخل الشهري" , MessageBoxButtons.OK , MessageBoxIcon.Information);
-                    //label10.Text = $"{result ?? 0} : الدخل الشهري";
-                }
-            }
+            //using (SqlConnection conn = new SqlConnection(connectionString))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand(query, conn))
+            //    {
+            //        cmd.Parameters.AddWithValue("@SelectedYear", date.Year);
+            //        cmd.Parameters.AddWithValue("@SelectedMonth", date.Month);
+            //        object result = cmd.ExecuteScalar();
+            //        MessageBox.Show($"{result ?? 0}" , "الدخل الشهري" , MessageBoxButtons.OK , MessageBoxIcon.Information);
+            //        //label10.Text = $"{result ?? 0} : الدخل الشهري";
+            //    }
+            //}
         }
         private bool IsValidDate(string input)
         {
@@ -1622,8 +1623,8 @@ namespace Car_Care_Service__.NET_
                 btnExportToExcel .Visible = true;
                 textBox5.Visible = true;
                 button7.Visible = true;
-                button8.Visible = true;
-                button9.Visible = true;
+                //button8.Visible = true;
+                //button9.Visible = true;
                 Date.Visible = true;    
                 label11.Visible = true; 
                 //label10.Visible = true;
@@ -1633,7 +1634,13 @@ namespace Car_Care_Service__.NET_
                 textBox3.Visible = false;
                 button11.Visible = true;
                 label12.Visible = true;
-                Costs.Visible = true;   
+                Costs.Visible = true;  
+                panel6.Visible = true;
+                dateTimePicker1 .Visible = true;    
+                dateTimePicker2 .Visible = true; 
+                label10.Visible=true;
+                label16.Visible = true; 
+                button8 .Visible = true;    
             }
         }
 
@@ -1666,7 +1673,6 @@ namespace Car_Care_Service__.NET_
 
         private void Date_TextChanged(object sender, EventArgs e)
         {
-
             Control ctrl = (sender as Control);
 
             string value = string.Concat(ctrl
@@ -1676,6 +1682,16 @@ namespace Car_Care_Service__.NET_
             if (value != ctrl.Text)
                 ctrl.Text = value;
             string input = textBox2.Text;
+            if(Date.Text.Length == 0)
+            {
+
+                label11.Text = " الحساب بالتاريخ ";
+
+            }
+            else
+            {
+                label11.Text = "";
+            }
         }
 
         private void Date_KeyPress(object sender, KeyPressEventArgs e)
@@ -1746,8 +1762,8 @@ namespace Car_Care_Service__.NET_
             btnExportToExcel.Visible = false;
             textBox5.Visible = false;
             button7.Visible = false;
-            button8.Visible = false;
-            button9.Visible = false;
+            //button8.Visible = false;
+            //button9.Visible = false;
             Date.Visible = false;
             label11.Visible = false;
             //label10.Visible = false;
@@ -1758,6 +1774,12 @@ namespace Car_Care_Service__.NET_
             button11.Visible = false;
             label12.Visible = false;
             Costs.Visible = false;
+            panel6.Visible = false;
+            dateTimePicker1.Visible = false;
+            dateTimePicker2.Visible = false;
+            label10.Visible = false;
+            label16.Visible = false;
+            button8.Visible = false;
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
@@ -1766,6 +1788,206 @@ namespace Car_Care_Service__.NET_
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Date_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string selectedDate = Date.Text;
+                if (!IsValidDate(Date.Text))
+                {
+                    MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.", "wrong input format", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+            DateTime startDate = DateTime.Parse(selectedDate);
+            DateTime endDate = DateTime.Parse(selectedDate);
+
+            // Query string to get data within the range
+            string query = @"
+        SELECT CurrentDate, Total 
+        FROM CarWashServices 
+        WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+            
+            // Create a DataTable to hold the results
+            System.Data.DataTable dataTable = new System.Data.DataTable();
+
+            // Execute the query and fill the DataTable
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            DateForm dateForm = new DateForm();
+            dateForm.SetDataSource(dataTable); // Pass the DataTable to the DateForm
+            query = @"
+            SELECT SUM(Total) AS TotalBetweenDates
+            FROM CarWashServices
+            WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                     object result = cmd.ExecuteScalar();
+                     dateForm.SetLabelText("Total : "+$"{result}"+ " £");
+                   // MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
+                }
+            }
+
+            dateForm.ShowDialog();
+            // Open DateForm and pass the data
+
+                //string query = "SELECT SUM(Total)  AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
+
+                //using (SqlConnection conn = new SqlConnection(connectionString))
+                //{
+                //    conn.Open();
+                //    using (SqlCommand cmd = new SqlCommand(query, conn))
+                //    {
+                //        cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
+                //        object result = cmd.ExecuteScalar();
+                //        MessageBox.Show($"{result ?? 0}", "الدخل اليومي", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        //label9.Text = $"{result ?? 0} : الدخل اليومي";
+                //    }
+                //}
+
+                ////string selectedDate = Date.Text; // e.g., "24/11/2024"
+                //DateTime date = DateTime.Parse(selectedDate);
+                //query = @"
+                //SELECT SUM(Total)  AS MonthlyTotal 
+                //FROM CarWashServices 
+                //WHERE YEAR(CurrentDate) = @SelectedYear AND MONTH(CurrentDate) = @SelectedMonth";
+
+                //using (SqlConnection conn = new SqlConnection(connectionString))
+                //{
+                //    conn.Open();
+                //    using (SqlCommand cmd = new SqlCommand(query, conn))
+                //    {
+                //        cmd.Parameters.AddWithValue("@SelectedYear", date.Year);
+                //        cmd.Parameters.AddWithValue("@SelectedMonth", date.Month);
+                //        object result = cmd.ExecuteScalar();
+                //        MessageBox.Show($"{result ?? 0}", "الدخل الشهري", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        //label10.Text = $"{result ?? 0} : الدخل الشهري";
+                //    }
+                //}
+                //label11.Visible = true;
+                //Date.Text = "";
+            }
+        }
+
+        private void label10_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+
+        {
+            //        DateTime startDate = dateTimePicker1.Value.Date; 
+            //        DateTime endDate = dateTimePicker2.Value.Date;   
+
+            //        string query = @"
+            //SELECT SUM(Total) AS TotalBetweenDates
+            //FROM CarWashServices
+            //WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+
+            //        DataTable dataTable = new DataTable();
+
+
+            //        using (SqlConnection conn = new SqlConnection(connectionString))
+            //        {
+            //            conn.Open();
+            //            using (SqlCommand cmd = new SqlCommand(query, conn))
+            //            {
+            //                cmd.Parameters.AddWithValue("@StartDate", startDate);
+            //                cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+            //                object result = cmd.ExecuteScalar();
+            //                MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //                // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
+            //            }
+            //        }
+
+
+            // Get date range from DateTimePickers
+            DateTime startDate = dateTimePicker1.Value.Date;
+            DateTime endDate = dateTimePicker2.Value.Date;
+
+            // Query string to get data within the range
+            string query = @"
+        SELECT CurrentDate, Total 
+        FROM CarWashServices 
+        WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+            
+            // Create a DataTable to hold the results
+            System.Data.DataTable dataTable = new System.Data.DataTable();
+
+            // Execute the query and fill the DataTable
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            DateForm dateForm = new DateForm();
+            dateForm.SetDataSource(dataTable); // Pass the DataTable to the DateForm
+            query = @"
+            SELECT SUM(Total) AS TotalBetweenDates
+            FROM CarWashServices
+            WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                     object result = cmd.ExecuteScalar();
+                     dateForm.SetLabelText("Total : "+$"{result}"+ " £");
+                   // MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
+                }
+            }
+
+            dateForm.ShowDialog();
+            // Open DateForm and pass the data
+
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
 
         }
