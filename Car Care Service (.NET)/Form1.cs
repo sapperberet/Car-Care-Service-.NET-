@@ -25,6 +25,9 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Runtime.CompilerServices;
 using System.Net.Http;
 using System.Reflection.Emit;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Xml.Linq;
+using System.Globalization;
 
 
 
@@ -92,7 +95,7 @@ namespace Car_Care_Service__.NET_
             timer.Interval = 1000; // Update every 1 second
             timer.Tick += Timer_Tick;
             timer.Start();
-
+            
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -676,8 +679,8 @@ namespace Car_Care_Service__.NET_
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
+                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'HH:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
 
                         {
                             
@@ -687,9 +690,10 @@ namespace Car_Care_Service__.NET_
 
                             command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
                             command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
-                        
-                        
-                        
+
+                        //FORMAT([Time], 'HH:mm:ss') AS FormattedTime
+
+
                         string tsk = new string(txtCarID.Text.Reverse().ToArray());
 
 
@@ -697,7 +701,8 @@ namespace Car_Care_Service__.NET_
                             command.Parameters.AddWithValue("@Profit", label8.Text);
                             command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
                             command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
-                            string cb = "";
+                             //command.Parameters.AddWithValue("@Time", "fs");
+                        string cb = "";
                         for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                         {   
                             cb += checkedListBox1.CheckedItems[i];
@@ -770,6 +775,7 @@ namespace Car_Care_Service__.NET_
                         //command.Parameters.AddWithValue("@Total", label8.Text);
                         //command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                        command.Parameters.AddWithValue("@ID", ID.Text);
                         command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
                         command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
                         string tsk = new string(txtCarID.Text.Reverse().ToArray());
@@ -777,6 +783,8 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@Profit", label8.Text);
                         command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
                         command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        command.Parameters.AddWithValue("@Time", DateTime.Now.TimeOfDay);
+
                         string cb = "";
                         for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                         {
@@ -787,7 +795,6 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
                         decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text);
-                        
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -915,11 +922,14 @@ namespace Car_Care_Service__.NET_
             //    }
 
             //}
+
+
+
             string input = txtCarID.Text;
 
-            if (textBox1.TextLength == 0)
+            if (txtCarID.TextLength == 0)
             {
-                textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
             }
             else
             {
@@ -968,15 +978,23 @@ namespace Car_Care_Service__.NET_
                 ctrl.Text = value;
             string input = textBox2.Text;
 
-            
-            if (IsValidInput2(input))
+            if (textBox2.TextLength != 0)
             {
-                textBox2.BackColor = System.Drawing.Color.LightGreen;
+
+                if (IsValidInput2(input))
+                {
+                    textBox2.BackColor = System.Drawing.Color.LightGreen;
+                }
+                else
+                {
+                    textBox2.BackColor = System.Drawing.Color.LightCoral;
+                }
             }
             else
             {
-                textBox2.BackColor = System.Drawing.Color.LightCoral;
+                textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
             }
+            
         }
         private bool IsValidInput2(string input)
         {
@@ -1581,9 +1599,9 @@ namespace Car_Care_Service__.NET_
 
         private void Costs_TextChanged(object sender, EventArgs e)
         {
-            if (Costs.Text.Length == 0) { 
-            Costs.Text = "0";
-            }
+            //if (Costs.Text.Length == 0) { 
+            //Costs.Text = "0";
+            //}
             Control ctrl = (sender as Control);
             string value = string.Concat(ctrl
                 .Text
@@ -1616,6 +1634,7 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
+                ID.Visible =  true;
                 dataGridView1.Visible = true;
                 button1.Visible = true;
                 button6.Visible = true;
@@ -1640,7 +1659,11 @@ namespace Car_Care_Service__.NET_
                 dateTimePicker2 .Visible = true; 
                 label10.Visible=true;
                 label16.Visible = true; 
-                button8 .Visible = true;    
+                button8 .Visible = true;
+
+                //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "HH:mm:ss yyyy-MM-dd";
+               // dataGridView1.Columns["Time"].DefaultCellStyle.Format = "HH:mm:ss";
             }
         }
 
@@ -1653,8 +1676,130 @@ namespace Car_Care_Service__.NET_
 
         private void ID_TextChanged(object sender, EventArgs e)
         {
+                string searchID = ID.Text; // Get ID from TextBox
+
+            // Loop through DataGridView rows
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["ID"].Value != null && row.Cells["ID"].Value.ToString() == searchID)
+                {
+                    // Match found, populate the text boxes
+                    txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
+                    textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
+                    //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
+                    
+                    txtVehicleType.Text = row.Cells["VehicleType"].Value?.ToString();
+                    //label8.Text = row.Cells["Profit"].Value?.ToString();
+
+                    string strSale = row.Cells["Discount"].Value?.ToString();
+                    txtSaleID.Text = strSale.Substring(0,strSale.Length-2);
+
+                    //string strara = row.Cells["CarID"].Value?.ToString();
+                    //textBox1.Text = strara.Substring(0, 5);
+
+                    //string strnum = row.Cells["CarID"].Value?.ToString();
+                    // strnum= strnum.Substring(6, 8);
+                    //txtCarID.Text = strnum;
+
+                    
+
+                    // Get the CarID value from the row
+                    string carId = row.Cells["CarID"].Value?.ToString();
+
+                    if (!string.IsNullOrEmpty(carId))
+                    {
+                        
+                        string arabicLetters = Regex.Replace(carId, @"[^\u0600-\u06FF]", "").Trim();
+                        
+                        textBox1.Text = string.Join(" ", arabicLetters.ToCharArray());
+
+                        string numbers = Regex.Replace(carId, @"[^\d]", "").Trim();
+                        
+                        string reversedNumbers = string.Join(" ", numbers.Reverse()) + " ";
+                        txtCarID.Text = reversedNumbers;
+
+                        textBox1.BackColor = System.Drawing.Color.LightGreen;
+                    }
+                    else
+                    {
+                        // Handle null or empty CarID case
+                        textBox1.Text = string.Empty;
+                        txtCarID.Text = string.Empty;
+                    }
+
+
+                    string strCost =  row.Cells["Costs"].Value?.ToString();
+                    Costs.Text = strCost.Substring(0 , strCost.Length -2);
+
+                    //label14.Text = row.Cells["Total"].Value?.ToString();
+                    txtNotes.Text = row.Cells["Notes"].Value?.ToString();
+
+
+                    string itemsToCheck = row.Cells["Services"].Value?.ToString();
+
+
+                    var items = itemsToCheck.Split('/')
+                        .Select(item => NormalizeArabicText(item.Trim()))
+                        .ToList();
+
+                    if (items.Count > 0) { 
+                    
+                    for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    {
+                        
+                       
+                            checkedListBox1.SetItemChecked(i, false);
+                       
+                    }
+                    }
+
+                    for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    {
+                        string normalizedItem = NormalizeArabicText(checkedListBox1.Items[i].ToString());
+                        if (items.Contains(normalizedItem))
+                        {
+                            checkedListBox1.SetItemChecked(i, true);
+                        }
+                    }
+
+                    //    foreach (var item in items)
+                    //    {
+                    //        int index = checkedListBox1.Items.IndexOf(item);
+                    //         txtNotes.Text += item.ToString();
+                    //        if (index != -1) // Check if the item exists in the CheckedListBox
+                    //        {
+                    //            checkedListBox1.SetItemChecked(index, true);
+                    //        }
+                    //}
+
+
+
+
+
+
+
+
+
+
+                    return; // Exit loop once match is found
+
+
+
+
+
+
+                }
+            }
 
         }
+        public static string NormalizeArabicText(string input)
+        {
+            // Normalize form and remove diacritics
+            return string.Concat(input.Normalize(NormalizationForm.FormD)
+                                       .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark))
+                         .Trim();
+        }
+
 
         private void label13_Click(object sender, EventArgs e)
         {
@@ -1756,6 +1901,7 @@ namespace Car_Care_Service__.NET_
         private void button11_Click(object sender, EventArgs e)
         {
             textBox3.Text = "";
+            ID.Visible = false;
             dataGridView1.Visible = false;
             button1.Visible = false;
             button6.Visible = false;
@@ -1808,7 +1954,7 @@ namespace Car_Care_Service__.NET_
 
             // Query string to get data within the range
             string query = @"
-        SELECT CurrentDate, Total 
+        SELECT CurrentDate,Time, Total 
         FROM CarWashServices 
         WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
             
@@ -1835,7 +1981,8 @@ namespace Car_Care_Service__.NET_
             DateForm dateForm = new DateForm();
             dateForm.SetDataSource(dataTable); // Pass the DataTable to the DateForm
             query = @"
-            SELECT SUM(Total) AS TotalBetweenDates
+            SELECT SUM(Total) AS TotalBetweenDates,
+            
             FROM CarWashServices
             WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
 
@@ -1848,7 +1995,7 @@ namespace Car_Care_Service__.NET_
                     cmd.Parameters.AddWithValue("@EndDate", endDate);
 
                      object result = cmd.ExecuteScalar();
-                     dateForm.SetLabelText("Total : "+$"{result}"+ " £");
+                     dateForm.SetLabelText("Total : "+$"{result}"+ " EGP");
                    // MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
                 }
@@ -1935,7 +2082,7 @@ namespace Car_Care_Service__.NET_
 
             // Query string to get data within the range
             string query = @"
-        SELECT CurrentDate, Total 
+        SELECT CurrentDate,Time, Total 
         FROM CarWashServices 
         WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
             
@@ -1975,7 +2122,7 @@ namespace Car_Care_Service__.NET_
                     cmd.Parameters.AddWithValue("@EndDate", endDate);
 
                      object result = cmd.ExecuteScalar();
-                     dateForm.SetLabelText("Total : "+$"{result}"+ " £");
+                     dateForm.SetLabelText("Total : "+$"{result}"+ " EGP");
                    // MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
                 }

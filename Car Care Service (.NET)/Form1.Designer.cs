@@ -544,7 +544,10 @@ namespace Car_Care_Service__.NET_
             // 
             // txtVehicleType
             // 
-            this.txtVehicleType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.HistoryList;
+            this.txtVehicleType.AutoCompleteCustomSource.AddRange(new string[] {
+            "سيارة"});
+            this.txtVehicleType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.txtVehicleType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.txtVehicleType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
             this.txtVehicleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.txtVehicleType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -717,6 +720,7 @@ namespace Car_Care_Service__.NET_
             this.ID.Name = "ID";
             this.ID.Size = new System.Drawing.Size(26, 32);
             this.ID.TabIndex = 1;
+            this.ID.Visible = false;
             this.ID.TextChanged += new System.EventHandler(this.ID_TextChanged);
             // 
             // textBox1
