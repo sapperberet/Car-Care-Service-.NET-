@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>IMG-20241125-WA0018.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.104.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.104.2\lib\netstandard2.0\ClosedXML.dll</HintPath>
@@ -245,6 +248,7 @@
     <Content Include="ElipseControl.bmp" />
     <Content Include="icon-car-icon-car-repair-icon-MUazAEQQ.jpg" />
     <Content Include="IMG-20241118-WA0106.jpg" />
+    <Content Include="IMG-20241125-WA0018.ico" />
     <Content Include="LICENSE.txt" />
     <None Include="Resources\Actions-dialog-close-icon.png" />
     <None Include="Resources\Actions-document-print-icon %281%29.png" />

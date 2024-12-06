@@ -46,6 +46,7 @@ namespace Car_Care_Service__.NET_
         private readonly Dictionary<string, double> operationPrices = new Dictionary<string, double>
         {
             { " اشتراك شهري", 500/2 },
+            { " عرض ال499", 500/2 },
             { " غسيل كامل للسيارة و كيماوي موتور ، صالون", 450/2 },
             { " غسيل سقف كيماوي", 200/2 },
 
@@ -53,6 +54,7 @@ namespace Car_Care_Service__.NET_
 
 
             { " غسيل داخلي وخارجي وموتور كيماوي", 170 / 2 },
+            { " عرض شهر 12", 100/2 },
             { " غسیل داخلي وخارجي", 67.5 },
             { " تنظيف جنوط كيماوي", 60/2 },
             { " غسیل موتور كيماوي", 60 / 2 },
@@ -67,6 +69,10 @@ namespace Car_Care_Service__.NET_
         {
             //AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
             InitializeComponent();
+
+            System.Drawing.Font currentFont = dataGridView1.DefaultCellStyle.Font;
+            dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font(currentFont.FontFamily, 11);
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(currentFont.FontFamily, 9);
 
             this.Load += MainForm_Load;
             //this.BackColor = Color.FromArgb(29, 29, 66);
@@ -88,7 +94,7 @@ namespace Car_Care_Service__.NET_
                 checkedListBox1.Items.Add(operation);
             }
 
-            Costs.Text = "0";
+            //Costs.Text = "0";
             checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 
             Timer timer = new Timer();
@@ -97,12 +103,49 @@ namespace Car_Care_Service__.NET_
             timer.Start();
             
         }
+        private void CountHelloOccurrences()
+        {
+            int ccount = 0;
+            int scount = 0;
+            int acount = 0;
 
+            // Iterate through each row in the DataGridView
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.IsNewRow) continue; // Skip the new empty row at the bottom (if any)
+
+                // Get the value in the 'words' column
+                string cellValue = row.Cells["VehicleType"].Value?.ToString().ToLower() ?? string.Empty;
+
+                // Check if the cell contains the word "hello"
+                if (cellValue.Contains("سيارة"))
+                {
+                    ccount++;
+
+                }
+                if (cellValue.Contains("(أخرى)"))
+                {
+                    acount++;
+
+                }
+                if (cellValue.Contains("سكوتر"))
+                {
+                    scount++;
+
+                }
+
+            }
+
+            // Update the label with the count of "hello"
+            cc.Text = $"{ccount} : سيارة";
+            sc.Text = $"{scount} : سكوتر";
+            ac.Text = $"{acount} : أخرى";
+        }
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Update the label with the current time
             //label9.Text = DateTime.Now.ToString("hh:mm:ss tt");
-            label9.Text = DateTime.Now.ToString("dd/MM/yy H:mm:ss");
+            label9.Text = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
         }
 
 
@@ -223,6 +266,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
+            
         }
 
         private void LoadCustomers(string searchQuery = "")
@@ -680,7 +724,7 @@ namespace Car_Care_Service__.NET_
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'HH:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
 
                         {
                             
@@ -718,6 +762,7 @@ namespace Car_Care_Service__.NET_
                             command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
                             //command.Parameters.AddWithValue("@Total", label8.Text);
                             ;
+
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
                         decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100)))- decimal.Parse(Costs.Text);
                         
@@ -753,8 +798,8 @@ namespace Car_Care_Service__.NET_
                 {
                     MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-            }
+            CountHelloOccurrences();
+        }
        // }
         private void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -825,6 +870,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            CountHelloOccurrences();
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -856,6 +902,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            CountHelloOccurrences();
         }
 
 
@@ -1064,20 +1111,21 @@ namespace Car_Care_Service__.NET_
 
             if (comboBox != null)
             {
-                string inputText = comboBox.Text.Trim(); 
+                
+                //string inputText = comboBox.Text.Trim(); 
 
                 
-                if (inputText == "سيارة" || inputText == "سكوتر")
-                {
+                //if (inputText == "سيارة" || inputText == "سكوتر" || inputText == "(أخرى)")
+                //{
                     
-                }
-                else
-                {
+                //}
+                //else
+                //{
                    
-                    comboBox.Text = string.Empty;
+                //    comboBox.Text = string.Empty;
 
-                    MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                //    MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
             }
         }
 
@@ -1602,6 +1650,7 @@ namespace Car_Care_Service__.NET_
             //if (Costs.Text.Length == 0) { 
             //Costs.Text = "0";
             //}
+            txtVehicleType.SelectedIndex = 3 ;
             Control ctrl = (sender as Control);
             string value = string.Concat(ctrl
                 .Text
@@ -1609,7 +1658,15 @@ namespace Car_Care_Service__.NET_
             if (value != ctrl.Text)
                 ctrl.Text = value;
             //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100))))  - decimal.Parse(Costs.Text);
+            decimal fs;
+            if (Costs.TextLength > 0)
+            {
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text);
+
+            }
+            else {
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) ;
+            }
             label14.Text = $"{fs}";
         }
 
@@ -1634,6 +1691,7 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
+                
                 ID.Visible =  true;
                 dataGridView1.Visible = true;
                 button1.Visible = true;
@@ -1644,8 +1702,8 @@ namespace Car_Care_Service__.NET_
                 button7.Visible = true;
                 //button8.Visible = true;
                 //button9.Visible = true;
-                Date.Visible = true;    
-                label11.Visible = true; 
+               //Date.Visible = true; //fs   
+               //label11.Visible = true;  //fs
                 //label10.Visible = true;
                 //label9.Visible = true;
                 button10.Visible = true;
@@ -1660,10 +1718,17 @@ namespace Car_Care_Service__.NET_
                 label10.Visible=true;
                 label16.Visible = true; 
                 button8 .Visible = true;
+                ac.Visible = true;
+                sc.Visible = true;
+                cc.Visible = true;
 
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "HH:mm:ss yyyy-MM-dd";
-               // dataGridView1.Columns["Time"].DefaultCellStyle.Format = "HH:mm:ss";
+                // dataGridView1.Columns["Time"].DefaultCellStyle.Format = "HH:mm:ss";
+                dataGridView1.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView1.Columns["CarID"].Width = 130;
+
+                CountHelloOccurrences();
             }
         }
 
@@ -1687,8 +1752,8 @@ namespace Car_Care_Service__.NET_
                     txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
                     textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
                     //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
-                    
-                    txtVehicleType.Text = row.Cells["VehicleType"].Value?.ToString();
+                   
+
                     //label8.Text = row.Cells["Profit"].Value?.ToString();
 
                     string strSale = row.Cells["Discount"].Value?.ToString();
@@ -1773,7 +1838,25 @@ namespace Car_Care_Service__.NET_
                     //}
 
 
-
+                    string fs = row.Cells["VehicleType"].Value?.ToString();
+                    int a = 0;
+                    if (fs == "سيارة")
+                    {
+                        a = 0;
+                    }
+                    if (fs == "سكوتر")
+                    {
+                        a = 1;
+                    }
+                    if (fs == "(أخرى)")
+                    {
+                        a = 2;
+                    }
+                    if (fs == "")
+                    {
+                        a = 3;
+                    }
+                    txtVehicleType.SelectedIndex = a;
 
 
 
@@ -1926,6 +2009,9 @@ namespace Car_Care_Service__.NET_
             label10.Visible = false;
             label16.Visible = false;
             button8.Visible = false;
+            ac.Visible = false;
+            sc.Visible = false;
+            cc.Visible = false;
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
@@ -1952,8 +2038,8 @@ namespace Car_Care_Service__.NET_
             DateTime startDate = DateTime.Parse(selectedDate);
             DateTime endDate = DateTime.Parse(selectedDate);
 
-            // Query string to get data within the range
-            string query = @"
+                // SELECT CurrentDate,Time, Total 
+                string query = @"
         SELECT CurrentDate,Time, Total 
         FROM CarWashServices 
         WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
@@ -2080,9 +2166,9 @@ namespace Car_Care_Service__.NET_
             DateTime startDate = dateTimePicker1.Value.Date;
             DateTime endDate = dateTimePicker2.Value.Date;
 
-            // Query string to get data within the range
+            // CurrentDate,Time, Total
             string query = @"
-        SELECT CurrentDate,Time, Total 
+        SELECT *
         FROM CarWashServices 
         WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
             
@@ -2137,6 +2223,19 @@ namespace Car_Care_Service__.NET_
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtVehicleType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Costs_Leave(object sender, EventArgs e)
+        {
+            if (Costs.TextLength < 1)
+            {
+                Costs.Text = "0";
+            }
         }
     }
         //private void HandleBackspace()

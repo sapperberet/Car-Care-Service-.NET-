@@ -86,6 +86,9 @@ namespace Car_Care_Service__.NET_
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.button10 = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.cc = new System.Windows.Forms.Label();
+            this.sc = new System.Windows.Forms.Label();
+            this.ac = new System.Windows.Forms.Label();
             this.elipseControl1 = new ElipseToolDemo.ElipseControl();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -183,6 +186,8 @@ namespace Car_Care_Service__.NET_
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel2.Controls.Add(this.ac);
+            this.panel2.Controls.Add(this.cc);
             this.panel2.Controls.Add(this.button8);
             this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.label10);
@@ -281,6 +286,7 @@ namespace Car_Care_Service__.NET_
             this.Costs.Visible = false;
             this.Costs.TextChanged += new System.EventHandler(this.Costs_TextChanged);
             this.Costs.Enter += new System.EventHandler(this.Costs_Enter);
+            this.Costs.Leave += new System.EventHandler(this.Costs_Leave);
             // 
             // label12
             // 
@@ -396,7 +402,7 @@ namespace Car_Care_Service__.NET_
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Readex Pro Deca Medium", 16F, System.Drawing.FontStyle.Bold);
-            this.label9.ForeColor = System.Drawing.Color.Lime;
+            this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label9.LiveSetting = System.Windows.Forms.Automation.AutomationLiveSetting.Polite;
             this.label9.Location = new System.Drawing.Point(1019, 9);
             this.label9.Name = "label9";
@@ -461,7 +467,7 @@ namespace Car_Care_Service__.NET_
             // 
             this.textBox5.BackColor = System.Drawing.Color.AliceBlue;
             this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox5.Font = new System.Drawing.Font("MV Boli", 23F);
+            this.textBox5.Font = new System.Drawing.Font("MV Boli", 15F);
             this.textBox5.Location = new System.Drawing.Point(645, 71);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
@@ -555,12 +561,15 @@ namespace Car_Care_Service__.NET_
             this.txtVehicleType.FormattingEnabled = true;
             this.txtVehicleType.Items.AddRange(new object[] {
             "سيارة",
-            "سكوتر"});
+            "سكوتر",
+            "(أخرى)",
+            " "});
             this.txtVehicleType.Location = new System.Drawing.Point(969, 295);
             this.txtVehicleType.Name = "txtVehicleType";
             this.txtVehicleType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtVehicleType.Size = new System.Drawing.Size(141, 29);
             this.txtVehicleType.TabIndex = 6;
+            this.txtVehicleType.SelectedIndexChanged += new System.EventHandler(this.txtVehicleType_SelectedIndexChanged);
             this.txtVehicleType.TextChanged += new System.EventHandler(this.txtVehicleType_TextChanged);
             this.txtVehicleType.Leave += new System.EventHandler(this.txtVehicleType_Leave);
             // 
@@ -709,6 +718,7 @@ namespace Car_Care_Service__.NET_
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkedListBox1.Size = new System.Drawing.Size(281, 100);
             this.checkedListBox1.TabIndex = 7;
+            this.checkedListBox1.Tag = "";
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged_1);
             // 
@@ -793,14 +803,14 @@ namespace Car_Care_Service__.NET_
             // 
             this.textBox4.BackColor = System.Drawing.Color.AliceBlue;
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox4.Font = new System.Drawing.Font("MV Boli", 23F);
+            this.textBox4.Font = new System.Drawing.Font("MV Boli", 15F);
             this.textBox4.Location = new System.Drawing.Point(362, 71);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.textBox4.Size = new System.Drawing.Size(286, 48);
             this.textBox4.TabIndex = 44;
-            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.textBox4.Visible = false;
             this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged_1);
             // 
@@ -823,6 +833,40 @@ namespace Car_Care_Service__.NET_
             this.panel5.Size = new System.Drawing.Size(303, 2);
             this.panel5.TabIndex = 44;
             // 
+            // cc
+            // 
+            this.cc.AutoSize = true;
+            this.cc.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.cc.Location = new System.Drawing.Point(251, 3);
+            this.cc.Name = "cc";
+            this.cc.Size = new System.Drawing.Size(82, 35);
+            this.cc.TabIndex = 56;
+            this.cc.Text = "label19";
+            this.cc.Visible = false;
+            // 
+            // sc
+            // 
+            this.sc.AutoSize = true;
+            this.sc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.sc.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.sc.Location = new System.Drawing.Point(233, 642);
+            this.sc.Name = "sc";
+            this.sc.Size = new System.Drawing.Size(85, 35);
+            this.sc.TabIndex = 57;
+            this.sc.Text = "label20";
+            this.sc.Visible = false;
+            // 
+            // ac
+            // 
+            this.ac.AutoSize = true;
+            this.ac.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.ac.Location = new System.Drawing.Point(165, 18);
+            this.ac.Name = "ac";
+            this.ac.Size = new System.Drawing.Size(82, 35);
+            this.ac.TabIndex = 58;
+            this.ac.Text = "label17";
+            this.ac.Visible = false;
+            // 
             // elipseControl1
             // 
             this.elipseControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
@@ -844,6 +888,7 @@ namespace Car_Care_Service__.NET_
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1258, 669);
             this.Controls.Add(this.panel5);
+            this.Controls.Add(this.sc);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.panel4);
@@ -932,7 +977,6 @@ namespace Car_Care_Service__.NET_
         private TextBox textBox1;
         private TextBox Costs;
         private TextBox Date;
-        private Label label11;
         private Label label12;
         private Label label14;
         private Label label13;
@@ -952,6 +996,10 @@ namespace Car_Care_Service__.NET_
         private Label label16;
         private Panel panel6;
         private Button button8;
+        private Label label11;
+        private Label sc;
+        private Label cc;
+        private Label ac;
     }
 
 }
