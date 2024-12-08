@@ -41,6 +41,7 @@ namespace Car_Care_Service__.NET_
     {
         
         BindingSource TransactionsBS = new BindingSource();
+        private bool isFullScreen = false;
 
         //Bitmap memoryImage;
         private readonly Dictionary<string, double> operationPrices = new Dictionary<string, double>
@@ -101,7 +102,75 @@ namespace Car_Care_Service__.NET_
             timer.Interval = 1000; // Update every 1 second
             timer.Tick += Timer_Tick;
             timer.Start();
-            
+
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.StartPosition = FormStartPosition.Manual;
+            this.Bounds = Screen.PrimaryScreen.Bounds;
+            this.TopMost = true;
+            this.WindowState = FormWindowState.Maximized;
+
+            //this.AutoScaleMode = AutoScaleMode.Dpi;
+            //this.Resize += Form1_Resize;
+
+            //this.KeyPreview = true; // Ensure form captures key events
+            //this.KeyDown += Form1_KeyDown;
+
+        }
+
+
+        //private void Form1_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Escape) // Detect Ctrl+F
+        //    {
+        //        ToggleFullScreen();
+        //    }
+        //}
+
+        //private void ToggleFullScreen()
+        //{
+        //}
+
+        //private void exitButton_Click(object sender, EventArgs e)
+        //{
+        //    if (isFullScreen)
+        //    {
+        //        ToggleFullScreen(); // Revert to normal state
+        //    }
+        //}
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+               
+                    if (isFullScreen)
+                    {
+                    // Revert to normal state
+                    this.TopMost = false;
+                    this.FormBorderStyle = FormBorderStyle.Fixed3D; 
+                isFullScreen = false;
+                    this.Bounds = Screen.PrimaryScreen.Bounds;
+                    this.Width = 1280;
+                    this.Height = 750;//709
+                    this.WindowState = FormWindowState.Normal;
+                    this.StartPosition = FormStartPosition.CenterScreen;
+                }
+                    else
+                    {
+                    // Enter full-screen mode
+                    this.FormBorderStyle = FormBorderStyle.None;
+                    this.StartPosition = FormStartPosition.Manual;
+                    this.Bounds = Screen.PrimaryScreen.Bounds;
+                    this.TopMost = true;
+                    this.WindowState = FormWindowState.Maximized;
+                    isFullScreen = true;
+                }
+
+                
+                //this.Close(); // Closes the form when Esc is pressed
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
         private void CountHelloOccurrences()
         {
@@ -220,7 +289,36 @@ namespace Car_Care_Service__.NET_
             InitializeDatabaseConnection();
             fs();
             
+
             //FetchDailyAndMonthlyTotals();
+        }
+
+        private void DisplayMonthlyTotal()
+        {
+            
+            string query = @"
+                SELECT SUM(Total) AS MonthlyTotal
+                FROM CarWashServices
+                WHERE MONTH(CurrentDate) = MONTH(GETDATE()) 
+                AND YEAR(CurrentDate) = YEAR(GETDATE());";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+                    connection.Open();
+                    var result = command.ExecuteScalar();
+                    decimal monthlyTotal = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                    monthlyTotal = Convert.ToInt64(monthlyTotal);
+                    month.Text = $" {monthlyTotal} EGP إجمالي الشهر";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+            }
         }
         private void fs() {
 
@@ -799,6 +897,7 @@ namespace Car_Care_Service__.NET_
                     MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             CountHelloOccurrences();
+            DisplayMonthlyTotal();
         }
        // }
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -871,6 +970,7 @@ namespace Car_Care_Service__.NET_
                 MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             CountHelloOccurrences();
+            DisplayMonthlyTotal();
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -903,6 +1003,7 @@ namespace Car_Care_Service__.NET_
                 MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             CountHelloOccurrences();
+            DisplayMonthlyTotal();
         }
 
 
@@ -1721,6 +1822,7 @@ namespace Car_Care_Service__.NET_
                 ac.Visible = true;
                 sc.Visible = true;
                 cc.Visible = true;
+                month.Visible = true;
 
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "HH:mm:ss yyyy-MM-dd";
@@ -1729,6 +1831,7 @@ namespace Car_Care_Service__.NET_
                 dataGridView1.Columns["CarID"].Width = 130;
 
                 CountHelloOccurrences();
+                DisplayMonthlyTotal();
             }
         }
 
@@ -2012,6 +2115,7 @@ namespace Car_Care_Service__.NET_
             ac.Visible = false;
             sc.Visible = false;
             cc.Visible = false;
+            month.Visible = false;  
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
@@ -2236,6 +2340,51 @@ namespace Car_Care_Service__.NET_
             {
                 Costs.Text = "0";
             }
+        }
+
+        private void month_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //private void Form1_Resize(object sender, EventArgs e)
+        //{
+        //    //foreach (Control control in this.Controls)
+        //    //{
+        //    //    control.Width = (int)(this.ClientSize.Width * 1);  // 30% of the form width
+        //    //    control.Height = (int)(this.ClientSize.Height * 1); // 10% of the form height
+        //    //}
+
+        //    float fontSize = this.ClientSize.Width / 100f; // Adjust this factor as needed
+        //    txtCarID.Font = new System.Drawing.Font(txtCarID.Font.FontFamily, fontSize);
+        //    txtCustomerID.Font = new System.Drawing.Font(txtCustomerID.Font.FontFamily, fontSize);
+        //    //txtNotes = new System.Drawing.Font(txtNotes.Font.FontFamily, fontSize);
+        //    //txtSaleID.Font = new System.Drawing.Font(txtSaleID.FontFamily, fontSize);
+        //    txtVehicleType.Font = new System.Drawing.Font(txtVehicleType.Font.FontFamily, fontSize);
+        //    //Costs = new System.Drawing.Font(txtCarID.Font.FontFamily, fontSize);
+        //    ac.Font = new System.Drawing.Font(ac.Font.FontFamily, fontSize);
+            
+
+        //}
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
         //private void HandleBackspace()
