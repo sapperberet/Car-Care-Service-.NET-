@@ -40,6 +40,9 @@ namespace Car_Care_Service__.NET_
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button14 = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.PID = new System.Windows.Forms.TextBox();
             this.month = new System.Windows.Forms.Label();
             this.sc = new System.Windows.Forms.Label();
             this.ac = new System.Windows.Forms.Label();
@@ -95,6 +98,8 @@ namespace Car_Care_Service__.NET_
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.ID1 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -180,7 +185,7 @@ namespace Car_Care_Service__.NET_
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button2.Location = new System.Drawing.Point(660, 9);
+            this.button2.Location = new System.Drawing.Point(636, 9);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(148, 61);
@@ -188,11 +193,14 @@ namespace Car_Care_Service__.NET_
             this.button2.Text = "طباعة الريسيت";
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.button2.Click += new System.EventHandler(this.Print_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel2.Controls.Add(this.button14);
+            this.panel2.Controls.Add(this.label17);
+            this.panel2.Controls.Add(this.PID);
             this.panel2.Controls.Add(this.month);
             this.panel2.Controls.Add(this.sc);
             this.panel2.Controls.Add(this.ac);
@@ -218,6 +226,45 @@ namespace Car_Care_Service__.NET_
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // button14
+            // 
+            this.button14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button14.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button14.FlatAppearance.BorderSize = 0;
+            this.button14.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
+            this.button14.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button14.Image = global::Car_Care_Service__.NET_.Properties.Resources.Media_Playlist_Repeat_icon;
+            this.button14.Location = new System.Drawing.Point(442, 16);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(49, 48);
+            this.button14.TabIndex = 51;
+            this.button14.UseVisualStyleBackColor = false;
+            this.button14.Visible = false;
+            this.button14.Click += new System.EventHandler(this.btnSync_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Readex Pro Deca Medium", 13F, System.Drawing.FontStyle.Bold);
+            this.label17.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label17.Location = new System.Drawing.Point(1166, 4);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(188, 38);
+            this.label17.TabIndex = 60;
+            this.label17.Text = "المسلسل للطباعة";
+            // 
+            // PID
+            // 
+            this.PID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.PID.ForeColor = System.Drawing.SystemColors.Info;
+            this.PID.Location = new System.Drawing.Point(1172, 41);
+            this.PID.Name = "PID";
+            this.PID.Size = new System.Drawing.Size(131, 32);
+            this.PID.TabIndex = 51;
+            this.PID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // month
             // 
@@ -656,10 +703,10 @@ namespace Car_Care_Service__.NET_
             "80",
             "90",
             "100"});
-            this.txtSaleID.Location = new System.Drawing.Point(1198, 292);
+            this.txtSaleID.Location = new System.Drawing.Point(1194, 260);
             this.txtSaleID.Name = "txtSaleID";
             this.txtSaleID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtSaleID.Size = new System.Drawing.Size(130, 30);
+            this.txtSaleID.Size = new System.Drawing.Size(50, 30);
             this.txtSaleID.TabIndex = 5;
             this.txtSaleID.Text = "0";
             this.txtSaleID.SelectedIndexChanged += new System.EventHandler(this.txtSaleID_SelectedIndexChanged);
@@ -674,11 +721,11 @@ namespace Car_Care_Service__.NET_
             this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label7.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(1220, 260);
+            this.label7.Location = new System.Drawing.Point(1279, 294);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(94, 29);
+            this.label7.Size = new System.Drawing.Size(83, 29);
             this.label7.TabIndex = 19;
-            this.label7.Text = "الخصومات";
+            this.label7.Text = "خصومات";
             this.label7.Click += new System.EventHandler(this.label7_Click_1);
             // 
             // txtCarID
@@ -794,6 +841,7 @@ namespace Car_Care_Service__.NET_
             this.ID.Name = "ID";
             this.ID.Size = new System.Drawing.Size(26, 32);
             this.ID.TabIndex = 1;
+            this.ID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ID.Visible = false;
             this.ID.TextChanged += new System.EventHandler(this.ID_TextChanged);
             // 
@@ -973,7 +1021,36 @@ namespace Car_Care_Service__.NET_
             this.ID1.Name = "ID1";
             this.ID1.Size = new System.Drawing.Size(26, 32);
             this.ID1.TabIndex = 50;
+            this.ID1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ID1.TextChanged += new System.EventHandler(this.ID1_TextChanged);
+            // 
+            // textBox6
+            // 
+            this.textBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.textBox6.Font = new System.Drawing.Font("Readex Pro Deca Medium", 11F, System.Drawing.FontStyle.Bold);
+            this.textBox6.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.textBox6.Location = new System.Drawing.Point(1194, 293);
+            this.textBox6.Multiline = true;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.textBox6.Size = new System.Drawing.Size(83, 29);
+            this.textBox6.TabIndex = 51;
+            this.textBox6.Text = "0";
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.textBox6.Enter += new System.EventHandler(this.textBox6_Enter);
+            this.textBox6.Leave += new System.EventHandler(this.textBox6_Leave);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.label18.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label18.ForeColor = System.Drawing.Color.Black;
+            this.label18.Location = new System.Drawing.Point(1258, 260);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(108, 29);
+            this.label18.TabIndex = 52;
+            this.label18.Text = "نسبة الخصم";
             // 
             // Form1
             // 
@@ -981,6 +1058,8 @@ namespace Car_Care_Service__.NET_
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.ID1);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.button13);
@@ -1103,6 +1182,11 @@ namespace Car_Care_Service__.NET_
         private Button button12;
         private Button button13;
         private TextBox ID1;
+        private TextBox PID;
+        private Label label17;
+        private Button button14;
+        private TextBox textBox6;
+        private Label label18;
     }
 
 }

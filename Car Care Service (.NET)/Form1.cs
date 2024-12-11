@@ -28,6 +28,8 @@ using System.Reflection.Emit;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using System.Xml.Linq;
 using System.Globalization;
+using System.IO;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 
 
@@ -39,7 +41,7 @@ namespace Car_Care_Service__.NET_
 {
     public partial class Form1 : Form
     {
-        
+
         BindingSource TransactionsBS = new BindingSource();
         private bool isFullScreen = false;
 
@@ -114,6 +116,7 @@ namespace Car_Care_Service__.NET_
             this.StartPosition = FormStartPosition.Manual;
             this.Bounds = Screen.PrimaryScreen.Bounds;
             this.TopMost = true;
+            this.TopMost = false;
             this.WindowState = FormWindowState.Maximized;
 
             //this.AutoScaleMode = AutoScaleMode.Dpi;
@@ -124,7 +127,85 @@ namespace Car_Care_Service__.NET_
             txtVehicleType.SelectedIndex = 0;
 
         }
+        private void Print_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to print this record?",
+                                                  "Confirm Deletion",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    // Validate the TextBox input
+                    if (string.IsNullOrWhiteSpace(PID.Text))
+                    {
+                        MessageBox.Show("Please enter a valid ID.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
+                    // Parse the ID
+                    string enteredID = PID.Text;
+
+                    // Find the row with the matching ID
+                    DataGridViewRow matchingRow = dataGridView2.Rows
+                        .Cast<DataGridViewRow>()
+                        .FirstOrDefault(row => row.Cells["ID"].Value.ToString() == enteredID);
+
+                    if (matchingRow == null)
+                    {
+                        MessageBox.Show("No matching row found for the entered ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Extract data from the matching row
+                    var rowData = string.Empty;
+                    foreach (DataGridViewCell cell in matchingRow.Cells)
+                    {
+                        if (cell.Value == "") {
+                            cell.Value = " ";
+                        
+                        }
+                        rowData += cell.Value + "\n";
+                    }
+                    rowData = rowData.TrimEnd(',');
+
+                    // Define the folder and file paths
+                    string folderPath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "shared");
+                    string filePath = System.IO.Path.Combine(folderPath, "sync.txt");
+
+                    // Ensure the folder exists
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    //// Write data to the file
+                    //File.WriteAllText(filePath, rowData);
+
+                    //// Delete the row from DataGridView
+
+                    //dataGridView2.Rows.Remove(matchingRow);
+
+                    File.AppendAllText(filePath, rowData);
+
+
+                    delete(PID.Text);
+
+                    //dataGridView2.Rows.Remove(matchingRow);
+
+
+
+
+                    //MessageBox.Show("", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+        }
 
         //private void Form1_KeyDown(object sender, KeyEventArgs e)
         //{
@@ -170,6 +251,7 @@ namespace Car_Care_Service__.NET_
                     this.StartPosition = FormStartPosition.Manual;
                     this.Bounds = Screen.PrimaryScreen.Bounds;
                     this.TopMost = true;
+                    this.TopMost = false;
                     this.WindowState = FormWindowState.Maximized;
                     isFullScreen = true;
                 }
@@ -225,31 +307,145 @@ namespace Car_Care_Service__.NET_
             label9.Text = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
         }
 
-
-
-        private void btnDailyTotal_Click(object sender, EventArgs e)
+        private void btnSync_Click(object sender, EventArgs e)
         {
-            //string selectedDate = Date.Text;
-            //if (!IsValidDate(Date.Text))
-            //{
-            //    MessageBox.Show("Please enter a valid date in the format dd/MM/yyyy.", "wrong input format", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    return;
-            //}
+            string filePath = System.IO.Path.Combine("shared", "sync.txt");
 
-            //string query = "SELECT SUM(Total)  AS DailyTotal FROM CarWashServices WHERE CurrentDate = @SelectedDate";
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("The sync file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            //using (SqlConnection conn = new SqlConnection(connectionString))
-            //{
-            //    conn.Open();
-            //    using (SqlCommand cmd = new SqlCommand(query, conn))
-            //    {
-            //        cmd.Parameters.AddWithValue("@SelectedDate", DateTime.Parse(selectedDate));
-            //        object result = cmd.ExecuteScalar();
-            //        MessageBox.Show($"{result ?? 0}", "الدخل اليومي", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //        //label9.Text = $"{result ?? 0} : الدخل اليومي";
-            //    }
-            //}
+            try
+            {
+                // Read all lines from the file
+                var lines = File.ReadAllLines(filePath).ToList();
+
+                if (lines.Count <= 1) // No data to process after skipping the first line
+                {
+                    MessageBox.Show("You Server is Up to Date", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Skip the first line (old ID)
+                
+
+                List<string[]> rows = new List<string[]>();
+
+                // Process records in chunks of 12 lines (ignore the skipped ID)
+                while (lines.Count >= 14)
+                {
+                    string[] record = lines.Take(14).ToArray();
+                    rows.Add(record);
+                    lines.RemoveRange(0, 14); // Remove the processed lines
+                }
+               
+
+
+
+                InsertRecordsIntoDatabase(rows);
+
+                // Insert records into the database
+
+                // Overwrite the file with remaining lines
+                File.WriteAllLines(filePath, lines);
+                LoadData(query);
+                MessageBox.Show("Data synced successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while syncing: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        private void InsertRecordsIntoDatabase(List<string[]> records)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (var record in records)
+                {
+                    using (SqlCommand cmd = new SqlCommand(
+                        "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes) " +
+                        "VALUES (@CustomerName, @PhoneNumber, @CurrentDate, @Time, @CarID, @VehicleType, @Services, @Profit, @Discountp, @Discount, @Costs, @Total, @Notes)", connection))
+                    {
+                        cmd.Parameters.AddWithValue("@CustomerName", record[1]);
+                        cmd.Parameters.AddWithValue("@PhoneNumber", record[2]);
+
+                        // Extract and parse the date portion
+                        string tsk = record[3].Substring(0,10);
+
+                        string input = tsk; // Original string
+                        string swapped = "";
+                        // Split the string by the dot
+                        if (input.Contains("/")){ 
+                        string[] parts = input.Split('/');
+                           swapped = $"{parts[1]}/{parts[0]}/{parts[2]}";
+                        }
+                        else if (input.Contains("."))
+                        {
+                            string[] parts = input.Split('.');
+
+                        swapped = $"{parts[1]}.{parts[0]}.{parts[2]}";
+                        }
+
+
+                        // Swap the first and second parts (day and month)
+
+                        // Swapping
+                        tsk = swapped;
+
+
+                        
+
+                        cmd.Parameters.AddWithValue("@CurrentDate", tsk);
+
+                        // Keep the time as it is
+                        cmd.Parameters.AddWithValue("@Time", TimeSpan.Parse(record[4]));
+
+                        cmd.Parameters.AddWithValue("@CarID", record[5]);
+                        cmd.Parameters.AddWithValue("@VehicleType", record[6]);
+                        cmd.Parameters.AddWithValue("@Services", record[7]);
+
+                        string strSale = record[8].Replace(",", "");
+                        string fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Profit", decimal.Parse(fs));
+
+
+                        strSale = record[9].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Discountp", decimal.Parse(fs));
+
+                        strSale = record[10].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Discount", decimal.Parse(fs));
+
+                        strSale = record[11].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2); 
+
+                        cmd.Parameters.AddWithValue("@Costs", decimal.Parse(fs));
+
+                        strSale = record[12].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Total", decimal.Parse(fs));
+
+
+                        cmd.Parameters.AddWithValue("@Notes", record[13]);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+        }
+
+
 
         private void btnMonthlyTotal_Click(object sender, EventArgs e)
         {
@@ -875,11 +1071,20 @@ namespace Car_Care_Service__.NET_
         //    }
          //   else {
                 try
+            {
+                if (textBox2.TextLength < 6)
                 {
-                    using (SqlConnection connection = new SqlConnection(connectionString))
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
+                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes) " +
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp , @Discount, @Costs, @Total, @Notes)";
 
                         {
                             
@@ -914,12 +1119,13 @@ namespace Car_Care_Service__.NET_
                         ;
 
                             command.Parameters.AddWithValue("@Services", cb);
-                            command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
                             //command.Parameters.AddWithValue("@Total", label8.Text);
                             ;
 
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100)))- decimal.Parse(Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100)))- decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
                         
 
                             command.Parameters.AddWithValue("@Total", total);
@@ -939,7 +1145,8 @@ namespace Car_Care_Service__.NET_
                         textBox1.Text = "";
                         txtVehicleType.Text = "";
                         txtSaleID.Text = "0";
-                            txtNotes.Text = "";
+                        textBox6.Text = "0";
+                        txtNotes.Text = "";
                             label8.Text = "0";
 
                         connection.Open();
@@ -964,16 +1171,23 @@ namespace Car_Care_Service__.NET_
             //   else {
             try
             {
+                if (textBox2.TextLength < 6) {
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return ;
+
+                }
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string insertQuery = "INSERT INTO CarWashServices1 (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes) " +
-                       "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discount, @Costs, @Total, @Notes)";
+                    string insertQuery = "INSERT INTO CarWashServices1 (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes) " +
+                       "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp, @Discount, @Costs, @Total, @Notes)";
 
                     {
 
                         SqlCommand command = new SqlCommand(insertQuery, connection);
 
-
+                      
 
                         command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
                         command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
@@ -1002,12 +1216,13 @@ namespace Car_Care_Service__.NET_
                     ;
 
                         command.Parameters.AddWithValue("@Services", cb);
-                        command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
                         //command.Parameters.AddWithValue("@Total", label8.Text);
                         ;
 
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
 
 
                         command.Parameters.AddWithValue("@Total", total);
@@ -1027,6 +1242,7 @@ namespace Car_Care_Service__.NET_
                         textBox1.Text = "";
                         txtVehicleType.Text = "";
                         txtSaleID.Text = "0";
+                        textBox6.Text = "0";
                         txtNotes.Text = "";
                         label8.Text = "0";
 
@@ -1048,13 +1264,22 @@ namespace Car_Care_Service__.NET_
         {
             try
             {
+                if (textBox2.TextLength < 6)
+                {
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     //string updateQuery = @"UPDATE Transactions 
                     //               SET Total = @Total, Notes = @Notes 
                     //               WHERE TransactionID = @TransactionID";
                     string updateQuery = "UPDATE CarWashServices SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
-                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
                        "WHERE ID = @ID";
 
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
@@ -1080,10 +1305,11 @@ namespace Car_Care_Service__.NET_
                         }
                         ;
                         command.Parameters.AddWithValue("@Services", cb);
-                      
-                        command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
+
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -1100,6 +1326,7 @@ namespace Car_Care_Service__.NET_
                         textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox1.Text = "";
                         txtSaleID.Text = "0";
+                        textBox6.Text = "0";
                         Costs.Text = "0";
                         txtNotes.Text = "";
                         label8.Text = "0";
@@ -1127,7 +1354,7 @@ namespace Car_Care_Service__.NET_
                     //               SET Total = @Total, Notes = @Notes 
                     //               WHERE TransactionID = @TransactionID";
                     string updateQuery = "UPDATE CarWashServices1 SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
-                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
                        "WHERE ID = @ID";
 
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
@@ -1153,9 +1380,10 @@ namespace Car_Care_Service__.NET_
                         }
                         ;
                         command.Parameters.AddWithValue("@Services", cb);
-                        command.Parameters.AddWithValue("@Discount", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
-                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text);
+                        decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -1172,6 +1400,7 @@ namespace Car_Care_Service__.NET_
                         textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
                         textBox1.Text = "";
                         txtSaleID.Text = "0";
+                        textBox6.Text = "0";
                         Costs.Text = "0";
                         txtNotes.Text = "";
                         label8.Text = "0";
@@ -1268,6 +1497,7 @@ namespace Car_Care_Service__.NET_
                             VehicleType NVARCHAR(50) NOT NULL,
                             Services NVARCHAR(MAX) NOT NULL,
                             Profit DECIMAL(10, 2) DEFAULT 0.00,
+                            Discountp    DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
                             Discount DECIMAL(10, 2) DEFAULT 0.00,
                             Costs DECIMAL(10, 2) DEFAULT 0.00,
                             Total DECIMAL(10, 2) NOT NULL,
@@ -1275,16 +1505,16 @@ namespace Car_Care_Service__.NET_
                         );
 
                         -- Insert reordered data into the temporary table
-                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes)
-                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, Total, Notes
                         FROM CarWashServices;
 
                         -- Truncate the original table
                         TRUNCATE TABLE CarWashServices;
 
                         -- Reinsert data from the temporary table
-                        INSERT INTO CarWashServices (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes)
-                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes
+                        INSERT INTO CarWashServices (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
                         FROM #TempTable;
 
                         -- Drop the temporary table
@@ -1372,6 +1602,7 @@ namespace Car_Care_Service__.NET_
                             VehicleType NVARCHAR(50) NOT NULL,
                             Services NVARCHAR(MAX) NOT NULL,
                             Profit DECIMAL(10, 2) DEFAULT 0.00,
+                            Discountp DECIMAL(10, 2) DEFAULT 0.00,
                             Discount DECIMAL(10, 2) DEFAULT 0.00,
                             Costs DECIMAL(10, 2) DEFAULT 0.00,
                             Total DECIMAL(10, 2) NOT NULL,
@@ -1379,16 +1610,16 @@ namespace Car_Care_Service__.NET_
                         );
 
                         -- Insert reordered data into the temporary table
-                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes)
-                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
                         FROM CarWashServices1;
 
                         -- Truncate the original table
                         TRUNCATE TABLE CarWashServices1;
 
                         -- Reinsert data from the temporary table
-                        INSERT INTO CarWashServices1 (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes)
-                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discount, Costs, Total, Notes
+                        INSERT INTO CarWashServices1 (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, Total, Notes
                         FROM #TempTable;
 
                         -- Drop the temporary table
@@ -1429,6 +1660,108 @@ namespace Car_Care_Service__.NET_
             
         }
 
+        private void delete(string fs) {
+            try
+            {
+                //DialogResult result = MessageBox.Show("Are you sure you want to delete this record?",
+                //                                      "Confirm Deletion",
+                //                                      MessageBoxButtons.YesNo,
+                //                                      MessageBoxIcon.Warning);
+                //if (result == DialogResult.Yes)
+                //{
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        // Begin a transaction to ensure data integrity
+                        SqlTransaction transaction = connection.BeginTransaction();
+
+                        try
+                        {
+                            // Delete the selected record
+                            string deleteQuery = "DELETE FROM CarWashServices1 WHERE ID = @ID";
+                            using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection, transaction))
+                            {
+                                deleteCommand.Parameters.AddWithValue("@ID", fs);
+                                deleteCommand.ExecuteNonQuery();
+                            }
+
+                            // Enable IDENTITY_INSERT for reordering
+                            string enableIdentityInsert = "SET IDENTITY_INSERT CarWashServices1 ON;";
+                            using (SqlCommand enableCommand = new SqlCommand(enableIdentityInsert, connection, transaction))
+                            {
+                                enableCommand.ExecuteNonQuery();
+                            }
+
+                            // Reorder IDs using a temporary table
+                            string reorderQuery = @"
+                        -- Create a temporary table
+                        CREATE TABLE #TempTable (
+                            ID INT NOT NULL,
+                            CustomerName NVARCHAR(100) NOT NULL,
+                            PhoneNumber NVARCHAR(15) NOT NULL,
+                            CurrentDate DATE DEFAULT GETDATE(),
+                            Time TIME(7) DEFAULT CONVERT(TIME, GETDATE()),
+                            CarID NVARCHAR(50) NOT NULL,
+                            VehicleType NVARCHAR(50) NOT NULL,
+                            Services NVARCHAR(MAX) NOT NULL,
+                            Profit DECIMAL(10, 2) DEFAULT 0.00,
+                            Discountp DECIMAL(10, 2) DEFAULT 0.00,
+                            Discount DECIMAL(10, 2) DEFAULT 0.00,
+                            Costs DECIMAL(10, 2) DEFAULT 0.00,
+                            Total DECIMAL(10, 2) NOT NULL,
+                            Notes NVARCHAR(MAX) NULL
+                        );
+
+                        -- Insert reordered data into the temporary table
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, Total, Notes
+                        FROM CarWashServices1;
+
+                        -- Truncate the original table
+                        TRUNCATE TABLE CarWashServices1;
+
+                        -- Reinsert data from the temporary table
+                        INSERT INTO CarWashServices1 (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
+                        FROM #TempTable;
+
+                        -- Drop the temporary table
+                        DROP TABLE #TempTable;
+                    ";
+                            using (SqlCommand reorderCommand = new SqlCommand(reorderQuery, connection, transaction))
+                            {
+                                reorderCommand.ExecuteNonQuery();
+                            }
+
+                            // Disable IDENTITY_INSERT after reordering
+                            string disableIdentityInsert = "SET IDENTITY_INSERT CarWashServices1 OFF;";
+                            using (SqlCommand disableCommand = new SqlCommand(disableIdentityInsert, connection, transaction))
+                            {
+                                disableCommand.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit(); // Commit the transaction
+                            //ID1.Text = "";
+
+                           // MessageBox.Show("Record deleted and IDs reordered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch
+                        {
+                            transaction.Rollback(); // Rollback on error
+                            throw;
+                        }
+                    }
+
+                    LoadData1(query1); // Reload the updated data
+                //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
 
 
         private void label6_Click_1(object sender, EventArgs e)
@@ -1958,7 +2291,7 @@ namespace Car_Care_Service__.NET_
             
             label8.Text = $"{totalPrice}";
            // decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text);
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
             
             label14.Text = $"{fs}";
         }
@@ -2187,11 +2520,11 @@ namespace Car_Care_Service__.NET_
             decimal fs;
             if (Costs.TextLength > 0)
             {
-                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text);
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
 
             }
             else {
-                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) ;
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(textBox6.Text) ;
             }
             label14.Text = $"{fs}";
         }
@@ -2209,7 +2542,7 @@ namespace Car_Care_Service__.NET_
             if (value != ctrl.Text)
                 ctrl.Text = value;
             //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
-            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100))))  - decimal.Parse(Costs.Text);
+            decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
             label14.Text = $"{fs}";
 
 
@@ -2232,7 +2565,9 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
-                
+                PID.Visible = false;
+                label17.Visible = false;
+                button14.Visible = true;
                 button12.Visible = false;
                 button13.Visible = false;
                 ID1.Visible = false;
@@ -2309,8 +2644,11 @@ namespace Car_Care_Service__.NET_
 
                     //label8.Text = row.Cells["Profit"].Value?.ToString();
 
+                    string strSalep = row.Cells["Discountp"].Value?.ToString();
+                    txtSaleID.Text = strSalep.Substring(0,strSalep.Length-2);
+
                     string strSale = row.Cells["Discount"].Value?.ToString();
-                    txtSaleID.Text = strSale.Substring(0,strSale.Length-2);
+                    textBox6.Text = strSale.Substring(0, strSale.Length - 2);
 
                     //==========
                     string numericPart = Regex.Replace(txtSaleID.Text, @"[^0-9.]", "");
@@ -2460,9 +2798,13 @@ namespace Car_Care_Service__.NET_
 
                     //label8.Text = row.Cells["Profit"].Value?.ToString();
 
+                    string strSalep = row.Cells["Discountp"].Value?.ToString();
+
+                    txtSaleID.Text = strSalep.Substring(0, strSalep.Length - 2);
+
                     string strSale = row.Cells["Discount"].Value?.ToString();
 
-                    txtSaleID.Text = strSale.Substring(0, strSale.Length - 2);
+                    textBox6.Text = strSale.Substring(0, strSale.Length - 2);
 
                     //==========
                     string numericPart = Regex.Replace(txtSaleID.Text, @"[^0-9.]", "");
@@ -2705,6 +3047,9 @@ namespace Car_Care_Service__.NET_
 
         private void button11_Click(object sender, EventArgs e)
         {
+            PID.Visible = true;
+            label17.Visible = true;
+            button14.Visible = false;
             button12.Visible = true;
             button13.Visible = true;
             ID1.Visible = true;
@@ -3034,9 +3379,52 @@ namespace Car_Care_Service__.NET_
 
         }
 
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            //if (Costs.Text.Length == 0) { 
+            //Costs.Text = "0";
+            //}
+            
+            Control ctrl = (sender as Control);
+            string value = string.Concat(ctrl
+                .Text
+                 .Where(c => Char.IsDigit(c) || c == '\u0020'));
+            if (value != ctrl.Text)
+                ctrl.Text = value;
+            //decimal fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * decimal.Parse(txtSaleID.Text) / 100)) - decimal.Parse(Costs.Text);
+            decimal fs;
+            if (textBox6.TextLength > 0)
+            {
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+            }
+            else
+            {
+                fs = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) ;
+            }
+            label14.Text = $"{fs}";
+
+        }
+
+        private void textBox6_Enter(object sender, EventArgs e)
+        {
+            System.Windows.Forms.TextBox ts = sender as System.Windows.Forms.TextBox;
+            if (ts != null && ts.Text.Length == 1)
+            {
+                ts.SelectAll();
+            }
 
 
+        }
 
+        private void textBox6_Leave(object sender, EventArgs e)
+        {
+            if (textBox6.TextLength < 1)
+            {
+                textBox6.Text = "0";
+            }
+
+        }
     }
         //private void HandleBackspace()
         //{
