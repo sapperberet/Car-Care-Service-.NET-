@@ -37,7 +37,6 @@ namespace Car_Care_Service__.NET_
             System.Windows.Forms.Label label3;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnExportToExcel = new System.Windows.Forms.Button();
-            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button14 = new System.Windows.Forms.Button();
@@ -1010,6 +1009,7 @@ namespace Car_Care_Service__.NET_
             this.button13.TabIndex = 48;
             this.button13.Text = "محو عملية";
             this.button13.UseVisualStyleBackColor = false;
+            this.button13.Visible = false;
             this.button13.Click += new System.EventHandler(this.btnDelete1_Click);
             // 
             // ID1
@@ -1123,8 +1123,6 @@ namespace Car_Care_Service__.NET_
 
         private Button btnExportToExcel;
 
-
-        private System.Drawing.Printing.PrintDocument printDocument1;
         private Button button2;
         private Panel panel2;
         private Button button4;

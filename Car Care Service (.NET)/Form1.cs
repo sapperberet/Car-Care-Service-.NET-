@@ -30,6 +30,10 @@ using System.Xml.Linq;
 using System.Globalization;
 using System.IO;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using DocumentFormat.OpenXml.Office2010.Excel;
+
 
 
 
@@ -40,8 +44,15 @@ using DocumentFormat.OpenXml.Spreadsheet;
 namespace Car_Care_Service__.NET_
 {
     public partial class Form1 : Form
+
     {
 
+        private PrintDocument printDocument;
+        private PrintPreviewDialog printPreviewDialog;
+        //private TextBox PID;
+        //private DataGridView dataGridView2;
+
+        private bool necessaryphone = true;
         BindingSource TransactionsBS = new BindingSource();
         private bool isFullScreen = false;
 
@@ -91,6 +102,9 @@ namespace Car_Care_Service__.NET_
             button2.FlatAppearance.BorderSize = 0;
             //button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             textBox2.MaxLength = 11;
+            
+            
+
             txtCarID.MaxLength = 13;
             Date.MaxLength = 10;
             dataGridView1.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
@@ -126,84 +140,169 @@ namespace Car_Care_Service__.NET_
             //this.KeyDown += Form1_KeyDown;
             txtVehicleType.SelectedIndex = 0;
 
+
+
+            // Existing setup
+            printDocument = new PrintDocument();
+            printDocument.PrintPage += PrintDocument_PrintPage;
+            printDocument.EndPrint += PrintDocument_EndPrint; // Attach EndPrint event
+
+            printPreviewDialog = new PrintPreviewDialog
+            {
+                Document = printDocument,
+                Width = 800,
+                Height = 600
+            };
+
+            //button2.Click += Print_Click;
+
+
+
         }
+
+        private bool isPrintedSuccessfully = false;
+
+        // Print_Click logic
         private void Print_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to print this record?",
-                                                  "Confirm Deletion",
-                                                  MessageBoxButtons.YesNo,
-                                                  MessageBoxIcon.Warning);
+            string filterID = PID.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(filterID))
+            {
+                MessageBox.Show("Please enter a valid PID.");
+                return;
+            }
+
+            // Check if the ID exists in the DataGridView
+            bool idExists = false;
+            foreach (DataGridViewRow row in dataGridView2.Rows)
+            {
+                if (row.Cells["ID"].Value?.ToString() == filterID)
+                {
+                    idExists = true;
+                    break;
+                }
+            }
+
+            if (!idExists)
+            {
+                MessageBox.Show($"No data found for PID: {filterID}");
+                return;
+            }
+
+            // Reset the printing status
+            isPrintedSuccessfully = false;
+
+            // Show the PrintPreviewDialog
+            string tsko = "هل انت متأكد من رقم العملية حيث انه سيتم محوها حين الموافقة";
+            DialogResult result = MessageBox.Show(tsko,
+                                                 "Confirm Deletion",
+                                                 MessageBoxButtons.YesNo,
+                                                 MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                try
+                printPreviewDialog.ShowDialog();
+            }
+        }
+
+        // PrintDocument_PrintPage logic
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            
+                int startX = 50, startY = 50;
+                int cellWidth = 100, cellHeight = 30;
+
+                // Draw column headers
+                for (int col = 0; col < dataGridView2.Columns.Count; col++)
                 {
-                    // Validate the TextBox input
-                    if (string.IsNullOrWhiteSpace(PID.Text))
+                    e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY, cellWidth, cellHeight);
+                    e.Graphics.DrawString(dataGridView2.Columns[col].HeaderText,
+                                          this.Font, Brushes.Black,
+                                          startX + col * cellWidth + 5, startY + 5);
+                }
+
+                // Draw filtered rows
+                int rowIndex = 1;
+                foreach (DataGridViewRow row in dataGridView2.Rows)
+                {
+                    if (row.Cells["ID"].Value?.ToString() == PID.Text.Trim())
                     {
-                        MessageBox.Show("Please enter a valid ID.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // Parse the ID
-                    string enteredID = PID.Text;
-
-                    // Find the row with the matching ID
-                    DataGridViewRow matchingRow = dataGridView2.Rows
-                        .Cast<DataGridViewRow>()
-                        .FirstOrDefault(row => row.Cells["ID"].Value.ToString() == enteredID);
-
-                    if (matchingRow == null)
-                    {
-                        MessageBox.Show("No matching row found for the entered ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // Extract data from the matching row
-                    var rowData = string.Empty;
-                    foreach (DataGridViewCell cell in matchingRow.Cells)
-                    {
-                        if (cell.Value == "") {
-                            cell.Value = " ";
-                        
+                        for (int col = 0; col < dataGridView2.Columns.Count; col++)
+                        {
+                            e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY + rowIndex * cellHeight, cellWidth, cellHeight);
+                            e.Graphics.DrawString(row.Cells[col].Value?.ToString(),
+                                                  this.Font, Brushes.Black,
+                                                  startX + col * cellWidth + 5, startY + rowIndex * cellHeight + 5);
                         }
-                        rowData += cell.Value + "\n";
+                        rowIndex++;
                     }
-                    rowData = rowData.TrimEnd(',');
-
-                    // Define the folder and file paths
-                    string folderPath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "shared");
-                    string filePath = System.IO.Path.Combine(folderPath, "sync.txt");
-
-                    // Ensure the folder exists
-                    if (!Directory.Exists(folderPath))
-                    {
-                        Directory.CreateDirectory(folderPath);
-                    }
-
-                    //// Write data to the file
-                    //File.WriteAllText(filePath, rowData);
-
-                    //// Delete the row from DataGridView
-
-                    //dataGridView2.Rows.Remove(matchingRow);
-
-                    File.AppendAllText(filePath, rowData);
-
-
-                    delete(PID.Text);
-
-                    //dataGridView2.Rows.Remove(matchingRow);
-
-
-
-
-                    //MessageBox.Show("", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch (Exception ex)
+
+                // Mark as printed
+                isPrintedSuccessfully = true;
+
+                // Parse the ID
+                string enteredID = PID.Text;
+
+                // Find the row with the matching ID
+                DataGridViewRow matchingRow = dataGridView2.Rows
+                    .Cast<DataGridViewRow>()
+                    .FirstOrDefault(row => row.Cells["ID"].Value.ToString() == enteredID);
+
+                if (matchingRow == null)
                 {
-                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No matching row found for the entered ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
+                // Extract data from the matching row
+                var rowData = string.Empty;
+                foreach (DataGridViewCell cell in matchingRow.Cells)
+                {
+                    if (cell.Value == "")
+                    {
+                        cell.Value = " ";
+
+                    }
+                    rowData += cell.Value + "\n";
+                }
+                rowData = rowData.TrimEnd(',');
+
+                // Define the folder and file paths
+                string folderPath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "shared");
+                string filePath = System.IO.Path.Combine(folderPath, "sync.txt");
+
+                // Ensure the folder exists
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                //// Write data to the file
+                //File.WriteAllText(filePath, rowData);
+
+                //// Delete the row from DataGridView
+
+                //dataGridView2.Rows.Remove(matchingRow);
+
+                File.AppendAllText(filePath, rowData);
+
+
+                delete(PID.Text);
+            
+        }
+
+        // EndPrint logic
+        private void PrintDocument_EndPrint(object sender, PrintEventArgs e)
+        {
+            // Only delete if printing was successful and not canceled
+            if (isPrintedSuccessfully && !e.Cancel)
+            {
+                string filterID = PID.Text.Trim();
+                if (!string.IsNullOrEmpty(filterID))
+                {
+                  //  delete(filterID); 
+                }
             }
         }
 
@@ -324,7 +423,7 @@ namespace Car_Care_Service__.NET_
 
                 if (lines.Count <= 1) // No data to process after skipping the first line
                 {
-                    MessageBox.Show("You Server is Up to Date", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Your Server is Up to Date", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
@@ -1072,13 +1171,17 @@ namespace Car_Care_Service__.NET_
          //   else {
                 try
             {
-                if (textBox2.TextLength < 6)
+                if (necessaryphone)
+                {
+
+                if (textBox2.TextLength < 8)
                 {
 
 
                     MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
 
+                }
                 }
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -1966,26 +2069,26 @@ namespace Car_Care_Service__.NET_
         private void txtVehicleType_TextChanged(object sender, EventArgs e)
         {
            
-            ComboBox comboBox = sender as ComboBox;
+            //ComboBox comboBox = sender as ComboBox;
 
-            if (comboBox != null)
-            {
+            //if (comboBox != null)
+            //{
                 
-                //string inputText = comboBox.Text.Trim(); 
+            //    //string inputText = comboBox.Text.Trim(); 
 
                 
-                //if (inputText == "سيارة" || inputText == "سكوتر" || inputText == "(أخرى)")
-                //{
+            //    //if (inputText == "سيارة" || inputText == "سكوتر" || inputText == "(أخرى)")
+            //    //{
                     
-                //}
-                //else
-                //{
+            //    //}
+            //    //else
+            //    //{
                    
-                //    comboBox.Text = string.Empty;
+            //    //    comboBox.Text = string.Empty;
 
-                //    MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
-            }
+            //    //    MessageBox.Show("الرجاء إدخال أو اختيار قيمة صحيحة: سيارة أو سكوتر", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    //}
+            //}
         }
 
         private void txtTotal_SelectedIndexChanged(object sender, EventArgs e)
@@ -2011,7 +2114,7 @@ namespace Car_Care_Service__.NET_
 
         private void txtSaleID_Leave(object sender, EventArgs e)
         {
-            ComboBox comboBox = sender as ComboBox;
+            System.Windows.Forms.ComboBox comboBox = sender as System.Windows.Forms.ComboBox;
 
             if (comboBox != null)
             {
@@ -3051,7 +3154,7 @@ namespace Car_Care_Service__.NET_
             label17.Visible = true;
             button14.Visible = false;
             button12.Visible = true;
-            button13.Visible = true;
+            button13.Visible = false;
             ID1.Visible = true;
             dataGridView1.Visible = false;
             dataGridView2.Visible = true;
@@ -3303,8 +3406,17 @@ namespace Car_Care_Service__.NET_
 
         private void txtVehicleType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (txtVehicleType.SelectedIndex == 1 || txtVehicleType.SelectedIndex == 0) {
 
+                necessaryphone = true;
+            }
+            if (txtVehicleType.SelectedIndex == 3 || txtVehicleType.SelectedIndex == 2)
+            {
+
+                necessaryphone = false;
+            }
         }
+
 
         private void Costs_Leave(object sender, EventArgs e)
         {
