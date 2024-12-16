@@ -34,7 +34,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using DocumentFormat.OpenXml.Office2010.Excel;
 
-
+using System.Reflection;
 
 
 
@@ -49,6 +49,8 @@ namespace Car_Care_Service__.NET_
 
         private PrintDocument printDocument;
         private PrintPreviewDialog printPreviewDialog;
+        private Bitmap logoImage; 
+        private Bitmap qrCodeImage;
         //private TextBox PID;
         //private DataGridView dataGridView2;
 
@@ -154,8 +156,28 @@ namespace Car_Care_Service__.NET_
                 Height = 600
             };
 
-            //button2.Click += Print_Click;
+            var assembly = Assembly.GetExecutingAssembly();
 
+            // Construct the resource name (use your project's default namespace + file path)
+            string resourceName = "Car_Care_Service__.NET_.assets.IMG-20241125-WA0018.jpg";
+
+            // Load the embedded resource as a stream
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new InvalidOperationException($"Resource '{resourceName}' not found.");
+               logoImage = new Bitmap(stream);
+            }
+            resourceName = "Car_Care_Service__.NET_.assets.IMG-20241216-WA0005.jpg";
+
+            // Load the embedded resource as a stream
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new InvalidOperationException($"Resource '{resourceName}' not found.");
+                qrCodeImage = new Bitmap(stream);
+            }
+            
 
 
         }
@@ -205,41 +227,154 @@ namespace Car_Care_Service__.NET_
             }
         }
 
-        // PrintDocument_PrintPage logic
+        
+        // TODO
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            
-                int startX = 50, startY = 50;
-                int cellWidth = 100, cellHeight = 30;
+            // Define starting position and font settings
+            int startX = 5;
+            int startY = 5;
+            int offsetY = 20;
+            int paperWidth = 280; // 72mm paper width (in pixels at 96 DPI)
+            System.Drawing.Font regularFont = new System.Drawing.Font("Readex Pro Deca Medium", 8, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font boldFont = new System.Drawing.Font("Readex Pro Deca Medium", 10, FontStyle.Bold);
 
-                // Draw column headers
-                for (int col = 0; col < dataGridView2.Columns.Count; col++)
-                {
-                    e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY, cellWidth, cellHeight);
-                    e.Graphics.DrawString(dataGridView2.Columns[col].HeaderText,
-                                          this.Font, Brushes.Black,
-                                          startX + col * cellWidth + 5, startY + 5);
-                }
+            // Drawing Logo and Title
+            if (logoImage != null)
+            {
+                e.Graphics.DrawImage(logoImage, startX, startY, 50, 50);
+            }
+            e.Graphics.DrawString("ON ROAD CAR CARE", boldFont, Brushes.Black, startX + 60, startY + 15);
+            offsetY += 60;
 
-                // Draw filtered rows
-                int rowIndex = 1;
-                foreach (DataGridViewRow row in dataGridView2.Rows)
-                {
-                    if (row.Cells["ID"].Value?.ToString() == PID.Text.Trim())
-                    {
-                        for (int col = 0; col < dataGridView2.Columns.Count; col++)
-                        {
-                            e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY + rowIndex * cellHeight, cellWidth, cellHeight);
-                            e.Graphics.DrawString(row.Cells[col].Value?.ToString(),
-                                                  this.Font, Brushes.Black,
-                                                  startX + col * cellWidth + 5, startY + rowIndex * cellHeight + 5);
-                        }
-                        rowIndex++;
-                    }
-                }
+            // Draw Date and Time
+            string dateTime = DateTime.Now.ToString("yyyy/MM/dd - hh:mm tt");
+            e.Graphics.DrawString($"Date: {dateTime}", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 20;
 
-                // Mark as printed
-                isPrintedSuccessfully = true;
+            // Client Information
+            e.Graphics.DrawString("Client: Mohamed Salah", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 15;
+            e.Graphics.DrawString("Phone: 0123456789", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 15;
+            e.Graphics.DrawString("Car Number: ABC-123", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 25;
+
+            // Table Header
+            e.Graphics.DrawString("Service", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("Price", boldFont, Brushes.Black, startX + 180, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            offsetY += 5;
+
+            // Table Rows (Example Rows)
+            string[,] services = {
+                { "Car Wash", "150" },
+                { "Oil Change", "200" },
+                { "Interior Cleaning", "100" }
+            };
+
+            for (int i = 0; i < services.GetLength(0); i++)
+            {
+                e.Graphics.DrawString(services[i, 0], regularFont, Brushes.Black, startX, startY + offsetY);
+                e.Graphics.DrawString($"${services[i, 1]}", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+                offsetY += 20;
+            }
+
+            // Draw Total
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            offsetY += 10;
+            e.Graphics.DrawString("Total:", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("$450", boldFont, Brushes.Black, startX + 180, startY + offsetY);
+            offsetY += 25;
+
+            // Payment Details
+            e.Graphics.DrawString("Paid: $300", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 15;
+            e.Graphics.DrawString("Left to Pay: $150", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 25;
+
+            // Welcoming Sentence
+            e.Graphics.DrawString("Thank you for choosing ElMaram!", boldFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 20;
+
+            // Contact Information
+            e.Graphics.DrawString("Contact Us: 1234 - 5678", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 25;
+
+            // QR Code at the Bottom
+            if (qrCodeImage != null)
+            {
+                e.Graphics.DrawImage(qrCodeImage, startX + 90, startY + offsetY, 100, 100);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //int startX = 50, startY = 50;
+            //int cellWidth = 100, cellHeight = 30;
+
+
+            // Draw column headers
+            //for (int col = 0; col < dataGridView2.Columns.Count; col++)
+            //{
+            //    e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY, cellWidth, cellHeight);
+            //    e.Graphics.DrawString(dataGridView2.Columns[col].HeaderText,
+            //                          this.Font, Brushes.Black,
+            //                          startX + col * cellWidth + 5, startY + 5);
+            //}
+
+            // Draw filtered rows
+            //int rowIndex = 1;
+            //foreach (DataGridViewRow row in dataGridView2.Rows)
+            //{
+            //    if (row.Cells["ID"].Value?.ToString() == PID.Text.Trim())
+            //    {
+            //        for (int col = 0; col < dataGridView2.Columns.Count; col++)
+            //        {
+            //            e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY + rowIndex * cellHeight, cellWidth, cellHeight);
+            //            e.Graphics.DrawString(row.Cells[col].Value?.ToString(),
+            //                                  this.Font, Brushes.Black,
+            //                                  startX + col * cellWidth + 5, startY + rowIndex * cellHeight + 5);
+            //        }
+            //        rowIndex++;
+            //    }
+            //}
+
+            // Mark as printed
+            isPrintedSuccessfully = true;
 
                 // Parse the ID
                 string enteredID = PID.Text;
