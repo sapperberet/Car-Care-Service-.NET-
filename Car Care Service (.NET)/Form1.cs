@@ -35,6 +35,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using DocumentFormat.OpenXml.Office2010.Excel;
 
 using System.Reflection;
+using DocumentFormat.OpenXml.Bibliography;
 
 
 
@@ -53,6 +54,9 @@ namespace Car_Care_Service__.NET_
         private Bitmap qrCodeImage;
         //private TextBox PID;
         //private DataGridView dataGridView2;
+
+        private string customerName, phoneNumber, carNumber, totalAmount, leftToPay ,dated ,notes ,tID , tprofit , tCosts , discp  , time , disc, Vehicletype;
+        private string[] services;
 
         private bool necessaryphone = true;
         BindingSource TransactionsBS = new BindingSource();
@@ -81,6 +85,7 @@ namespace Car_Care_Service__.NET_
 
         private double totalPrice = 0;
 
+        private Dictionary<string, double> normalizedOperationPrices;
         public Form1()
         {
             //AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
@@ -177,8 +182,8 @@ namespace Car_Care_Service__.NET_
                     throw new InvalidOperationException($"Resource '{resourceName}' not found.");
                 qrCodeImage = new Bitmap(stream);
             }
-            
 
+            normalizedOperationPrices = CreateNormalizedDictionary(operationPrices);
 
         }
 
@@ -223,6 +228,7 @@ namespace Car_Care_Service__.NET_
                                                  MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
+                FetchCarWashData(PID.Text);
                 printPreviewDialog.ShowDialog();
             }
         }
@@ -236,7 +242,7 @@ namespace Car_Care_Service__.NET_
             int startY = 5;
             int offsetY = 20;
             int paperWidth = 280; // 72mm paper width (in pixels at 96 DPI)
-            System.Drawing.Font regularFont = new System.Drawing.Font("Readex Pro Deca Medium", 8, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font regularFont = new System.Drawing.Font("Aria", 8, System.Drawing.FontStyle.Bold);
             System.Drawing.Font boldFont = new System.Drawing.Font("Readex Pro Deca Medium", 10, FontStyle.Bold);
 
             // Drawing Logo and Title
@@ -248,59 +254,80 @@ namespace Car_Care_Service__.NET_
             offsetY += 60;
 
             // Draw Date and Time
-            string dateTime = DateTime.Now.ToString("yyyy/MM/dd - hh:mm tt");
-            e.Graphics.DrawString($"Date: {dateTime}", regularFont, Brushes.Black, startX, startY + offsetY);
+            //string dateTime = DateTime.Now.ToString("yyyy/MM/dd - hh:mm tt");
+            e.Graphics.DrawString($"{dated} - {time} : التاريخ", regularFont, Brushes.Black, startX + 180, startY + offsetY);
             offsetY += 20;
 
             // Client Information
-            e.Graphics.DrawString("Client: Mohamed Salah", regularFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString($"{customerName} : اسم العميل", regularFont, Brushes.Black, startX+180, startY + offsetY);
             offsetY += 15;
-            e.Graphics.DrawString("Phone: 0123456789", regularFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString($"{phoneNumber} : التليفون", regularFont, Brushes.Black, startX +180, startY + offsetY);
             offsetY += 15;
-            e.Graphics.DrawString("Car Number: ABC-123", regularFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 25;
+            e.Graphics.DrawString($"{carNumber} : رقم المركبة", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+            offsetY += 20;
 
             // Table Header
-            e.Graphics.DrawString("Service", boldFont, Brushes.Black, startX, startY + offsetY);
-            e.Graphics.DrawString("Price", boldFont, Brushes.Black, startX + 180, startY + offsetY);
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            e.Graphics.DrawString("السعر", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("الخدمة", boldFont, Brushes.Black, startX + 180, startY + offsetY);
             offsetY += 20;
             e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
             offsetY += 5;
 
             // Table Rows (Example Rows)
-            string[,] services = {
-                { "Car Wash", "150" },
-                { "Oil Change", "200" },
-                { "Interior Cleaning", "100" }
-            };
-
-            for (int i = 0; i < services.GetLength(0); i++)
+            //string[,] services = {
+            //    { "Car Wash", "150" },
+            //    { "Oil Change", "200" },
+            //    { "Interior Cleaning", "100" }
+            //};
+           
+            foreach (var service in services)
             {
-                e.Graphics.DrawString(services[i, 0], regularFont, Brushes.Black, startX, startY + offsetY);
-                e.Graphics.DrawString($"${services[i, 1]}", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+                string normalizedService = NormalizeArabicText(service.Trim());
+                if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
+                {
+                    e.Graphics.DrawString(service, regularFont, Brushes.Black, startX, startY + offsetY);
+
+            }
+            e.Graphics.DrawString(service, regularFont, Brushes.Black, startX + 200, startY + offsetY);
                 offsetY += 20;
             }
+
+            //foreach (var service in services)
+            //{
+            //    string normalizedService = NormalizeArabicText(service.Trim());
+            //    if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
+            //    {
+            //       e.Graphics.DrawString($"{price}", regularFont, Brushes.Black, startX, startY + offsetY);
+            //      //  e.Graphics.DrawString($"{price}", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+            //     offsetY += 20;
+            //    }
+            //}
 
             // Draw Total
             e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
             offsetY += 10;
-            e.Graphics.DrawString("Total:", boldFont, Brushes.Black, startX, startY + offsetY);
-            e.Graphics.DrawString("$450", boldFont, Brushes.Black, startX + 180, startY + offsetY);
-            offsetY += 25;
-
+            e.Graphics.DrawString("الإجمالي", boldFont, Brushes.Black, startX + 180, startY + offsetY);
+            e.Graphics.DrawString($"{totalAmount}"+ " ج.م ", boldFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 30;
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            offsetY += 25; 
             // Payment Details
-            e.Graphics.DrawString("Paid: $300", regularFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 15;
-            e.Graphics.DrawString("Left to Pay: $150", regularFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 25;
+            //e.Graphics.DrawString("Paid: $300", regularFont, Brushes.Black, startX, startY + offsetY);
+            //offsetY += 15;
+            //e.Graphics.DrawString("Left to Pay: $150", regularFont, Brushes.Black, startX, startY + offsetY);
+            //offsetY += 25;
 
             // Welcoming Sentence
-            e.Graphics.DrawString("Thank you for choosing ElMaram!", boldFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 20;
+            e.Graphics.DrawString("           Thank you for choosing", boldFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 30;
+            e.Graphics.DrawString("               On Road Car Care!", boldFont, Brushes.Black, startX, startY + offsetY);
+            
+            offsetY += 40;
 
             // Contact Information
-            e.Graphics.DrawString("Contact Us: 1234 - 5678", regularFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 25;
+            e.Graphics.DrawString("Contact Us: \n01021536569\n01010357975", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 50;
 
             // QR Code at the Bottom
             if (qrCodeImage != null)
@@ -680,6 +707,58 @@ namespace Car_Care_Service__.NET_
         }
 
 
+        private void FetchCarWashData(string carWashID)
+        {
+            string query = "SELECT * FROM CarWashServices1 WHERE ID = @ID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ID", carWashID);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Assign data to variables
+                    //ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
+                    tID= reader["ID"].ToString();
+                    customerName = reader["CustomerName"].ToString();
+                    phoneNumber = reader["PhoneNumber"].ToString();
+                    dated = reader["CurrentDate"].ToString();
+                    time = reader["Time"].ToString();
+                    carNumber = reader["CarID"].ToString();
+                    Vehicletype = reader["VehicleType"].ToString();
+                    string servicesData = reader["Services"].ToString();
+
+                    //leftToPay = (Convert.ToDecimal(reader["Total"]) - Convert.ToDecimal(reader["Profit"])).ToString("F2");
+                    tprofit = reader["Profit"].ToString();
+                    discp = reader["Discountp"].ToString();
+                    disc  = reader["Discount"].ToString();
+                    tCosts = reader["Costs"].ToString();
+                    totalAmount = reader["Total"].ToString();
+                    notes = reader["Notes"].ToString();
+                    // Parse Services into a table
+                    services = ParseServices(servicesData);
+                }
+            }
+        }
+        private string[] ParseServices(string servicesData)
+        {
+          
+            var items =  servicesData.Split('/')
+                        .Select(item => NormalizeArabicText(item.Trim()))
+                        .ToList();
+            string[] parsedServices = items.ToArray();
+
+            //for (int i = 0; i < rows.Length; i++)
+            //{
+            //    parsedServices[i, 0] = rows[i].Split('-')[0]; // Service Name
+            //    parsedServices[i, 1] = rows[i].Split('-')[1]; // Price
+            //}
+            return parsedServices;
+        }
 
         private void btnMonthlyTotal_Click(object sender, EventArgs e)
         {
@@ -1044,7 +1123,19 @@ namespace Car_Care_Service__.NET_
         {
             //con
         }
-
+        private Dictionary<string, double> CreateNormalizedDictionary(Dictionary<string, double> originalDict)
+        {
+            var normalizedDict = new Dictionary<string, double>();
+            foreach (var kvp in originalDict)
+            {
+                string normalizedKey = NormalizeArabicText(kvp.Key.Trim());
+                if (!normalizedDict.ContainsKey(normalizedKey))
+                {
+                    normalizedDict.Add(normalizedKey, kvp.Value);
+                }
+            }
+            return normalizedDict;
+        }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -3552,6 +3643,10 @@ namespace Car_Care_Service__.NET_
             }
         }
 
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
 
         private void Costs_Leave(object sender, EventArgs e)
         {

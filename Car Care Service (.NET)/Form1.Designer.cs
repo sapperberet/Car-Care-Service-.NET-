@@ -984,6 +984,7 @@ namespace Car_Care_Service__.NET_
             this.dataGridView2.RowHeadersWidth = 51;
             this.dataGridView2.Size = new System.Drawing.Size(1000, 512);
             this.dataGridView2.TabIndex = 47;
+            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // button12
             // 
