@@ -55,7 +55,7 @@ namespace Car_Care_Service__.NET_
         //private TextBox PID;
         //private DataGridView dataGridView2;
 
-        private string customerName, phoneNumber, carNumber, totalAmount, leftToPay ,dated ,notes ,tID , tprofit , tCosts , discp  , time , disc, Vehicletype;
+        private string customerName, phoneNumber, carNumber, totalAmount, leftToPay ,dated ,notes ,tID , tprofit , tCosts , discp  , time , disc, Vehicletype , tincome;
         private string[] services;
 
         private bool necessaryphone = true;
@@ -80,7 +80,9 @@ namespace Car_Care_Service__.NET_
             { " غسیل موتور كيماوي", 60 / 2 },
             { " غسيل خارجي", 70 /2 },
             { " غسيل داخلي", 70 / 2 },
-            { " اسکوتر", 50 / 2 }
+            { " اسکوتر", 50 / 2 },
+            { " تنظيف شنطة كامل", 20 / 2 }
+
         };
 
         private double totalPrice = 0;
@@ -164,7 +166,7 @@ namespace Car_Care_Service__.NET_
             var assembly = Assembly.GetExecutingAssembly();
 
             // Construct the resource name (use your project's default namespace + file path)
-            string resourceName = "Car_Care_Service__.NET_.assets.IMG-20241125-WA0018.jpg";
+            string resourceName = "Car_Care_Service__.NET_.assets.listlogo.jpg";
 
             // Load the embedded resource as a stream
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -248,30 +250,37 @@ namespace Car_Care_Service__.NET_
             // Drawing Logo and Title
             if (logoImage != null)
             {
-                e.Graphics.DrawImage(logoImage, startX, startY, 50, 50);
+                e.Graphics.DrawImage(logoImage, startX+120, startY, 50, 50);
             }
-            e.Graphics.DrawString("ON ROAD CAR CARE", boldFont, Brushes.Black, startX + 60, startY + 15);
-            offsetY += 60;
+            offsetY += 35;
+            e.Graphics.DrawString("ON ROAD CAR CARE", boldFont, Brushes.Black, startX + 70, offsetY);
+            offsetY += 20;
 
             // Draw Date and Time
             //string dateTime = DateTime.Now.ToString("yyyy/MM/dd - hh:mm tt");
-            e.Graphics.DrawString($"{dated} - {time} : التاريخ", regularFont, Brushes.Black, startX + 180, startY + offsetY);
-            offsetY += 20;
+            dated = dated.Substring(0, 10);
+            DateTime today = DateTime.Now;
+            CultureInfo arabicCulture = new CultureInfo("ar-SA");
+            string dayNameInArabic = today.ToString("dddd", arabicCulture);
+            
+            
 
             // Client Information
-            e.Graphics.DrawString($"{customerName} : اسم العميل", regularFont, Brushes.Black, startX+180, startY + offsetY);
+            e.Graphics.DrawString($"Name: {customerName}", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 15; 
+            e.Graphics.DrawString($"Tel: {phoneNumber}", regularFont, Brushes.Black, startX , startY + offsetY);
             offsetY += 15;
-            e.Graphics.DrawString($"{phoneNumber} : التليفون", regularFont, Brushes.Black, startX +180, startY + offsetY);
+            e.Graphics.DrawString($"Num. Car: {carNumber}", regularFont, Brushes.Black, startX , startY + offsetY);
             offsetY += 15;
-            e.Graphics.DrawString($"{carNumber} : رقم المركبة", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+            e.Graphics.DrawString($"Date: {dated} - {time} - {dayNameInArabic}", regularFont, Brushes.Black, startX, startY + offsetY);
             offsetY += 20;
 
             // Table Header
-            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth-10, startY + offsetY);
             e.Graphics.DrawString("السعر", boldFont, Brushes.Black, startX, startY + offsetY);
-            e.Graphics.DrawString("الخدمة", boldFont, Brushes.Black, startX + 180, startY + offsetY);
+            e.Graphics.DrawString("الخدمة", boldFont, Brushes.Black, startX + 200, startY + offsetY);
             offsetY += 20;
-            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth-10, startY + offsetY);
             offsetY += 5;
 
             // Table Rows (Example Rows)
@@ -280,16 +289,84 @@ namespace Car_Care_Service__.NET_
             //    { "Oil Change", "200" },
             //    { "Interior Cleaning", "100" }
             //};
+
+            Pen dottedPen1 = new Pen(System.Drawing.Color.Black, 1);
+            dottedPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
            
+
             foreach (var service in services)
             {
+                offsetY += 10;
                 string normalizedService = NormalizeArabicText(service.Trim());
                 if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
                 {
-                    e.Graphics.DrawString(service, regularFont, Brushes.Black, startX, startY + offsetY);
+                    e.Graphics.DrawString($"{price*2}", regularFont, Brushes.Black, startX+5, startY + offsetY);
 
             }
-            e.Graphics.DrawString(service, regularFont, Brushes.Black, startX + 200, startY + offsetY);
+
+                //offsetY += 10;
+               
+                //offsetY += 10;
+                int chunkSize = 17;
+                for (int i = 0; i < service.Length; i += chunkSize)
+                {
+                    // Determine the length of the current chunk
+                    int length = Math.Min(chunkSize, service.Length - i);
+
+                    // Extract the substring chunk
+                    string chunk = service.Substring(i, length);
+
+                    // Draw the string
+                    e.Graphics.DrawString(chunk, regularFont, Brushes.Black, startX+180, startY + offsetY);
+
+                    // Move the Y offset for the next line
+                    offsetY += 20;
+                }
+            }
+            int a = 0;
+            
+                
+
+                offsetY += 20;
+                e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY-15 , startX + 220, startY + offsetY-15);
+                 
+                
+            e.Graphics.DrawString("الحساب", boldFont, Brushes.Black, startX + 200, startY + offsetY-10);
+                e.Graphics.DrawString($"{tprofit}",boldFont, Brushes.Black, startX + 20, startY + offsetY-10);
+                e.Graphics.DrawString($"ج.م", regularFont, Brushes.Black, startX, startY + offsetY - 15);
+
+            //e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY + 15, startX + 240, startY + offsetY + 15);
+            //offsetY += 20;
+
+
+
+
+            if (decimal.Parse(disc) != 0) {
+                if (a == 0) { 
+            
+                    e.Graphics.DrawLine(dottedPen1, startX+60, startY + offsetY + 15, startX + 220, startY + offsetY + 15);
+                    a = 1;
+                }
+                offsetY += 20;
+                e.Graphics.DrawString("خصم", regularFont, Brushes.Black, startX + 230, startY + offsetY);
+               
+                e.Graphics.DrawString($"{disc}", regularFont, Brushes.Black, startX + 20, startY + offsetY);
+                e.Graphics.DrawString($"ج.م", regularFont, Brushes.Black, startX, startY + offsetY-2);
+               
+                
+            }
+            if (decimal.Parse(disc) != 0)
+            {
+                if (a == 0)
+                {
+
+                    e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY + 15, startX + 220, startY + offsetY + 15);
+                    a = 1;
+                }
+                offsetY += 20;
+                e.Graphics.DrawString("نسبة الخصم", regularFont, Brushes.Black, startX + 200, startY + offsetY);
+                e.Graphics.DrawString($"%{discp}", regularFont, Brushes.Black, startX+5, startY + offsetY);
                 offsetY += 20;
             }
 
@@ -305,34 +382,54 @@ namespace Car_Care_Service__.NET_
             //}
 
             // Draw Total
-            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth-10, startY + offsetY);
             offsetY += 10;
-            e.Graphics.DrawString("الإجمالي", boldFont, Brushes.Black, startX + 180, startY + offsetY);
-            e.Graphics.DrawString($"{totalAmount}"+ " ج.م ", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("الإجمالي", boldFont, Brushes.Black, startX + 200, startY + offsetY);
+            e.Graphics.DrawString($"{totalAmount}", boldFont, Brushes.Black, startX+20, startY + offsetY);
+            e.Graphics.DrawString($"ج.م", boldFont, Brushes.Black, startX, startY + offsetY-5);
             offsetY += 30;
-            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth, startY + offsetY);
-            offsetY += 25; 
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth-10, startY + offsetY);
+
             // Payment Details
             //e.Graphics.DrawString("Paid: $300", regularFont, Brushes.Black, startX, startY + offsetY);
             //offsetY += 15;
             //e.Graphics.DrawString("Left to Pay: $150", regularFont, Brushes.Black, startX, startY + offsetY);
             //offsetY += 25;
+            offsetY += 10;
+            if (decimal.Parse(disc) != 0)
+            {
+               
 
+                    e.Graphics.DrawLine(dottedPen1, startX , startY + offsetY + 15, startX + paperWidth - 10 , startY + offsetY + 15);
+                 
+
+                if (notes != null) { 
+                
+                e.Graphics.DrawString($"Notes : {notes}", regularFont, Brushes.Black, startX + 5, startY + offsetY);
+                offsetY += 20;
+                }
+
+               
+            }
             // Welcoming Sentence
-            e.Graphics.DrawString("           Thank you for choosing", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("              Thank you for choosing", boldFont, Brushes.Black, startX, startY + offsetY);
             offsetY += 30;
-            e.Graphics.DrawString("               On Road Car Care!", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("                On Road Car Care!", boldFont, Brushes.Black, startX, startY + offsetY);
             
             offsetY += 40;
 
             // Contact Information
-            e.Graphics.DrawString("Contact Us: \n01021536569\n01010357975", regularFont, Brushes.Black, startX, startY + offsetY);
-            offsetY += 50;
+            e.Graphics.DrawString(": للمقترحات و الشكاوي يرجي التواصل علي", regularFont, Brushes.Black, startX+100, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString("01021536569", regularFont, Brushes.Black, startX+25, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString("01010357975", regularFont, Brushes.Black, startX+25, startY + offsetY);
+            offsetY += 20;
 
             // QR Code at the Bottom
             if (qrCodeImage != null)
             {
-                e.Graphics.DrawImage(qrCodeImage, startX + 90, startY + offsetY, 100, 100);
+                e.Graphics.DrawImage(qrCodeImage, startX + 115, startY + offsetY, 50, 50);
             }
 
 
@@ -737,6 +834,7 @@ namespace Car_Care_Service__.NET_
                     discp = reader["Discountp"].ToString();
                     disc  = reader["Discount"].ToString();
                     tCosts = reader["Costs"].ToString();
+                    //tincome = reader["income"].ToString();
                     totalAmount = reader["Total"].ToString();
                     notes = reader["Notes"].ToString();
                     // Parse Services into a table
@@ -1412,8 +1510,8 @@ namespace Car_Care_Service__.NET_
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes) " +
-                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp , @Discount, @Costs, @Total, @Notes)";
+                        string insertQuery = "INSERT INTO CarWashServices (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes) " +
+                           "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp , @Discount, @Costs, @income, @Total, @Notes)";
 
                         {
                             
@@ -1455,9 +1553,10 @@ namespace Car_Care_Service__.NET_
 
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
                         decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100)))- decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
-                        
 
-                            command.Parameters.AddWithValue("@Total", total);
+                         total = total + decimal.Parse(Income.Text);
+                        command.Parameters.AddWithValue("@income", Income.Text);
+                        command.Parameters.AddWithValue("@Total", total);
                             command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                             txtCustomerID.Text = "";
                             textBox2.Text = "";
@@ -1608,7 +1707,7 @@ namespace Car_Care_Service__.NET_
                     //               SET Total = @Total, Notes = @Notes 
                     //               WHERE TransactionID = @TransactionID";
                     string updateQuery = "UPDATE CarWashServices SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
-                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,Total = @Total, Notes = @Notes " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,Total = @Total,income = @income, Notes = @Notes " +
                        "WHERE ID = @ID";
 
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
@@ -1639,6 +1738,8 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
                         command.Parameters.AddWithValue("@Costs", Costs.Text);
                         decimal total = (decimal.Parse(label8.Text) - (decimal.Parse(label8.Text) * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+                        total = total + decimal.Parse(Income.Text);
+                        command.Parameters.AddWithValue("@income", Income.Text);
                         command.Parameters.AddWithValue("@Total", total);
                         command.Parameters.AddWithValue("@Notes", txtNotes.Text);
                         txtCustomerID.Text = "";
@@ -1829,21 +1930,22 @@ namespace Car_Care_Service__.NET_
                             Discountp    DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
                             Discount DECIMAL(10, 2) DEFAULT 0.00,
                             Costs DECIMAL(10, 2) DEFAULT 0.00,
+                            income  DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
                             Total DECIMAL(10, 2) NOT NULL,
                             Notes NVARCHAR(MAX) NULL
                         );
 
                         -- Insert reordered data into the temporary table
-                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
-                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, Total, Notes
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, income, Total, Notes
                         FROM CarWashServices;
 
                         -- Truncate the original table
                         TRUNCATE TABLE CarWashServices;
 
                         -- Reinsert data from the temporary table
-                        INSERT INTO CarWashServices (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes)
-                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
+                        INSERT INTO CarWashServices (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes
                         FROM #TempTable;
 
                         -- Drop the temporary table
@@ -2038,6 +2140,7 @@ namespace Car_Care_Service__.NET_
                             Discountp DECIMAL(10, 2) DEFAULT 0.00,
                             Discount DECIMAL(10, 2) DEFAULT 0.00,
                             Costs DECIMAL(10, 2) DEFAULT 0.00,
+                            
                             Total DECIMAL(10, 2) NOT NULL,
                             Notes NVARCHAR(MAX) NULL
                         );
@@ -2894,6 +2997,8 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
+                label19.Visible = true;
+                Income.Visible = true;
                 PID.Visible = false;
                 label17.Visible = false;
                 button14.Visible = true;
@@ -3376,6 +3481,8 @@ namespace Car_Care_Service__.NET_
 
         private void button11_Click(object sender, EventArgs e)
         {
+            label19.Visible = false;
+            Income.Visible = false;
             PID.Visible = true;
             label17.Visible = true;
             button14.Visible = false;
@@ -3445,7 +3552,7 @@ namespace Car_Care_Service__.NET_
 
                 // SELECT CurrentDate,Time, Total 
                 string query = @"
-        SELECT CurrentDate,Time, Total 
+        SELECT *
         FROM CarWashServices 
         WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
             
@@ -3641,6 +3748,11 @@ namespace Car_Care_Service__.NET_
 
                 necessaryphone = false;
             }
+        }
+
+        private void Income_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)

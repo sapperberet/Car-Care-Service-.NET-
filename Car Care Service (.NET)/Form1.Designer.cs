@@ -99,6 +99,8 @@ namespace Car_Care_Service__.NET_
             this.ID1 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.Income = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -197,6 +199,8 @@ namespace Car_Care_Service__.NET_
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel2.Controls.Add(this.label19);
+            this.panel2.Controls.Add(this.Income);
             this.panel2.Controls.Add(this.button14);
             this.panel2.Controls.Add(this.label17);
             this.panel2.Controls.Add(this.PID);
@@ -391,7 +395,7 @@ namespace Car_Care_Service__.NET_
             this.Costs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.Costs.Font = new System.Drawing.Font("Readex Pro Deca Medium", 13F, System.Drawing.FontStyle.Bold);
             this.Costs.ForeColor = System.Drawing.SystemColors.Info;
-            this.Costs.Location = new System.Drawing.Point(945, 24);
+            this.Costs.Location = new System.Drawing.Point(938, 46);
             this.Costs.Multiline = true;
             this.Costs.Name = "Costs";
             this.Costs.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -408,7 +412,7 @@ namespace Car_Care_Service__.NET_
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
             this.label12.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label12.Location = new System.Drawing.Point(1063, 23);
+            this.label12.Location = new System.Drawing.Point(1056, 45);
             this.label12.Name = "label12";
             this.label12.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label12.Size = new System.Drawing.Size(115, 35);
@@ -1053,6 +1057,34 @@ namespace Car_Care_Service__.NET_
             this.label18.TabIndex = 52;
             this.label18.Text = "نسبة الخصم";
             // 
+            // Income
+            // 
+            this.Income.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.Income.Font = new System.Drawing.Font("Readex Pro Deca Medium", 13F, System.Drawing.FontStyle.Bold);
+            this.Income.ForeColor = System.Drawing.SystemColors.Info;
+            this.Income.Location = new System.Drawing.Point(938, 7);
+            this.Income.Multiline = true;
+            this.Income.Name = "Income";
+            this.Income.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.Income.Size = new System.Drawing.Size(112, 35);
+            this.Income.TabIndex = 53;
+            this.Income.Text = "0";
+            this.Income.Visible = false;
+            this.Income.TextChanged += new System.EventHandler(this.Income_TextChanged);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
+            this.label19.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label19.Location = new System.Drawing.Point(1056, 10);
+            this.label19.Name = "label19";
+            this.label19.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label19.Size = new System.Drawing.Size(91, 35);
+            this.label19.TabIndex = 61;
+            this.label19.Text = "الإرادات :";
+            this.label19.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -1186,6 +1218,8 @@ namespace Car_Care_Service__.NET_
         private Button button14;
         private TextBox textBox6;
         private Label label18;
+        private TextBox Income;
+        private Label label19;
     }
 
 }

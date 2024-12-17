@@ -241,6 +241,7 @@
     <None Include="assets\Media-Playlist-Repeat-icon.png" />
     <EmbeddedResource Include="assets\IMG-20241216-WA0005.jpg" />
     <None Include="assets\OnRoadLogo.ico" />
+    <EmbeddedResource Include="assets\listlogo.jpg" />
     <Content Include="assets\pngtree-vector-print-icon-png-image_3994913.jpg" />
     <Content Include="assets\print.ico" />
     <Content Include="assets\print.png" />
