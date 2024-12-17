@@ -245,6 +245,7 @@
     <Content Include="assets\pngtree-vector-print-icon-png-image_3994913.jpg" />
     <Content Include="assets\print.ico" />
     <Content Include="assets\print.png" />
+    <EmbeddedResource Include="assets\qrlogo1.jpg" />
     <Content Include="assets\repair-shop.ico" />
     <Content Include="assets\repair-shop.png" />
     <Content Include="Car Wash Service.csproj.user" />

@@ -39,6 +39,8 @@ namespace Car_Care_Service__.NET_
             this.btnExportToExcel = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.Income = new System.Windows.Forms.TextBox();
             this.button14 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.PID = new System.Windows.Forms.TextBox();
@@ -99,8 +101,6 @@ namespace Car_Care_Service__.NET_
             this.ID1 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.Income = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -229,6 +229,34 @@ namespace Car_Care_Service__.NET_
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
+            this.label19.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label19.Location = new System.Drawing.Point(1056, 10);
+            this.label19.Name = "label19";
+            this.label19.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label19.Size = new System.Drawing.Size(91, 35);
+            this.label19.TabIndex = 61;
+            this.label19.Text = "الإرادات :";
+            // 
+            // Income
+            // 
+            this.Income.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.Income.Font = new System.Drawing.Font("Readex Pro Deca Medium", 13F, System.Drawing.FontStyle.Bold);
+            this.Income.ForeColor = System.Drawing.SystemColors.Info;
+            this.Income.Location = new System.Drawing.Point(938, 7);
+            this.Income.Multiline = true;
+            this.Income.Name = "Income";
+            this.Income.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.Income.Size = new System.Drawing.Size(112, 35);
+            this.Income.TabIndex = 53;
+            this.Income.Text = "0";
+            this.Income.TextChanged += new System.EventHandler(this.Income_TextChanged);
+            this.Income.Enter += new System.EventHandler(this.Income_Enter);
+            this.Income.Leave += new System.EventHandler(this.Income_Leave);
             // 
             // button14
             // 
@@ -653,7 +681,7 @@ namespace Car_Care_Service__.NET_
             this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label6.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(1069, 261);
+            this.label6.Location = new System.Drawing.Point(1051, 260);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(96, 29);
             this.label6.TabIndex = 24;
@@ -679,7 +707,7 @@ namespace Car_Care_Service__.NET_
             this.txtVehicleType.Location = new System.Drawing.Point(1047, 293);
             this.txtVehicleType.Name = "txtVehicleType";
             this.txtVehicleType.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtVehicleType.Size = new System.Drawing.Size(141, 29);
+            this.txtVehicleType.Size = new System.Drawing.Size(118, 29);
             this.txtVehicleType.TabIndex = 6;
             this.txtVehicleType.SelectedIndexChanged += new System.EventHandler(this.txtVehicleType_SelectedIndexChanged);
             this.txtVehicleType.TextChanged += new System.EventHandler(this.txtVehicleType_TextChanged);
@@ -706,10 +734,10 @@ namespace Car_Care_Service__.NET_
             "80",
             "90",
             "100"});
-            this.txtSaleID.Location = new System.Drawing.Point(1194, 260);
+            this.txtSaleID.Location = new System.Drawing.Point(1179, 260);
             this.txtSaleID.Name = "txtSaleID";
             this.txtSaleID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtSaleID.Size = new System.Drawing.Size(50, 30);
+            this.txtSaleID.Size = new System.Drawing.Size(65, 30);
             this.txtSaleID.TabIndex = 5;
             this.txtSaleID.Text = "0";
             this.txtSaleID.SelectedIndexChanged += new System.EventHandler(this.txtSaleID_SelectedIndexChanged);
@@ -724,11 +752,11 @@ namespace Car_Care_Service__.NET_
             this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.label7.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(1279, 294);
+            this.label7.Location = new System.Drawing.Point(1257, 293);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(83, 29);
+            this.label7.Size = new System.Drawing.Size(117, 29);
             this.label7.TabIndex = 19;
-            this.label7.Text = "خصومات";
+            this.label7.Text = "خصم بالقيمة ";
             this.label7.Click += new System.EventHandler(this.label7_Click_1);
             // 
             // txtCarID
@@ -1034,7 +1062,7 @@ namespace Car_Care_Service__.NET_
             this.textBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
             this.textBox6.Font = new System.Drawing.Font("Readex Pro Deca Medium", 11F, System.Drawing.FontStyle.Bold);
             this.textBox6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.textBox6.Location = new System.Drawing.Point(1194, 293);
+            this.textBox6.Location = new System.Drawing.Point(1179, 293);
             this.textBox6.Multiline = true;
             this.textBox6.Name = "textBox6";
             this.textBox6.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -1056,34 +1084,6 @@ namespace Car_Care_Service__.NET_
             this.label18.Size = new System.Drawing.Size(108, 29);
             this.label18.TabIndex = 52;
             this.label18.Text = "نسبة الخصم";
-            // 
-            // Income
-            // 
-            this.Income.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.Income.Font = new System.Drawing.Font("Readex Pro Deca Medium", 13F, System.Drawing.FontStyle.Bold);
-            this.Income.ForeColor = System.Drawing.SystemColors.Info;
-            this.Income.Location = new System.Drawing.Point(938, 7);
-            this.Income.Multiline = true;
-            this.Income.Name = "Income";
-            this.Income.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Income.Size = new System.Drawing.Size(112, 35);
-            this.Income.TabIndex = 53;
-            this.Income.Text = "0";
-            this.Income.Visible = false;
-            this.Income.TextChanged += new System.EventHandler(this.Income_TextChanged);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
-            this.label19.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label19.Location = new System.Drawing.Point(1056, 10);
-            this.label19.Name = "label19";
-            this.label19.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label19.Size = new System.Drawing.Size(91, 35);
-            this.label19.TabIndex = 61;
-            this.label19.Text = "الإرادات :";
-            this.label19.Visible = false;
             // 
             // Form1
             // 
