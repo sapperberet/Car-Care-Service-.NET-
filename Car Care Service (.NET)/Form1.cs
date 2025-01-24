@@ -1321,7 +1321,7 @@ namespace Car_Care_Service__.NET_
             public void ExportToExcel()
             {
                 DialogResult result = MessageBox.Show("Do you want to export the data to Excel?",
-                                                      "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                                    "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
@@ -1372,21 +1372,202 @@ namespace Car_Care_Service__.NET_
                                 }
                             }
 
-                            workbook.Worksheets.Add(dt, sheetStrFormat);
+                            int dateColumnIndex = dt.Columns.IndexOf("CurrentDate");
+                            int totalColumnIndex = dt.Columns.IndexOf("Total");
+                            int costsColumnIndex = dt.Columns.IndexOf("Costs");
+
+                            if (dateColumnIndex == -1 || totalColumnIndex == -1 || costsColumnIndex == -1)
+                            {
+                                MessageBox.Show("Required columns (Date, Total, Costs) not found.",
+                                              "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            var monthlySums = new Dictionary<DateTime, (decimal Total, decimal Costs, decimal MonthlyTotal)>();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (DateTime.TryParse(row[dateColumnIndex].ToString(), out DateTime date))
+                                {
+                                    var monthStart = new DateTime(date.Year, date.Month, 1);
+
+                                    decimal total = Convert.ToDecimal(row[totalColumnIndex]);
+                                    decimal costs = Convert.ToDecimal(row[costsColumnIndex]);
+                                    decimal monthlyTotal = total + costs;
+
+                                    if (monthlySums.ContainsKey(monthStart))
+                                    {
+                                        var existing = monthlySums[monthStart];
+                                        monthlySums[monthStart] = (
+                                            existing.Total + total,
+                                            existing.Costs + costs,
+                                            existing.MonthlyTotal + monthlyTotal
+                                        );
+                                    }
+                                    else
+                                    {
+                                        monthlySums[monthStart] = (total, costs, monthlyTotal);
+                                    }
+                                }
+                            }
+
+                            var worksheet = workbook.Worksheets.Add(dt, sheetStrFormat);
+
+                            // Add new column for monthly totals
+
+                            int monthlyTotalColumnIndex = dt.Columns.Count + 1;
+                            worksheet.Cell(1, monthlyTotalColumnIndex).Value = "Monthly Total";
+
+                            int currentRow = dt.Rows.Count + 3;
+                            decimal grandTotal = 0;
+                            decimal grandCosts = 0;
+                            decimal grandMonthlyTotal = 0;
+
+                            // Add summary headers
+                            worksheet.Cell(currentRow - 1, costsColumnIndex - 2).Value = "Monthly Summaries";
+                            worksheet.Cell(currentRow - 1, costsColumnIndex + 1).Value = "Costs";
+                            worksheet.Cell(currentRow - 1, totalColumnIndex + 1).Value = "Total";
+                            worksheet.Cell(currentRow - 1, monthlyTotalColumnIndex).Value = "Grand Totals";
+
+                            worksheet.Range(currentRow - 1, 1, currentRow - 1, monthlyTotalColumnIndex)
+                                   .Merge()
+                                   .Style.Font.SetBold()
+                                   .Fill.SetBackgroundColor(XLColor.LightGray);
+
+                            foreach (var month in monthlySums.OrderBy(m => m.Key))
+                            {
+                                worksheet.Cell(currentRow, costsColumnIndex - 2).Value = $"Month End: {month.Key:MMMM yyyy}";
+                                worksheet.Cell(currentRow, totalColumnIndex + 1).Value = month.Value.Total;
+                                worksheet.Cell(currentRow, costsColumnIndex + 1).Value = month.Value.Costs;
+                                worksheet.Cell(currentRow, monthlyTotalColumnIndex).Value = month.Value.MonthlyTotal;
+
+                                grandTotal += month.Value.Total;
+                                grandCosts += month.Value.Costs;
+                                grandMonthlyTotal += month.Value.MonthlyTotal;
+
+                                currentRow++;
+                            }
+
+                            // Add grand totals
+                            worksheet.Cell(currentRow, costsColumnIndex - 2).Value = "GRAND TOTAL";
+                            worksheet.Cell(currentRow, totalColumnIndex + 1).Value = grandTotal;
+                            worksheet.Cell(currentRow, costsColumnIndex + 1).Value = grandCosts;
+                            worksheet.Cell(currentRow, monthlyTotalColumnIndex).Value = grandMonthlyTotal;
+
+                            // Formatting
+                            var summaryRange = worksheet.Range(
+                                dt.Rows.Count + 3, 1,
+                                currentRow, monthlyTotalColumnIndex
+                            );
+
+                            summaryRange.Style
+                                .Font.SetBold(true)
+                                .Fill.SetBackgroundColor(XLColor.LightGray)
+                                .Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+
+                            // Special formatting for labels
+                            worksheet.Range(dt.Rows.Count + 3, 1, currentRow, 1)
+                                   .Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+
+                            // Format numbers
+                            worksheet.Columns(totalColumnIndex + 1, monthlyTotalColumnIndex)
+                                   .Style.NumberFormat.Format = "#,##0.00";
+
+                            worksheet.Columns().AdjustToContents();
+
                             workbook.SaveAs(filePath);
                         }
 
                         MessageBox.Show("Data exported successfully to Excel.",
-                                        "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                      "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error exporting data to Excel: " + ex.Message,
-                                        "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                      "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
+        //public class SaveExcel
+        //{
+        //    private DataGridView dataGridView1;
+
+        //    public SaveExcel(DataGridView dgv)
+        //    {
+        //        this.dataGridView1 = dgv;
+        //    }
+
+        //    public void ExportToExcel()
+        //    {
+        //        DialogResult result = MessageBox.Show("Do you want to export the data to Excel?",
+        //                                              "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        //        if (result == DialogResult.Yes)
+        //        {
+        //            if (dataGridView1.Rows.Count == 0)
+        //            {
+        //                MessageBox.Show("No data to export.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //                return;
+        //            }
+
+        //            string filePath = string.Empty;
+        //            using (SaveFileDialog sfd = new SaveFileDialog())
+        //            {
+        //                sfd.Filter = "Excel Files|*.xlsx";
+        //                sfd.Title = "Save an Excel File";
+        //                if (sfd.ShowDialog() == DialogResult.OK)
+        //                {
+        //                    filePath = sfd.FileName;
+        //                }
+        //                else
+        //                {
+        //                    return;
+        //                }
+        //            }
+
+        //            DateTime dtNow = DateTime.Now;
+        //            string sheetStrFormat = dtNow.ToString("yyyy-MM-dd") + " REPORT";
+
+        //            try
+        //            {
+        //                using (XLWorkbook workbook = new XLWorkbook())
+        //                {
+        //                    System.Data.DataTable dt = new System.Data.DataTable();
+        //                    foreach (DataGridViewColumn column in dataGridView1.Columns)
+        //                    {
+        //                        dt.Columns.Add(column.HeaderText);
+        //                    }
+
+        //                    foreach (DataGridViewRow row in dataGridView1.Rows)
+        //                    {
+        //                        if (!row.IsNewRow)
+        //                        {
+        //                            DataRow dr = dt.NewRow();
+        //                            foreach (DataGridViewCell cell in row.Cells)
+        //                            {
+        //                                dr[cell.ColumnIndex] = cell.Value;
+        //                            }
+        //                            dt.Rows.Add(dr);
+        //                        }
+        //                    }
+
+        //                    workbook.Worksheets.Add(dt, sheetStrFormat);
+        //                    workbook.SaveAs(filePath);
+        //                }
+
+        //                MessageBox.Show("Data exported successfully to Excel.",
+        //                                "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Error exporting data to Excel: " + ex.Message,
+        //                                "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            }
+        //        }
+        //    }
+        //}
 
         private void transactionIDLabel_Click(object sender, EventArgs e)
         {
@@ -1769,11 +1950,20 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
                         command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
                         command.Parameters.AddWithValue("@Time", DateTime.Now.TimeOfDay);
-
+                        //here
                         string cb = "";
+                        //for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                        //{
+                        //    cb += checkedListBox1.Items[i];
+                        //}
                         for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                         {
-                            cb += checkedListBox1.Items[i];
+                            cb += checkedListBox1.CheckedItems[i];
+                            if (i < checkedListBox1.CheckedItems.Count - 1)
+                            {
+
+                                cb += " / ";
+                            }
                         }
                         ;
                         command.Parameters.AddWithValue("@Services", cb);
@@ -1851,9 +2041,18 @@ namespace Car_Care_Service__.NET_
                         command.Parameters.AddWithValue("@Time", DateTime.Now.TimeOfDay);
 
                         string cb = "";
+                        //for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                        //{
+                        //    cb += checkedListBox1.Items[i];
+                        //}
                         for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
                         {
-                            cb += checkedListBox1.Items[i];
+                            cb += checkedListBox1.CheckedItems[i];
+                            if (i < checkedListBox1.CheckedItems.Count - 1)
+                            {
+
+                                cb += " / ";
+                            }
                         }
                         ;
                         command.Parameters.AddWithValue("@Services", cb);

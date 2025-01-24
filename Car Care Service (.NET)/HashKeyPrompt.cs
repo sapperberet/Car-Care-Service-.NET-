@@ -19,22 +19,36 @@ namespace Car_Care_Service__.NET_
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
+        //private void btnSubmit_Click(object sender, EventArgs e)
+        //{
+        //    HashKey = txtHashKey.Text; 
+        //    if (string.IsNullOrWhiteSpace(HashKey))
+        //    {
+        //        MessageBox.Show("Please enter a valid hash key.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //    else
+        //    {
+        //        this.DialogResult = DialogResult.OK;
+        //        txtHashKey.Text = "";
+        //        //this.Close();
+        //    }
+        //}
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            HashKey = txtHashKey.Text; 
-            if (string.IsNullOrWhiteSpace(HashKey))
-            {
-                MessageBox.Show("Please enter a valid hash key.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
+           
                 this.DialogResult = DialogResult.OK;
-                txtHashKey.Text = "";
+           
                 //this.Close();
-            }
+            
         }
 
+
         private void txtHashKey_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

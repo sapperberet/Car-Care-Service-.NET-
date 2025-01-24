@@ -867,10 +867,10 @@ namespace Car_Care_Service__.NET_
             // 
             this.ID.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.ID.Location = new System.Drawing.Point(1340, 58);
+            this.ID.Location = new System.Drawing.Point(1303, 58);
             this.ID.Multiline = true;
             this.ID.Name = "ID";
-            this.ID.Size = new System.Drawing.Size(26, 32);
+            this.ID.Size = new System.Drawing.Size(63, 32);
             this.ID.TabIndex = 1;
             this.ID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ID.Visible = false;
@@ -1049,10 +1049,10 @@ namespace Car_Care_Service__.NET_
             // 
             this.ID1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ID1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.ID1.Location = new System.Drawing.Point(1340, 58);
+            this.ID1.Location = new System.Drawing.Point(1303, 58);
             this.ID1.Multiline = true;
             this.ID1.Name = "ID1";
-            this.ID1.Size = new System.Drawing.Size(26, 32);
+            this.ID1.Size = new System.Drawing.Size(63, 32);
             this.ID1.TabIndex = 50;
             this.ID1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ID1.TextChanged += new System.EventHandler(this.ID1_TextChanged);
