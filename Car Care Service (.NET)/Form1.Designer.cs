@@ -32,9 +32,6 @@ namespace Car_Care_Service__.NET_
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.Label label1;
-            System.Windows.Forms.Label label2;
-            System.Windows.Forms.Label label3;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnExportToExcel = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -60,6 +57,7 @@ namespace Car_Care_Service__.NET_
             this.Date = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.button11 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -71,7 +69,6 @@ namespace Car_Care_Service__.NET_
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.txtNotes = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtVehicleType = new System.Windows.Forms.ComboBox();
             this.txtSaleID = new System.Windows.Forms.ComboBox();
@@ -101,59 +98,17 @@ namespace Car_Care_Service__.NET_
             this.ID1 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            label1 = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
-            label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            label1.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
-            label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label1.Location = new System.Drawing.Point(1151, 192);
-            label1.Margin = new System.Windows.Forms.Padding(0);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(101, 29);
-            label1.TabIndex = 28;
-            label1.Text = "رقم السيارة";
-            label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            label1.Click += new System.EventHandler(this.label1_Click_3);
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            label2.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
-            label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label2.Location = new System.Drawing.Point(1146, 122);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(106, 29);
-            label2.TabIndex = 29;
-            label2.Text = "رقم التيلفون";
-            label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            label2.Click += new System.EventHandler(this.label2_Click);
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            label3.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
-            label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            label3.Location = new System.Drawing.Point(1146, 59);
-            label3.Name = "label3";
-            label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            label3.Size = new System.Drawing.Size(100, 29);
-            label3.TabIndex = 30;
-            label3.Text = "اسم العميل";
-            label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            label3.Click += new System.EventHandler(this.label3_Click_1);
             // 
             // btnExportToExcel
             // 
@@ -501,6 +456,7 @@ namespace Car_Care_Service__.NET_
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Controls.Add(this.button11);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.pictureBox1);
@@ -516,6 +472,18 @@ namespace Car_Care_Service__.NET_
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::Car_Care_Service__.NET_.Properties.Resources.green;
+            this.pictureBox2.Location = new System.Drawing.Point(-68, -4);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(216, 81);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 8;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Visible = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click_1);
             // 
             // button11
             // 
@@ -660,20 +628,6 @@ namespace Car_Care_Service__.NET_
             this.label4.TabIndex = 13;
             this.label4.Text = "الملاحظات";
             this.label4.Click += new System.EventHandler(this.label4_Click_1);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.label5.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
-            this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(1146, 321);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(96, 29);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "نوع الخدمة";
-            this.label5.Click += new System.EventHandler(this.label5_Click_1);
             // 
             // label6
             // 
@@ -1085,12 +1039,65 @@ namespace Car_Care_Service__.NET_
             this.label18.TabIndex = 52;
             this.label18.Text = "نسبة الخصم";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.label5.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold);
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(1146, 321);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(96, 29);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "نوع الخدمة";
+            this.label5.Click += new System.EventHandler(this.label5_Click_1);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.label3.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label3.ForeColor = System.Drawing.Color.Black;
+            this.label3.Location = new System.Drawing.Point(1151, 192);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(101, 29);
+            this.label3.TabIndex = 53;
+            this.label3.Text = "رقم السيارة";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.label1.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(1146, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 29);
+            this.label1.TabIndex = 54;
+            this.label1.Text = "اسم العميل";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.label2.Font = new System.Drawing.Font("Readex Pro Deca Medium", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(1146, 122);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 29);
+            this.label2.TabIndex = 55;
+            this.label2.Text = "رقم التيلفون";
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.ID1);
@@ -1113,9 +1120,6 @@ namespace Car_Care_Service__.NET_
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button1);
-            this.Controls.Add(label3);
-            this.Controls.Add(label2);
-            this.Controls.Add(label1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.button3);
@@ -1137,13 +1141,14 @@ namespace Car_Care_Service__.NET_
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ON ROAD (Car Care)";
+            this.Text = "ON ROAD";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.Form1_Load_1);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
@@ -1167,7 +1172,6 @@ namespace Car_Care_Service__.NET_
         private Button button5;
         private TextBox txtNotes;
         private Label label4;
-        private Label label5;
         private Label label6;
         private ComboBox txtVehicleType;
         private ComboBox txtSaleID;
@@ -1220,6 +1224,11 @@ namespace Car_Care_Service__.NET_
         private Label label18;
         private TextBox Income;
         private Label label19;
+        private PictureBox pictureBox2;
+        private Label label5;
+        private Label label3;
+        private Label label1;
+        private Label label2;
     }
 
 }

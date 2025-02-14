@@ -4067,6 +4067,83 @@ namespace Car_Care_Service__.NET_
             }
         }
 
+        private void pictureBox2_Click_1(object sender, EventArgs e)
+        {
+            //253; 188; 42
+
+            label1.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label2.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label3.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label4.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label5.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label6.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label7.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label8.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label9.ForeColor = System.Drawing.Color.FromArgb(253,188,42);
+            label13.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label14.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label15.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+            label18.BackColor = System.Drawing.Color.FromArgb(253,188,42);
+
+            
+            pictureBox2.Visible = false;
+            pictureBox1.Visible = true;
+            //label19.Visible = false;
+            //Income.Visible = false;
+            PID.Visible = true;
+            label17.Visible = true;
+            button14.Visible = false;
+            button12.Visible = true;
+            button13.Visible = false;
+            ID1.Visible = true;
+            dataGridView1.Visible = false;
+            dataGridView2.Visible = true;
+            button3.Visible = false;
+            button9.Visible = true;
+            button2.Visible = true;
+            textBox3.Text = "";
+            ID.Visible = false;
+
+            button1.Visible = false;
+            button6.Visible = false;
+            btnExportToExcel.Visible = false;
+            textBox5.Visible = false;
+            button7.Visible = false;
+            //button8.Visible = false;
+            //button9.Visible = false;
+            Date.Visible = false;
+            label11.Visible = false;
+            //label10.Visible = false;
+            //label9.Visible = false;
+            button10.Visible = false;
+            textBox4.Visible = false;
+            textBox3.Visible = true;
+            button11.Visible = false;
+            label12.Visible = false;
+            Costs.Visible = false;
+            panel6.Visible = false;
+            dateTimePicker1.Visible = false;
+            dateTimePicker2.Visible = false;
+            label10.Visible = false;
+            label16.Visible = false;
+            button8.Visible = false;
+            ac.Visible = false;
+            sc.Visible = false;
+            cc.Visible = false;
+            month.Visible = false;
+            this.BackColor = System.Drawing.Color.FromArgb(253, 188, 42);
+        }
+
+        private void g4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void g10_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -4112,7 +4189,71 @@ namespace Car_Care_Service__.NET_
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
         {
+            label1.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label2.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label3.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
 
+            label4.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label5.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label6.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label7.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label8.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label9.ForeColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label13.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label14.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label15.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            label18.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
+
+
+
+            pictureBox2.Visible = true;
+            pictureBox1.Visible = false;
+            PID.Visible = false;
+            label17.Visible = false;
+            button14.Visible = false;
+            button12.Visible = false;
+            button13.Visible = false;
+            ID1.Visible = false;
+            dataGridView1.Visible = false;
+            dataGridView2.Visible = false;
+            button3.Visible = false;
+            button9.Visible = false;
+            button2.Visible = false;
+            ID.Visible = false;
+
+            button1.Visible = false;
+            button6.Visible = false;
+            textBox3.Text = "";
+            btnExportToExcel.Visible = false;
+            textBox5.Visible = false;
+            button7.Visible = false;
+            //button8.Visible = true;
+            //button9.Visible = true;
+            //Date.Visible = true; //fs   
+            //label11.Visible = true;  //fs
+            //label10.Visible = true;
+            //label9.Visible = true;
+            button10.Visible = false;
+            textBox4.Visible = false;
+            textBox3.Visible = false;
+            button11.Visible = false;
+            label12.Visible = false;
+            Costs.Visible = false;
+            panel6.Visible = false;
+            dateTimePicker1.Visible = false;
+            dateTimePicker2.Visible = false;
+            label10.Visible = false;
+            label16.Visible = false;
+            button8.Visible = false;
+            ac.Visible = false;
+            sc.Visible = false;
+            cc.Visible = false;
+            month.Visible = false;
+            
+
+            //253; 188; 42
+            //0; 192; 0
+            this.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
         }
 
         private void label12_Click(object sender, EventArgs e)
