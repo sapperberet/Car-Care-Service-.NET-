@@ -102,12 +102,18 @@ namespace Car_Care_Service__.NET_
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.shopadminpass = new System.Windows.Forms.TextBox();
+            this.button15 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.SuspendLayout();
             // 
             // btnExportToExcel
@@ -456,6 +462,8 @@ namespace Car_Care_Service__.NET_
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel1.Controls.Add(this.button15);
+            this.panel1.Controls.Add(this.shopadminpass);
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Controls.Add(this.button11);
             this.panel1.Controls.Add(this.label9);
@@ -475,7 +483,7 @@ namespace Car_Care_Service__.NET_
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::Car_Care_Service__.NET_.Properties.Resources.green;
+            this.pictureBox2.Image = global::Car_Care_Service__.NET_.Properties.Resources.greenerr;
             this.pictureBox2.Location = new System.Drawing.Point(-68, -4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(216, 81);
@@ -1089,12 +1097,78 @@ namespace Car_Care_Service__.NET_
             this.label2.TabIndex = 55;
             this.label2.Text = "رقم التيلفون";
             // 
+            // dataGridView3
+            // 
+            this.dataGridView3.AllowUserToAddRows = false;
+            this.dataGridView3.AllowUserToDeleteRows = false;
+            this.dataGridView3.AllowUserToOrderColumns = true;
+            this.dataGridView3.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView3.Location = new System.Drawing.Point(24, 122);
+            this.dataGridView3.Name = "dataGridView3";
+            this.dataGridView3.ReadOnly = true;
+            this.dataGridView3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dataGridView3.RowHeadersWidth = 51;
+            this.dataGridView3.Size = new System.Drawing.Size(1000, 512);
+            this.dataGridView3.TabIndex = 56;
+            this.dataGridView3.Visible = false;
+            // 
+            // dataGridView4
+            // 
+            this.dataGridView4.AllowUserToAddRows = false;
+            this.dataGridView4.AllowUserToDeleteRows = false;
+            this.dataGridView4.AllowUserToOrderColumns = true;
+            this.dataGridView4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView4.Location = new System.Drawing.Point(24, 144);
+            this.dataGridView4.Name = "dataGridView4";
+            this.dataGridView4.ReadOnly = true;
+            this.dataGridView4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dataGridView4.RowHeadersWidth = 51;
+            this.dataGridView4.Size = new System.Drawing.Size(1000, 512);
+            this.dataGridView4.TabIndex = 57;
+            this.dataGridView4.Visible = false;
+            // 
+            // shopadminpass
+            // 
+            this.shopadminpass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.shopadminpass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.shopadminpass.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.shopadminpass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.shopadminpass.Location = new System.Drawing.Point(471, 9);
+            this.shopadminpass.Name = "shopadminpass";
+            this.shopadminpass.Size = new System.Drawing.Size(424, 41);
+            this.shopadminpass.TabIndex = 9;
+            this.shopadminpass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.shopadminpass.Visible = false;
+            this.shopadminpass.TextChanged += new System.EventHandler(this.shopadminpass_TextChanged);
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.BorderSize = 0;
+            this.button15.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.Image = global::Car_Care_Service__.NET_.Properties.Resources.Log_Out_icon;
+            this.button15.Location = new System.Drawing.Point(83, 5);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(75, 46);
+            this.button15.TabIndex = 10;
+            this.button15.UseVisualStyleBackColor = false;
+            this.button15.Visible = false;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.dataGridView4);
+            this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);
@@ -1152,6 +1226,8 @@ namespace Car_Care_Service__.NET_
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1229,6 +1305,10 @@ namespace Car_Care_Service__.NET_
         private Label label3;
         private Label label1;
         private Label label2;
+        private DataGridView dataGridView3;
+        private DataGridView dataGridView4;
+        private TextBox shopadminpass;
+        private Button button15;
     }
 
 }

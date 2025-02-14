@@ -101,6 +101,8 @@ namespace Car_Care_Service__.NET_
             System.Drawing.Font currentFont2 = dataGridView2.DefaultCellStyle.Font;
             dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font(currentFont2.FontFamily, 11);
             dataGridView2.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(currentFont2.FontFamily, 9);
+            dataGridView3.DefaultCellStyle.Font = new System.Drawing.Font(currentFont2.FontFamily, 11);
+            dataGridView3.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(currentFont2.FontFamily, 9);
 
             this.Load += MainForm_Load;
             //this.BackColor = Color.FromArgb(29, 29, 66);
@@ -123,6 +125,9 @@ namespace Car_Care_Service__.NET_
             dataGridView2.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             dataGridView2.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView3.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            dataGridView3.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView3.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             foreach (var operation in operationPrices.Keys)
             {
                 checkedListBox1.Items.Add(operation);
@@ -1082,6 +1087,46 @@ namespace Car_Care_Service__.NET_
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+        private void LoadShopCustomers(string searchQuery = "")
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query;
+
+
+                    if (string.IsNullOrWhiteSpace(searchQuery))
+                    {
+                        query = "SELECT * FROM Shop";
+                    }
+                    else
+                    {
+                        query = "SELECT * FROM Shop WHERE CustomerName LIKE @SearchQuery";
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrWhiteSpace(searchQuery))
+                        {
+                            cmd.Parameters.AddWithValue("@SearchQuery", $"%{searchQuery}%");
+                        }
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            System.Data.DataTable dataTable = new System.Data.DataTable();
+                            adapter.Fill(dataTable);
+                            dataGridView3.DataSource = dataTable;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
         private void LoadTelephone(string searchQuery = "")
         {
             try
@@ -1113,6 +1158,47 @@ namespace Car_Care_Service__.NET_
                             System.Data.DataTable dataTable = new System.Data.DataTable();
                             adapter.Fill(dataTable);
                             dataGridView2.DataSource = dataTable;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private void LoadShopTelephone(string searchQuery = "")
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query;
+
+
+                    if (string.IsNullOrWhiteSpace(searchQuery))
+                    {
+                        query = "SELECT * FROM Shop";
+                    }
+                    else
+                    {
+                        query = "SELECT * FROM Shop WHERE PhoneNumber LIKE @SearchQuery";
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        if (!string.IsNullOrWhiteSpace(searchQuery))
+                        {
+                            cmd.Parameters.AddWithValue("@SearchQuery", $"%{searchQuery}%");
+                        }
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            System.Data.DataTable dataTable = new System.Data.DataTable();
+                            adapter.Fill(dataTable);
+                            dataGridView3.DataSource = dataTable;
                         }
                     }
                 }
@@ -1627,11 +1713,15 @@ namespace Car_Care_Service__.NET_
         //"
         string query = "SELECT * FROM CarWashServices";
         string query1 = "SELECT * FROM CarWashServices1";
+        string Shop = "SELECT * FROM Shop";
+        string ShopAdmin = "SELECT * FROM ShopAdmin";
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadData(query);
             LoadData1(query1);
+            LoadDataShop(Shop);
+            LoadDataShopAdmin(ShopAdmin);
         }
         //string databasePath => System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Database.mdf");
         //string connectionString => $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""{databasePath}"";Integrated Security=True;";
@@ -1698,6 +1788,63 @@ namespace Car_Care_Service__.NET_
 
 
                     dataGridView2.DataSource = dataTable;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.Write("tsk");
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void LoadDataShop(string customQuery)
+        {
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    connection.Open();
+
+
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(customQuery, connection);
+
+
+                    System.Data.DataTable dataTable = new System.Data.DataTable();
+                    dataAdapter.Fill(dataTable);
+
+
+                    dataGridView3.DataSource = dataTable;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.Write("tsk");
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadDataShopAdmin(string customQuery)
+        {
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    connection.Open();
+
+
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(customQuery, connection);
+
+
+                    System.Data.DataTable dataTable = new System.Data.DataTable();
+                    dataAdapter.Fill(dataTable);
+
+
+                    dataGridView4.DataSource = dataTable;
 
                 }
             }
@@ -3251,6 +3398,8 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
+                pictureBox1.Visible = false;
+                pictureBox2.Visible = false;
                 // label19.Visible = true;
                 // Income.Visible = true;
                 PID.Visible = false;
@@ -3302,6 +3451,9 @@ namespace Car_Care_Service__.NET_
                 dataGridView1.Columns["CarID"].Width = 130;
                 dataGridView2.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dataGridView2.Columns["CarID"].Width = 130;
+
+                dataGridView3.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView3.Columns["CarID"].Width = 130;
 
                 CountHelloOccurrences();
                 DisplayMonthlyTotal();
@@ -3633,6 +3785,166 @@ namespace Car_Care_Service__.NET_
             }
 
         }
+        private void IDShop_TextChanged(object sender, EventArgs e)
+        {
+            string searchID = ID1.Text; // Get ID from TextBox
+
+            // Loop through DataGridView rows
+            foreach (DataGridViewRow row in dataGridView3.Rows)
+            {
+                if (row.Cells["ID"].Value != null && row.Cells["ID"].Value.ToString() == searchID)
+                {
+                    // Match found, populate the text boxes
+                    txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
+                    textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
+                    //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
+
+
+                    //label8.Text = row.Cells["Profit"].Value?.ToString();
+
+                    string strSalep = row.Cells["Discountp"].Value?.ToString();
+
+                    txtSaleID.Text = strSalep.Substring(0, strSalep.Length - 2);
+
+                    string strSale = row.Cells["Discount"].Value?.ToString();
+
+                    textBox6.Text = strSale.Substring(0, strSale.Length - 2);
+
+                    //==========
+                    string numericPart = Regex.Replace(txtSaleID.Text, @"[^0-9.]", "");
+                    if (numericPart.StartsWith("."))
+                        numericPart = numericPart.TrimStart('.');
+                    if (txtSaleID.Text != numericPart)
+                    {
+                        // Format to avoid ".0" issue
+                        txtSaleID.Text = numericPart.Contains(".") ? numericPart : int.Parse(numericPart).ToString();
+
+                        // Reset cursor position
+                        txtSaleID.SelectionStart = textBox1.Text.Length;
+                    }
+
+                    //=========
+                    //UpdatetxtSaleID(txtSaleID, tyosk);
+
+                    //string strara = row.Cells["CarID"].Value?.ToString();
+                    //textBox1.Text = strara.Substring(0, 5);
+
+                    //string strnum = row.Cells["CarID"].Value?.ToString();
+                    // strnum= strnum.Substring(6, 8);
+                    //txtCarID.Text = strnum;
+
+
+
+                    // Get the CarID value from the row
+                    string carId = row.Cells["CarID"].Value?.ToString();
+
+                    if (!string.IsNullOrEmpty(carId))
+                    {
+
+                        string arabicLetters = Regex.Replace(carId, @"[^\u0600-\u06FF]", "").Trim();
+
+                        textBox1.Text = string.Join(" ", arabicLetters.ToCharArray());
+
+                        string numbers = Regex.Replace(carId, @"[^\d]", "").Trim();
+
+                        string reversedNumbers = string.Join(" ", numbers.Reverse()) + " ";
+                        txtCarID.Text = reversedNumbers;
+
+                        textBox1.BackColor = System.Drawing.Color.LightGreen;
+                    }
+                    else
+                    {
+                        // Handle null or empty CarID case
+                        textBox1.Text = string.Empty;
+                        txtCarID.Text = string.Empty;
+                    }
+
+                    string sIncome = row.Cells["Income"].Value?.ToString();
+                    Income.Text = sIncome.Substring(0, sIncome.Length - 2);
+
+                    string strCost = row.Cells["Costs"].Value?.ToString();
+                    Costs.Text = strCost.Substring(0, strCost.Length - 2);
+
+                    //label14.Text = row.Cells["Total"].Value?.ToString();
+                    txtNotes.Text = row.Cells["Notes"].Value?.ToString();
+
+
+                    string itemsToCheck = row.Cells["Services"].Value?.ToString();
+
+
+                    var items = itemsToCheck.Split('/')
+                        .Select(item => NormalizeArabicText(item.Trim()))
+                        .ToList();
+
+                    if (items.Count > 0)
+                    {
+
+                        for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                        {
+
+
+                            checkedListBox1.SetItemChecked(i, false);
+
+                        }
+                    }
+
+                    for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    {
+                        string normalizedItem = NormalizeArabicText(checkedListBox1.Items[i].ToString());
+                        if (items.Contains(normalizedItem))
+                        {
+                            checkedListBox1.SetItemChecked(i, true);
+                        }
+                    }
+
+                    //    foreach (var item in items)
+                    //    {
+                    //        int index = checkedListBox1.Items.IndexOf(item);
+                    //         txtNotes.Text += item.ToString();
+                    //        if (index != -1) // Check if the item exists in the CheckedListBox
+                    //        {
+                    //            checkedListBox1.SetItemChecked(index, true);
+                    //        }
+                    //}
+
+
+                    string fs = row.Cells["VehicleType"].Value?.ToString();
+                    int a = 0;
+                    if (fs == "سيارة")
+                    {
+                        a = 0;
+                    }
+                    if (fs == "سكوتر")
+                    {
+                        a = 1;
+                    }
+                    if (fs == "(أخرى)")
+                    {
+                        a = 2;
+                    }
+                    if (fs == "")
+                    {
+                        a = 3;
+                    }
+                    txtVehicleType.SelectedIndex = a;
+
+
+
+
+
+
+
+                    return; // Exit loop once match is found
+
+
+
+
+
+
+                }
+            }
+
+        }
         public static string NormalizeArabicText(string input)
         {
             // Normalize form and remove diacritics
@@ -3741,8 +4053,11 @@ namespace Car_Care_Service__.NET_
 
         private void button11_Click(object sender, EventArgs e)
         {
+            //pictureBox1.Visible = true;
+
             //label19.Visible = false;
             //Income.Visible = false;
+            pictureBox1.Visible = true;
             PID.Visible = true;
             label17.Visible = true;
             button14.Visible = false;
@@ -4088,6 +4403,9 @@ namespace Car_Care_Service__.NET_
             
             pictureBox2.Visible = false;
             pictureBox1.Visible = true;
+
+            textBox3.Visible = true;
+            shopadminpass.Visible = false;
             //label19.Visible = false;
             //Income.Visible = false;
             PID.Visible = true;
@@ -4098,6 +4416,7 @@ namespace Car_Care_Service__.NET_
             ID1.Visible = true;
             dataGridView1.Visible = false;
             dataGridView2.Visible = true;
+            dataGridView3.Visible = false;
             button3.Visible = false;
             button9.Visible = true;
             button2.Visible = true;
@@ -4141,7 +4460,129 @@ namespace Car_Care_Service__.NET_
 
         private void g10_Click(object sender, EventArgs e)
         {
+            
+        }
 
+        private void shopadminpass_TextChanged(object sender, EventArgs e)
+        {
+            if (shopadminpass.Text == "3108")
+            {
+                pictureBox1.Visible = false;
+                pictureBox2.Visible = false;
+                // label19.Visible = true;
+                // Income.Visible = true;
+                PID.Visible = false;
+                label17.Visible = false;
+                button14.Visible = true;
+                button12.Visible = false;
+                button13.Visible = false;
+                ID1.Visible = false;
+                dataGridView1.Visible = false;
+                dataGridView2.Visible = false;
+                dataGridView3.Visible = false;
+                dataGridView4.Visible = true;
+                button3.Visible = true;
+                button9.Visible = false;
+                button2.Visible = false;
+                ID.Visible = true;
+
+                button1.Visible = true;
+                button6.Visible = true;
+                textBox3.Text = "";
+                shopadminpass.Text = "";
+                checkedListBox1.Visible = false;
+                btnExportToExcel.Visible = true;
+                textBox5.Visible = true;
+                button7.Visible = true;
+                //button8.Visible = true;
+                //button9.Visible = true;
+                //Date.Visible = true; //fs   
+                //label11.Visible = true;  //fs
+                //label10.Visible = true;
+                //label9.Visible = true;
+                button10.Visible = true;
+                textBox4.Visible = true;
+                textBox3.Visible = false;
+                //button11.Visible = true;
+                button15.Visible = true;
+                label12.Visible = true;
+                Costs.Visible = true;
+                panel6.Visible = true;
+                dateTimePicker1.Visible = true;
+                dateTimePicker2.Visible = true;
+                label10.Visible = true;
+                label16.Visible = true;
+                button8.Visible = true;
+                ac.Visible = true;
+                sc.Visible = true;
+                cc.Visible = true;
+                month.Visible = true;
+
+                //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "HH:mm:ss yyyy-MM-dd";
+                // dataGridView1.Columns["Time"].DefaultCellStyle.Format = "HH:mm:ss";
+                dataGridView1.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView1.Columns["CarID"].Width = 130;
+                dataGridView2.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView2.Columns["CarID"].Width = 130;
+
+                dataGridView3.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView3.Columns["CarID"].Width = 130;
+
+                CountHelloOccurrences();
+                DisplayMonthlyTotal();
+            }
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            //label19.Visible = false;
+            //Income.Visible = false;
+            button15.Visible = false;
+            pictureBox2.Visible = true;
+            PID.Visible = true;
+            label17.Visible = true;
+            button14.Visible = false;
+            button12.Visible = true;
+            button13.Visible = false;
+            ID1.Visible = true;
+            dataGridView1.Visible = false;
+            dataGridView2.Visible = false;
+            dataGridView3.Visible = true;
+            dataGridView4.Visible = false;
+            button3.Visible = false;
+            button9.Visible = true;
+            button2.Visible = true;
+            textBox3.Text = "";
+            ID.Visible = false;
+
+            button1.Visible = false;
+            button6.Visible = false;
+            btnExportToExcel.Visible = false;
+            textBox5.Visible = false;
+            button7.Visible = false;
+            //button8.Visible = false;
+            //button9.Visible = false;
+            Date.Visible = false;
+            label11.Visible = false;
+            //label10.Visible = false;
+            //label9.Visible = false;
+            button10.Visible = false;
+            textBox4.Visible = false;
+            textBox3.Visible = true;
+            button11.Visible = false;
+            label12.Visible = false;
+            Costs.Visible = false;
+            panel6.Visible = false;
+            dateTimePicker1.Visible = false;
+            dateTimePicker2.Visible = false;
+            label10.Visible = false;
+            label16.Visible = false;
+            button8.Visible = false;
+            ac.Visible = false;
+            sc.Visible = false;
+            cc.Visible = false;
+            month.Visible = false;
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -4205,9 +4646,13 @@ namespace Car_Care_Service__.NET_
             label18.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
 
 
+            textBox3.Visible = false;
+            shopadminpass.Visible = true;
+
 
             pictureBox2.Visible = true;
             pictureBox1.Visible = false;
+            checkedListBox1.Visible = false;
             PID.Visible = false;
             label17.Visible = false;
             button14.Visible = false;
@@ -4216,6 +4661,7 @@ namespace Car_Care_Service__.NET_
             ID1.Visible = false;
             dataGridView1.Visible = false;
             dataGridView2.Visible = false;
+            dataGridView3.Visible = true;
             button3.Visible = false;
             button9.Visible = false;
             button2.Visible = false;
