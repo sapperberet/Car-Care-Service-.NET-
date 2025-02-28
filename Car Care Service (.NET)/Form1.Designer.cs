@@ -36,6 +36,7 @@ namespace Car_Care_Service__.NET_
             this.btnExportToExcel = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttong = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.Income = new System.Windows.Forms.TextBox();
             this.button14 = new System.Windows.Forms.Button();
@@ -57,6 +58,8 @@ namespace Car_Care_Service__.NET_
             this.Date = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button15 = new System.Windows.Forms.Button();
+            this.shopadminpass = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.button11 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
@@ -104,8 +107,19 @@ namespace Car_Care_Service__.NET_
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
-            this.shopadminpass = new System.Windows.Forms.TextBox();
-            this.button15 = new System.Windows.Forms.Button();
+            this.addg = new System.Windows.Forms.Button();
+            this.addgadmin = new System.Windows.Forms.Button();
+            this.textg = new System.Windows.Forms.TextBox();
+            this.label55 = new System.Windows.Forms.Label();
+            this.updateg = new System.Windows.Forms.Button();
+            this.updategadmin = new System.Windows.Forms.Button();
+            this.deletegadmin = new System.Windows.Forms.Button();
+            this.IDg = new System.Windows.Forms.TextBox();
+            this.IDgadmin = new System.Windows.Forms.TextBox();
+            this.monthg = new System.Windows.Forms.Label();
+            this.button8g = new System.Windows.Forms.Button();
+            this.btnSyncg = new System.Windows.Forms.Button();
+            this.btnExportToExcelg = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -160,6 +174,11 @@ namespace Car_Care_Service__.NET_
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.panel2.Controls.Add(this.btnExportToExcelg);
+            this.panel2.Controls.Add(this.btnSyncg);
+            this.panel2.Controls.Add(this.button8g);
+            this.panel2.Controls.Add(this.monthg);
+            this.panel2.Controls.Add(this.buttong);
             this.panel2.Controls.Add(this.label19);
             this.panel2.Controls.Add(this.Income);
             this.panel2.Controls.Add(this.button14);
@@ -190,6 +209,27 @@ namespace Car_Care_Service__.NET_
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // buttong
+            // 
+            this.buttong.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.buttong.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.buttong.FlatAppearance.BorderSize = 4;
+            this.buttong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttong.Font = new System.Drawing.Font("Readex Pro Deca Medium", 6F, System.Drawing.FontStyle.Bold);
+            this.buttong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.buttong.Image = ((System.Drawing.Image)(resources.GetObject("buttong.Image")));
+            this.buttong.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttong.Location = new System.Drawing.Point(636, 9);
+            this.buttong.Margin = new System.Windows.Forms.Padding(0);
+            this.buttong.Name = "buttong";
+            this.buttong.Size = new System.Drawing.Size(148, 61);
+            this.buttong.TabIndex = 62;
+            this.buttong.Text = "طباعة الريسيت";
+            this.buttong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttong.UseVisualStyleBackColor = false;
+            this.buttong.Visible = false;
+            this.buttong.Click += new System.EventHandler(this.Printg_Click);
             // 
             // label19
             // 
@@ -480,6 +520,38 @@ namespace Car_Care_Service__.NET_
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.BorderSize = 0;
+            this.button15.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button15.Image = global::Car_Care_Service__.NET_.Properties.Resources.Log_Out_icon;
+            this.button15.Location = new System.Drawing.Point(83, 5);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(75, 46);
+            this.button15.TabIndex = 10;
+            this.button15.UseVisualStyleBackColor = false;
+            this.button15.Visible = false;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // shopadminpass
+            // 
+            this.shopadminpass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.shopadminpass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.shopadminpass.Font = new System.Drawing.Font("MV Boli", 15F);
+            this.shopadminpass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.shopadminpass.Location = new System.Drawing.Point(471, 9);
+            this.shopadminpass.Name = "shopadminpass";
+            this.shopadminpass.Size = new System.Drawing.Size(424, 41);
+            this.shopadminpass.TabIndex = 9;
+            this.shopadminpass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.shopadminpass.Visible = false;
+            this.shopadminpass.TextChanged += new System.EventHandler(this.shopadminpass_TextChanged);
             // 
             // pictureBox2
             // 
@@ -794,7 +866,6 @@ namespace Car_Care_Service__.NET_
             this.button7.Size = new System.Drawing.Size(49, 48);
             this.button7.TabIndex = 33;
             this.button7.UseVisualStyleBackColor = false;
-            this.button7.Visible = false;
             this.button7.Click += new System.EventHandler(this.button7_Click_1);
             // 
             // label8
@@ -1128,38 +1199,203 @@ namespace Car_Care_Service__.NET_
             this.dataGridView4.Size = new System.Drawing.Size(1000, 512);
             this.dataGridView4.TabIndex = 57;
             this.dataGridView4.Visible = false;
+            this.dataGridView4.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView4_CellContentClick);
             // 
-            // shopadminpass
+            // addg
             // 
-            this.shopadminpass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.shopadminpass.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.shopadminpass.Font = new System.Drawing.Font("MV Boli", 15F);
-            this.shopadminpass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.shopadminpass.Location = new System.Drawing.Point(471, 9);
-            this.shopadminpass.Name = "shopadminpass";
-            this.shopadminpass.Size = new System.Drawing.Size(424, 41);
-            this.shopadminpass.TabIndex = 9;
-            this.shopadminpass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.shopadminpass.Visible = false;
-            this.shopadminpass.TextChanged += new System.EventHandler(this.shopadminpass_TextChanged);
+            this.addg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(0)))));
+            this.addg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(62)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
+            this.addg.FlatAppearance.BorderSize = 4;
+            this.addg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(113)))));
+            this.addg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.addg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addg.Font = new System.Drawing.Font("Readex Pro Deca Medium", 15F, System.Drawing.FontStyle.Bold);
+            this.addg.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.addg.Location = new System.Drawing.Point(1047, 567);
+            this.addg.Name = "addg";
+            this.addg.Size = new System.Drawing.Size(291, 73);
+            this.addg.TabIndex = 58;
+            this.addg.Text = "اضافة";
+            this.addg.UseVisualStyleBackColor = false;
+            this.addg.Visible = false;
+            this.addg.Click += new System.EventHandler(this.addg_Click);
             // 
-            // button15
+            // addgadmin
             // 
-            this.button15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button15.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button15.FlatAppearance.BorderSize = 0;
-            this.button15.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button15.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button15.Image = global::Car_Care_Service__.NET_.Properties.Resources.Log_Out_icon;
-            this.button15.Location = new System.Drawing.Point(83, 5);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(75, 46);
-            this.button15.TabIndex = 10;
-            this.button15.UseVisualStyleBackColor = false;
-            this.button15.Visible = false;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
+            this.addgadmin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(0)))));
+            this.addgadmin.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(62)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
+            this.addgadmin.FlatAppearance.BorderSize = 4;
+            this.addgadmin.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(113)))));
+            this.addgadmin.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.addgadmin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addgadmin.Font = new System.Drawing.Font("Readex Pro Deca Medium", 15F, System.Drawing.FontStyle.Bold);
+            this.addgadmin.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.addgadmin.Location = new System.Drawing.Point(1047, 567);
+            this.addgadmin.Name = "addgadmin";
+            this.addgadmin.Size = new System.Drawing.Size(303, 73);
+            this.addgadmin.TabIndex = 59;
+            this.addgadmin.Text = "اضافة";
+            this.addgadmin.UseVisualStyleBackColor = false;
+            this.addgadmin.Visible = false;
+            this.addgadmin.Click += new System.EventHandler(this.addgadmin_Click);
+            // 
+            // textg
+            // 
+            this.textg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.textg.Location = new System.Drawing.Point(1047, 353);
+            this.textg.Multiline = true;
+            this.textg.Name = "textg";
+            this.textg.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.textg.Size = new System.Drawing.Size(281, 124);
+            this.textg.TabIndex = 60;
+            this.textg.Visible = false;
+            this.textg.TextChanged += new System.EventHandler(this.textg_TextChanged);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(1095, 647);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(85, 35);
+            this.label55.TabIndex = 61;
+            this.label55.Text = "label55";
+            this.label55.Visible = false;
+            // 
+            // updateg
+            // 
+            this.updateg.BackColor = System.Drawing.Color.AliceBlue;
+            this.updateg.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
+            this.updateg.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.updateg.Location = new System.Drawing.Point(24, 68);
+            this.updateg.Name = "updateg";
+            this.updateg.Size = new System.Drawing.Size(162, 48);
+            this.updateg.TabIndex = 62;
+            this.updateg.Text = "تعديل عملية";
+            this.updateg.UseVisualStyleBackColor = false;
+            this.updateg.Visible = false;
+            this.updateg.Click += new System.EventHandler(this.updateg_Click);
+            // 
+            // updategadmin
+            // 
+            this.updategadmin.BackColor = System.Drawing.Color.AliceBlue;
+            this.updategadmin.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
+            this.updategadmin.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.updategadmin.Location = new System.Drawing.Point(24, 86);
+            this.updategadmin.Name = "updategadmin";
+            this.updategadmin.Size = new System.Drawing.Size(162, 48);
+            this.updategadmin.TabIndex = 63;
+            this.updategadmin.Text = "تعديل عملية";
+            this.updategadmin.UseVisualStyleBackColor = false;
+            this.updategadmin.Visible = false;
+            this.updategadmin.Click += new System.EventHandler(this.updategadmin_Click);
+            // 
+            // deletegadmin
+            // 
+            this.deletegadmin.BackColor = System.Drawing.Color.AliceBlue;
+            this.deletegadmin.Font = new System.Drawing.Font("Readex Pro Deca Medium", 12F, System.Drawing.FontStyle.Bold);
+            this.deletegadmin.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.deletegadmin.Location = new System.Drawing.Point(192, 85);
+            this.deletegadmin.Name = "deletegadmin";
+            this.deletegadmin.Size = new System.Drawing.Size(184, 48);
+            this.deletegadmin.TabIndex = 64;
+            this.deletegadmin.Text = "محو عملية";
+            this.deletegadmin.UseVisualStyleBackColor = false;
+            this.deletegadmin.Visible = false;
+            this.deletegadmin.Click += new System.EventHandler(this.deletegadmin_Click);
+            // 
+            // IDg
+            // 
+            this.IDg.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.IDg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.IDg.Location = new System.Drawing.Point(1303, 58);
+            this.IDg.Multiline = true;
+            this.IDg.Name = "IDg";
+            this.IDg.Size = new System.Drawing.Size(63, 32);
+            this.IDg.TabIndex = 65;
+            this.IDg.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.IDg.Visible = false;
+            this.IDg.TextChanged += new System.EventHandler(this.IDg_TextChanged);
+            // 
+            // IDgadmin
+            // 
+            this.IDgadmin.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.IDgadmin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
+            this.IDgadmin.Location = new System.Drawing.Point(1303, 58);
+            this.IDgadmin.Multiline = true;
+            this.IDgadmin.Name = "IDgadmin";
+            this.IDgadmin.Size = new System.Drawing.Size(63, 32);
+            this.IDgadmin.TabIndex = 66;
+            this.IDgadmin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.IDgadmin.Visible = false;
+            this.IDgadmin.TextChanged += new System.EventHandler(this.IDgadmin_TextChanged);
+            // 
+            // monthg
+            // 
+            this.monthg.AutoSize = true;
+            this.monthg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.monthg.Location = new System.Drawing.Point(1153, 26);
+            this.monthg.Name = "monthg";
+            this.monthg.Size = new System.Drawing.Size(28, 35);
+            this.monthg.TabIndex = 63;
+            this.monthg.Text = "0";
+            this.monthg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.monthg.Visible = false;
+            this.monthg.Click += new System.EventHandler(this.label20_Click);
+            // 
+            // button8g
+            // 
+            this.button8g.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.button8g.FlatAppearance.BorderSize = 4;
+            this.button8g.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button8g.Font = new System.Drawing.Font("Readex Pro Deca SemiBold", 12F, System.Drawing.FontStyle.Bold);
+            this.button8g.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button8g.Location = new System.Drawing.Point(497, 18);
+            this.button8g.Name = "button8g";
+            this.button8g.Size = new System.Drawing.Size(134, 35);
+            this.button8g.TabIndex = 64;
+            this.button8g.Text = "عرض الفترة";
+            this.button8g.UseVisualStyleBackColor = true;
+            this.button8g.Visible = false;
+            this.button8g.Click += new System.EventHandler(this.button8g_Click);
+            // 
+            // btnSyncg
+            // 
+            this.btnSyncg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnSyncg.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnSyncg.FlatAppearance.BorderSize = 0;
+            this.btnSyncg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
+            this.btnSyncg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnSyncg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSyncg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnSyncg.Image = global::Car_Care_Service__.NET_.Properties.Resources.Media_Playlist_Repeat_icon;
+            this.btnSyncg.Location = new System.Drawing.Point(442, 16);
+            this.btnSyncg.Name = "btnSyncg";
+            this.btnSyncg.Size = new System.Drawing.Size(49, 48);
+            this.btnSyncg.TabIndex = 65;
+            this.btnSyncg.UseVisualStyleBackColor = false;
+            this.btnSyncg.Visible = false;
+            this.btnSyncg.Click += new System.EventHandler(this.btnSyncg_Click);
+            // 
+            // btnExportToExcelg
+            // 
+            this.btnExportToExcelg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnExportToExcelg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.btnExportToExcelg.FlatAppearance.BorderSize = 4;
+            this.btnExportToExcelg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportToExcelg.Font = new System.Drawing.Font("Readex Pro Deca Medium", 7F, System.Drawing.FontStyle.Bold);
+            this.btnExportToExcelg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnExportToExcelg.Image = ((System.Drawing.Image)(resources.GetObject("btnExportToExcelg.Image")));
+            this.btnExportToExcelg.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExportToExcelg.Location = new System.Drawing.Point(94, 4);
+            this.btnExportToExcelg.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExportToExcelg.Name = "btnExportToExcelg";
+            this.btnExportToExcelg.Size = new System.Drawing.Size(141, 61);
+            this.btnExportToExcelg.TabIndex = 66;
+            this.btnExportToExcelg.Text = "حفظ الملف";
+            this.btnExportToExcelg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExportToExcelg.UseVisualStyleBackColor = false;
+            this.btnExportToExcelg.Visible = false;
+            this.btnExportToExcelg.Click += new System.EventHandler(this.btnExportToExcelg_OnClick);
             // 
             // Form1
             // 
@@ -1167,6 +1403,15 @@ namespace Car_Care_Service__.NET_
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.IDgadmin);
+            this.Controls.Add(this.IDg);
+            this.Controls.Add(this.deletegadmin);
+            this.Controls.Add(this.updategadmin);
+            this.Controls.Add(this.updateg);
+            this.Controls.Add(this.label55);
+            this.Controls.Add(this.textg);
+            this.Controls.Add(this.addgadmin);
+            this.Controls.Add(this.addg);
             this.Controls.Add(this.dataGridView4);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.label2);
@@ -1309,6 +1554,20 @@ namespace Car_Care_Service__.NET_
         private DataGridView dataGridView4;
         private TextBox shopadminpass;
         private Button button15;
+        private Button buttong;
+        private Button addg;
+        private Button addgadmin;
+        private TextBox textg;
+        private Label label55;
+        private Button updateg;
+        private Button updategadmin;
+        private Button deletegadmin;
+        private TextBox IDg;
+        private TextBox IDgadmin;
+        private Label monthg;
+        private Button button8g;
+        private Button btnSyncg;
+        private Button btnExportToExcelg;
     }
 
 }

@@ -37,14 +37,14 @@ namespace Car_Care_Service__.NET_
         [STAThread]
         static void Main()
         {
-
+            ar = 0;
             AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             DateTime lastPopupDate = LoadLastPopupDate();
             DateTime currentDate = DateTime.UtcNow;
-            Application.Run(new Form1());
+            //Application.Run(new Form1());
             SaveLastPopupDate(currentDate);
             //if (lastPopupDate == DateTime.MinValue || (currentDate - lastPopupDate).Days >= 30)
             //{

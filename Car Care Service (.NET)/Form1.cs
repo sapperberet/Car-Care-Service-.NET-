@@ -37,6 +37,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using System.Reflection;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using RoundTextBoxProject.Extensions;
 
 
 
@@ -50,7 +51,9 @@ namespace Car_Care_Service__.NET_
     {
 
         private PrintDocument printDocument;
+        private PrintDocument printDocumentg;
         private PrintPreviewDialog printPreviewDialog;
+        private PrintPreviewDialog printPreviewDialogg;
         private Bitmap logoImage;
         private Bitmap qrCodeImage;
         //private TextBox PID;
@@ -93,7 +96,7 @@ namespace Car_Care_Service__.NET_
         {
             //AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
             InitializeComponent();
-
+            
             System.Drawing.Font currentFont = dataGridView1.DefaultCellStyle.Font;
             dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font(currentFont.FontFamily, 11);
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(currentFont.FontFamily, 9);
@@ -112,9 +115,13 @@ namespace Car_Care_Service__.NET_
             button2.TabStop = false;
             button2.FlatStyle = FlatStyle.Flat;
             button2.FlatAppearance.BorderSize = 0;
+            buttong.TabStop = false;
+            buttong.FlatStyle = FlatStyle.Flat;
+            buttong.FlatAppearance.BorderSize = 0;
             //button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             textBox2.MaxLength = 11;
 
+            
 
 
             txtCarID.MaxLength = 13;
@@ -160,11 +167,23 @@ namespace Car_Care_Service__.NET_
             // Existing setup
             printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
-            printDocument.EndPrint += PrintDocument_EndPrint; // Attach EndPrint event
+            printDocument.EndPrint += PrintDocument_EndPrint;
+
+            printDocumentg = new PrintDocument();
+
+            printDocumentg.PrintPage += PrintDocumentg_PrintPage;
+            printDocumentg.EndPrint += PrintDocumentg_EndPrint;// Attach EndPrint event
 
             printPreviewDialog = new PrintPreviewDialog
             {
                 Document = printDocument,
+                Width = 800,
+                Height = 600
+            };
+
+            printPreviewDialogg = new PrintPreviewDialog
+            {
+                Document = printDocumentg,
                 Width = 800,
                 Height = 600
             };
@@ -193,6 +212,8 @@ namespace Car_Care_Service__.NET_
 
             normalizedOperationPrices = CreateNormalizedDictionary(operationPrices);
 
+
+            button7.Visible = false;
         }
 
         private bool isPrintedSuccessfully = false;
@@ -241,7 +262,48 @@ namespace Car_Care_Service__.NET_
             }
         }
 
+        private void Printg_Click(object sender, EventArgs e)
+        {
+            string filterID = PID.Text.Trim();
 
+            if (string.IsNullOrWhiteSpace(filterID))
+            {
+                MessageBox.Show("Please enter a valid PID.");
+                return;
+            }
+
+            // Check if the ID exists in the DataGridView
+            bool idExists = false;
+            foreach (DataGridViewRow row in dataGridView3.Rows)
+            {
+                if (row.Cells["ID"].Value?.ToString() == filterID)
+                {
+                    idExists = true;
+                    break;
+                }
+            }
+
+            if (!idExists)
+            {
+                MessageBox.Show($"No data found for PID: {filterID}");
+                return;
+            }
+
+            // Reset the printing status
+            isPrintedSuccessfully = false;
+            printclicked = 0;
+            // Show the PrintPreviewDialog
+            string tsko = "هل انت متأكد من رقم العملية حيث انه سيتم محوها حين الموافقة";
+            DialogResult result = MessageBox.Show(tsko,
+                                                 "Confirm Deletion",
+                                                 MessageBoxButtons.YesNo,
+                                                 MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                FetchCarWashDatag(PID.Text);
+                printPreviewDialog.ShowDialog();
+            }
+        }
         // TODO
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -586,6 +648,350 @@ namespace Car_Care_Service__.NET_
 
         }
 
+        private void PrintDocumentg_PrintPage(object sender, PrintPageEventArgs e)
+        {
+
+            // Define starting position and font settings
+            int startX = 5;
+            int startY = 5;
+            int offsetY = 20;
+            int paperWidth = 280; // 72mm paper width (in pixels at 96 DPI)
+            System.Drawing.Font regularFont = new System.Drawing.Font("Aria", 8, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font boldFont = new System.Drawing.Font("Readex Pro Deca Medium", 10, FontStyle.Bold);
+            System.Drawing.Font b = new System.Drawing.Font("Readex Pro Deca Medium", 7, FontStyle.Bold);
+
+            // Drawing Logo and Title
+            if (logoImage != null)
+            {
+                e.Graphics.DrawImage(logoImage, startX + 102, startY, 75, 75);
+            }
+            offsetY += 60;
+            e.Graphics.DrawString("ON ROAD CAR CARE", boldFont, Brushes.Black, startX + 65, offsetY);
+            offsetY += 20;
+
+            // Draw Date and Time
+            //string dateTime = DateTime.Now.ToString("yyyy/MM/dd - hh:mm tt");
+            dated = dated.Substring(0, 10);
+            DateTime today = DateTime.Now;
+            CultureInfo arabicCulture = new CultureInfo("ar-SA");
+            string dayNameInArabic = today.ToString("dddd", arabicCulture);
+
+
+
+            // Client Information
+            e.Graphics.DrawString($"{dated} / {time} / {dayNameInArabic}", regularFont, Brushes.Black, startX + 60, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString($"Name             : {customerName}", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString($"Telephone   : {phoneNumber}", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 20;
+
+
+            e.Graphics.DrawString($"Num Car       : {carNumber}", regularFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 20;
+
+            // Table Header
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth - 10, startY + offsetY);
+            e.Graphics.DrawString("السعر", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("الخدمة", boldFont, Brushes.Black, startX + 200, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth - 10, startY + offsetY);
+            offsetY += 5;
+
+            // Table Rows (Example Rows)
+            //string[,] services = {
+            //    { "Car Wash", "150" },
+            //    { "Oil Change", "200" },
+            //    { "Interior Cleaning", "100" }
+            //};
+
+            Pen dottedPen1 = new Pen(System.Drawing.Color.Black, 1);
+            dottedPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
+
+
+            foreach (var service in services)
+            {
+                offsetY += 10;
+                string normalizedService = NormalizeArabicText(service.Trim());
+                if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
+                {
+                    e.Graphics.DrawString($"{price * 2}", regularFont, Brushes.Black, startX + 5, startY + offsetY);
+
+                }
+
+                //offsetY += 10;
+
+                //offsetY += 10;
+                int chunkSize = 17;
+                for (int i = 0; i < service.Length; i += chunkSize)
+                {
+                    // Determine the length of the current chunk
+                    int length = Math.Min(chunkSize, service.Length - i);
+
+                    // Extract the substring chunk
+                    string chunk = service.Substring(i, length);
+
+                    // Draw the string
+                    e.Graphics.DrawString(chunk, regularFont, Brushes.Black, startX + 180, startY + offsetY);
+
+                    // Move the Y offset for the next line
+                    offsetY += 20;
+                }
+            }
+            int a = 0;
+
+
+
+            offsetY += 20;
+            e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY - 15, startX + 220, startY + offsetY - 15);
+
+
+            e.Graphics.DrawString("الحساب", boldFont, Brushes.Black, startX + 200 + 4, startY + offsetY - 10);
+            e.Graphics.DrawString($"{tprofit}", boldFont, Brushes.Black, startX + 20, startY + offsetY - 10);
+            e.Graphics.DrawString($"ج.م", regularFont, Brushes.Black, startX, startY + offsetY - 10);
+
+            if (decimal.Parse(tincome) != 0)
+            {
+
+                offsetY += 20;
+                e.Graphics.DrawString("رسوم اخري", b, Brushes.Black, startX + 200 + 4, startY + offsetY);
+                e.Graphics.DrawString($"{tincome}", boldFont, Brushes.Black, startX + 20, startY + offsetY);
+                e.Graphics.DrawString($"ج.م", regularFont, Brushes.Black, startX, startY + offsetY);
+
+                offsetY += 5;
+
+            }
+
+            //e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY + 15, startX + 240, startY + offsetY + 15);
+            //offsetY += 20;
+
+
+
+
+            //if (decimal.Parse(disc) != 0) {
+            if (decimal.Parse(disc) != 0 || decimal.Parse(discp) != 0)
+            {
+
+
+                e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY + 15, startX + 220, startY + offsetY + 15);
+                a = 1;
+
+
+
+                offsetY += 20;
+                e.Graphics.DrawString("خصم", regularFont, Brushes.Black, startX + 230, startY + offsetY);
+
+                e.Graphics.DrawString($"{disc}", regularFont, Brushes.Black, startX + 20, startY + offsetY);
+                e.Graphics.DrawString($"ج.م", regularFont, Brushes.Black, startX, startY + offsetY - 2);
+
+
+                //}
+                //if (decimal.Parse(disc) != 0)
+                //{
+
+                //e.Graphics.DrawLine(dottedPen1, startX + 60, startY + offsetY + 15, startX + 220, startY + offsetY + 15);
+                //    a = 1;
+
+
+                offsetY += 20;
+                e.Graphics.DrawString("نسبة الخصم", regularFont, Brushes.Black, startX + 203, startY + offsetY);
+                e.Graphics.DrawString($"% {discp}", regularFont, Brushes.Black, startX + 5, startY + offsetY);
+            }
+            offsetY += 20;
+
+
+            //}
+
+            //foreach (var service in services)
+            //{
+            //    string normalizedService = NormalizeArabicText(service.Trim());
+            //    if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
+            //    {
+            //       e.Graphics.DrawString($"{price}", regularFont, Brushes.Black, startX, startY + offsetY);
+            //      //  e.Graphics.DrawString($"{price}", regularFont, Brushes.Black, startX + 180, startY + offsetY);
+            //     offsetY += 20;
+            //    }
+            //}
+
+            // Draw Total
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth - 10, startY + offsetY);
+            offsetY += 10;
+            e.Graphics.DrawString("الإجمالي", boldFont, Brushes.Black, startX + 200, startY + offsetY);
+            e.Graphics.DrawString($"{totalAmount}", boldFont, Brushes.Black, startX + 20, startY + offsetY);
+            e.Graphics.DrawString($"ج.م", boldFont, Brushes.Black, startX, startY + offsetY - 5);
+            offsetY += 30;
+            e.Graphics.DrawLine(Pens.Black, startX, startY + offsetY, startX + paperWidth - 10, startY + offsetY);
+
+            // Payment Details
+            //e.Graphics.DrawString("Paid: $300", regularFont, Brushes.Black, startX, startY + offsetY);
+            //offsetY += 15;
+            //e.Graphics.DrawString("Left to Pay: $150", regularFont, Brushes.Black, startX, startY + offsetY);
+            //offsetY += 25;
+            offsetY += 10;
+
+
+
+            e.Graphics.DrawLine(dottedPen1, startX, startY + offsetY + 15, startX + paperWidth - 10, startY + offsetY + 15);
+
+
+            if (notes != null)
+            {
+
+                e.Graphics.DrawString($"Notes : {notes}", regularFont, Brushes.Black, startX + 5, startY + offsetY);
+                offsetY += 20;
+            }
+
+
+
+            // Welcoming Sentence
+            e.Graphics.DrawString("              Thank you for choosing", boldFont, Brushes.Black, startX, startY + offsetY);
+            offsetY += 15;
+            e.Graphics.DrawString("                On Road Car Care❤", boldFont, Brushes.Black, startX, startY + offsetY);
+
+            offsetY += 40;
+
+            //if (qrCodeImage != null)
+            //{
+            //    e.Graphics.DrawImage(qrCodeImage, startX + 102, startY + offsetY - 20, 75, 75);
+            //}
+            if (qrCodeImage != null)
+            {
+                e.Graphics.DrawImage(qrCodeImage, startX + 90, startY + offsetY - 20, 100, 100);
+            }
+
+
+            //offsetY += 57;
+            offsetY += 85;
+            e.Graphics.DrawString(": للمقترحات و الشكاوي يرجي التواصل فون-واتساب", regularFont, Brushes.Black, startX + 30, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString("01021536569 / 01010357975", regularFont, Brushes.Black, startX + 60, startY + offsetY);
+            //offsetY += 20;
+            //e.Graphics.DrawString("01010357975", regularFont, Brushes.Black, startX, startY + offsetY-20);
+
+            // QR Code at the Bottom
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //int startX = 50, startY = 50;
+            //int cellWidth = 100, cellHeight = 30;
+
+
+            // Draw column headers
+            //for (int col = 0; col < dataGridView2.Columns.Count; col++)
+            //{
+            //    e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY, cellWidth, cellHeight);
+            //    e.Graphics.DrawString(dataGridView2.Columns[col].HeaderText,
+            //                          this.Font, Brushes.Black,
+            //                          startX + col * cellWidth + 5, startY + 5);
+            //}
+
+            // Draw filtered rows
+            //int rowIndex = 1;
+            //foreach (DataGridViewRow row in dataGridView2.Rows)
+            //{
+            //    if (row.Cells["ID"].Value?.ToString() == PID.Text.Trim())
+            //    {
+            //        for (int col = 0; col < dataGridView2.Columns.Count; col++)
+            //        {
+            //            e.Graphics.DrawRectangle(Pens.Black, startX + col * cellWidth, startY + rowIndex * cellHeight, cellWidth, cellHeight);
+            //            e.Graphics.DrawString(row.Cells[col].Value?.ToString(),
+            //                                  this.Font, Brushes.Black,
+            //                                  startX + col * cellWidth + 5, startY + rowIndex * cellHeight + 5);
+            //        }
+            //        rowIndex++;
+            //    }
+            //}
+
+            // Mark as printed
+            isPrintedSuccessfully = true;
+
+            // Parse the ID
+            string enteredID = PID.Text;
+
+            // Find the row with the matching ID
+            DataGridViewRow matchingRow = dataGridView2.Rows
+                .Cast<DataGridViewRow>()
+                .FirstOrDefault(row => row.Cells["ID"].Value.ToString() == enteredID);
+
+            if (matchingRow == null)
+            {
+                MessageBox.Show("No matching row found for the entered ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // Extract data from the matching row
+            var rowData = string.Empty;
+            foreach (DataGridViewCell cell in matchingRow.Cells)
+            {
+                if (cell.Value == "")
+                {
+                    cell.Value = " ";
+
+                }
+                rowData += cell.Value + "\n";
+            }
+            rowData = rowData.TrimEnd(',');
+
+            // Define the folder and file paths
+            string folderPath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "shared");
+            string filePath = System.IO.Path.Combine(folderPath, "sync.txt");
+
+            // Ensure the folder exists
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            //// Write data to the file
+            //File.WriteAllText(filePath, rowData);
+
+            //// Delete the row from DataGridView
+
+            //dataGridView2.Rows.Remove(matchingRow);
+
+            if (printclicked == 0)
+            {
+                printclicked = 1;
+                File.AppendAllText(filePath, rowData);
+
+                deleteg(PID.Text);
+            }
+
+        }
+
         public int printclicked = 0;
         // EndPrint logic
         private void PrintDocument_EndPrint(object sender, PrintEventArgs e)
@@ -601,6 +1007,18 @@ namespace Car_Care_Service__.NET_
             //}
         }
 
+        private void PrintDocumentg_EndPrint(object sender, PrintEventArgs e)
+        {
+            // Only delete if printing was successful and not canceled
+            //if (isPrintedSuccessfully && !e.Cancel)
+            //{
+            //    string filterID = PID.Text.Trim();
+            //    if (!string.IsNullOrEmpty(filterID))
+            //    {
+            //        //  delete(filterID); 
+            //    }
+            //}
+        }
         //private void Form1_KeyDown(object sender, KeyEventArgs e)
         //{
         //    if (e.KeyCode == Keys.Escape) // Detect Ctrl+F
@@ -886,6 +1304,46 @@ namespace Car_Care_Service__.NET_
                 }
             }
         }
+        private void FetchCarWashDatag(string carWashID)
+        {
+            string query = "SELECT * FROM Shop WHERE ID = @ID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ID", carWashID);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Assign data to variables
+                    //ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, Total, Notes
+                    tID = reader["ID"].ToString();
+                    customerName = reader["CustomerName"].ToString();
+                    phoneNumber = reader["PhoneNumber"].ToString();
+                    dated = reader["CurrentDate"].ToString();
+                    time = reader["Time"].ToString();
+                    carNumber = reader["CarID"].ToString();
+                    Vehicletype = reader["VehicleType"].ToString();
+                    string servicesData = reader["Services"].ToString();
+
+                    //leftToPay = (Convert.ToDecimal(reader["Total"]) - Convert.ToDecimal(reader["Profit"])).ToString("F2");
+                    tprofit = reader["Profit"].ToString();
+                    discp = reader["Discountp"].ToString();
+                    disc = reader["Discount"].ToString();
+                    tCosts = reader["Costs"].ToString();
+
+                    //tincome = reader["income"].ToString();
+                    tincome = reader["income"].ToString();
+                    totalAmount = reader["Total"].ToString();
+                    notes = reader["Notes"].ToString();
+                    // Parse Services into a table
+                    services = ParseServices(servicesData);
+                }
+            }
+        }
         private string[] ParseServices(string servicesData)
         {
 
@@ -973,6 +1431,34 @@ namespace Car_Care_Service__.NET_
                     decimal monthlyTotal = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
                     monthlyTotal = Convert.ToInt64(monthlyTotal);
                     month.Text = $" {monthlyTotal} EGP إجمالي الشهر";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+            }
+        }
+
+        private void DisplayMonthlyTotalg()
+        {
+
+            string query = @"
+                SELECT SUM(Total) AS MonthlyTotal
+                FROM ShopAdmin
+                WHERE MONTH(CurrentDate) = MONTH(GETDATE()) 
+                AND YEAR(CurrentDate) = YEAR(GETDATE());";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+                    connection.Open();
+                    var result = command.ExecuteScalar();
+                    decimal monthlyTotal = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                    monthlyTotal = Convert.ToInt64(monthlyTotal);
+                    monthg.Text = $" {monthlyTotal} EGP إجمالي الشهر";
                 }
                 catch (Exception ex)
                 {
@@ -2592,7 +3078,110 @@ namespace Car_Care_Service__.NET_
             }
 
         }
+        private void deleteg(string fs)
+        {
+            try
+            {
+                //DialogResult result = MessageBox.Show("Are you sure you want to delete this record?",
+                //                                      "Confirm Deletion",
+                //                                      MessageBoxButtons.YesNo,
+                //                                      MessageBoxIcon.Warning);
+                //if (result == DialogResult.Yes)
+                //{
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
 
+                    // Begin a transaction to ensure data integrity
+                    SqlTransaction transaction = connection.BeginTransaction();
+
+                    try
+                    {
+                        // Delete the selected record
+                        string deleteQuery = "DELETE FROM Shop WHERE ID = @ID";
+                        using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection, transaction))
+                        {
+                            deleteCommand.Parameters.AddWithValue("@ID", fs);
+                            deleteCommand.ExecuteNonQuery();
+                        }
+
+                        // Enable IDENTITY_INSERT for reordering
+                        string enableIdentityInsert = "SET IDENTITY_INSERT CarWashServices1 ON;";
+                        using (SqlCommand enableCommand = new SqlCommand(enableIdentityInsert, connection, transaction))
+                        {
+                            enableCommand.ExecuteNonQuery();
+                        }
+
+                        // Reorder IDs using a temporary table
+                        string reorderQuery = @"
+                        -- Create a temporary table
+                        CREATE TABLE #TempTable (
+                            ID INT NOT NULL,
+                            CustomerName NVARCHAR(100) NOT NULL,
+                            PhoneNumber NVARCHAR(15) NOT NULL,
+                            CurrentDate DATE DEFAULT GETDATE(),
+                            Time TIME(7) DEFAULT CONVERT(TIME, GETDATE()),
+                            CarID NVARCHAR(50) NOT NULL,
+                            VehicleType NVARCHAR(50) NOT NULL,
+                            Services NVARCHAR(MAX) NOT NULL,
+                            Profit DECIMAL(10, 2) DEFAULT 0.00,
+                            Discountp DECIMAL(10, 2) DEFAULT 0.00,
+                            Discount DECIMAL(10, 2) DEFAULT 0.00,
+                            Costs DECIMAL(10, 2) DEFAULT 0.00,
+                            income DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
+                            Total DECIMAL(10, 2) NOT NULL,
+                            Notes NVARCHAR(MAX) NULL
+                        );
+
+                        -- Insert reordered data into the temporary table
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs,income , Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs,income , Total, Notes
+                        FROM Shop;
+
+                        -- Truncate the original table
+                        TRUNCATE TABLE Shop;
+
+                        -- Reinsert data from the temporary table
+                        INSERT INTO Shop (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs,income , Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes
+                        FROM #TempTable;
+
+                        -- Drop the temporary table
+                        DROP TABLE #TempTable;
+                    ";
+                        using (SqlCommand reorderCommand = new SqlCommand(reorderQuery, connection, transaction))
+                        {
+                            reorderCommand.ExecuteNonQuery();
+                        }
+
+                        // Disable IDENTITY_INSERT after reordering
+                        string disableIdentityInsert = "SET IDENTITY_INSERT Shop OFF;";
+                        using (SqlCommand disableCommand = new SqlCommand(disableIdentityInsert, connection, transaction))
+                        {
+                            disableCommand.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit(); // Commit the transaction
+                                              //ID1.Text = "";
+
+                        // MessageBox.Show("Record deleted and IDs reordered successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch
+                    {
+                        transaction.Rollback(); // Rollback on error
+                        throw;
+                    }
+                }
+
+                LoadDataShop(Shop);// Reload the updated data
+                //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
 
         private void label6_Click_1(object sender, EventArgs e)
         {
@@ -3398,6 +3987,12 @@ namespace Car_Care_Service__.NET_
         {
             if (textBox3.Text == "3108")
             {
+
+
+                addg.Visible = false;
+                addgadmin.Visible = false;
+
+                textg.Visible = false;
                 pictureBox1.Visible = false;
                 pictureBox2.Visible = false;
                 // label19.Visible = true;
@@ -3413,13 +4008,20 @@ namespace Car_Care_Service__.NET_
                 button3.Visible = true;
                 button9.Visible = false;
                 button2.Visible = false;
+               
                 ID.Visible = true;
+                updateg.Visible = false;
+                updategadmin.Visible = false;
+                
+
+
+
 
                 button1.Visible = true;
                 button6.Visible = true;
                 textBox3.Text = "";
                 btnExportToExcel.Visible = true;
-                textBox5.Visible = true;
+                textBox5.Visible = true;  
                 button7.Visible = true;
                 //button8.Visible = true;
                 //button9.Visible = true;
@@ -4057,6 +4659,7 @@ namespace Car_Care_Service__.NET_
 
             //label19.Visible = false;
             //Income.Visible = false;
+
             pictureBox1.Visible = true;
             PID.Visible = true;
             label17.Visible = true;
@@ -4385,6 +4988,13 @@ namespace Car_Care_Service__.NET_
         private void pictureBox2_Click_1(object sender, EventArgs e)
         {
             //253; 188; 42
+            
+            updateg.Visible = false;
+            updategadmin.Visible = false;
+
+
+            addg.Visible = false;
+            addgadmin.Visible = false;
 
             label1.BackColor = System.Drawing.Color.FromArgb(253,188,42);
             label2.BackColor = System.Drawing.Color.FromArgb(253,188,42);
@@ -4400,10 +5010,14 @@ namespace Car_Care_Service__.NET_
             label15.BackColor = System.Drawing.Color.FromArgb(253,188,42);
             label18.BackColor = System.Drawing.Color.FromArgb(253,188,42);
 
-            
+            textg.Visible = false;
+
+            IDg.Visible = false;
+
+
             pictureBox2.Visible = false;
             pictureBox1.Visible = true;
-
+            checkedListBox1.Visible = true;
             textBox3.Visible = true;
             shopadminpass.Visible = false;
             //label19.Visible = false;
@@ -4420,6 +5034,8 @@ namespace Car_Care_Service__.NET_
             button3.Visible = false;
             button9.Visible = true;
             button2.Visible = true;
+            buttong.Visible = false;
+
             textBox3.Text = "";
             ID.Visible = false;
 
@@ -4467,6 +5083,20 @@ namespace Car_Care_Service__.NET_
         {
             if (shopadminpass.Text == "3108")
             {
+
+                updateg.Visible = false;
+                updategadmin.Visible = true;
+                deletegadmin.Visible = true;
+
+
+                addg.Visible = false;
+                addgadmin.Visible = true;
+
+
+                IDg.Visible = false;
+                IDgadmin.Visible = true;
+
+
                 pictureBox1.Visible = false;
                 pictureBox2.Visible = false;
                 // label19.Visible = true;
@@ -4484,16 +5114,27 @@ namespace Car_Care_Service__.NET_
                 button3.Visible = true;
                 button9.Visible = false;
                 button2.Visible = false;
+                buttong.Visible = false;
+
+
+
+
+
                 ID.Visible = true;
 
-                button1.Visible = true;
-                button6.Visible = true;
+                //button1.Visible = true;
+                //button6.Visible = true;
+
                 textBox3.Text = "";
                 shopadminpass.Text = "";
                 checkedListBox1.Visible = false;
                 btnExportToExcel.Visible = true;
                 textBox5.Visible = true;
+
+
                 button7.Visible = true;
+
+
                 //button8.Visible = true;
                 //button9.Visible = true;
                 //Date.Visible = true; //fs   
@@ -4513,10 +5154,19 @@ namespace Car_Care_Service__.NET_
                 label10.Visible = true;
                 label16.Visible = true;
                 button8.Visible = true;
-                ac.Visible = true;
-                sc.Visible = true;
-                cc.Visible = true;
-                month.Visible = true;
+                //ac.Visible = true;
+                //sc.Visible = true;
+                //cc.Visible = true;
+                    
+                ac.Visible = false;
+                sc.Visible = false;
+                cc.Visible = false; 
+
+                month.Visible = false;
+                monthg.Visible = true;
+                btnSyncg.Visible = true;
+                btnExportToExcelg.Visible = true;   
+                button8g.Visible = true;
 
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
                 //dataGridView1.Columns["CurrentDate"].DefaultCellStyle.Format = "HH:mm:ss yyyy-MM-dd";
@@ -4530,7 +5180,7 @@ namespace Car_Care_Service__.NET_
                 dataGridView3.Columns["CarID"].Width = 130;
 
                 CountHelloOccurrences();
-                DisplayMonthlyTotal();
+                DisplayMonthlyTotalg();
             }
         }
 
@@ -4538,6 +5188,22 @@ namespace Car_Care_Service__.NET_
         {
             //label19.Visible = false;
             //Income.Visible = false;
+            //9 , 3 admin
+
+            updateg.Visible = true;
+            updategadmin.Visible = false;
+            deletegadmin.Visible = false;
+
+            addg.Visible = true;
+            addgadmin.Visible = false;
+
+
+
+            IDg.Visible = true;
+            IDgadmin.Visible = false;   
+
+
+
             button15.Visible = false;
             pictureBox2.Visible = true;
             PID.Visible = true;
@@ -4552,9 +5218,11 @@ namespace Car_Care_Service__.NET_
             dataGridView4.Visible = false;
             button3.Visible = false;
             button9.Visible = true;
-            button2.Visible = true;
+            button2.Visible = false;
+            buttong.Visible = true;
             textBox3.Text = "";
             ID.Visible = false;
+
 
             button1.Visible = false;
             button6.Visible = false;
@@ -4582,7 +5250,1105 @@ namespace Car_Care_Service__.NET_
             ac.Visible = false;
             sc.Visible = false;
             cc.Visible = false;
+
             month.Visible = false;
+            monthg.Visible = false;
+            btnSyncg.Visible = false;
+            btnExportToExcelg.Visible = false;
+            button8g.Visible = false;
+        }
+
+        private void buttong_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+        private string totalg = "";
+        private string itemsg = "";
+        private void textg_TextChanged(object sender, EventArgs e)
+            {
+
+
+
+            decimal total = 0;
+            StringBuilder items = new StringBuilder();
+
+            foreach (string line in textg.Lines)
+            {
+                // Normalize Arabic text
+                string normalizedLine = NormalizeArabicText(line);
+
+                string[] parts = normalizedLine.Split('=');
+                if (parts.Length == 2)
+                {
+                    string key = parts[0].Trim();
+                    string valueText = parts[1].Trim();
+
+                    // Add the item name to the list
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        if (items.Length > 0)
+                            items.Append(" / "); // Add separator
+
+                        items.Append(key);
+                    }
+
+                    // Parse the numeric value and add to total
+                    if (decimal.TryParse(valueText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
+                    {
+                        total += price;
+                    }
+                }
+
+
+
+            }
+            label55.Text = items.ToString(); 
+            label8.Text = total.ToString();
+
+            decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+            decimal fs = (lol - (lol * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+            label14.Text = fs.ToString();
+
+        }
+
+        private void addg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBox2.TextLength < 6)
+                {
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string insertQuery = "INSERT INTO Shop (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs,income , Total, Notes) " +
+                       "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp, @Discount, @Costs, @income, @Total, @Notes)";
+
+                    {
+
+                        SqlCommand command = new SqlCommand(insertQuery, connection);
+
+
+
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
+
+                        //FORMAT([Time], 'HH:mm:ss') AS FormattedTime
+
+
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+
+
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text + tsk);
+                        command.Parameters.AddWithValue("@Profit", label8.Text);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
+                        command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        //command.Parameters.AddWithValue("@Time", "fs");
+                        
+                     
+                    
+
+                        command.Parameters.AddWithValue("@Services", label55.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
+                        //command.Parameters.AddWithValue("@Total", label8.Text);
+                        ;
+
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+                        decimal total = (lol - (lol * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+
+                        command.Parameters.AddWithValue("@income", Income.Text);
+
+                        command.Parameters.AddWithValue("@Total", total);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        txtCustomerID.Text = "";
+                        textBox2.Text = "";
+                        txtCarID.Text = "";
+                        Costs.Text = "0";
+                        for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                        {
+                            checkedListBox1.SetItemChecked(i, false);
+                        }
+                    ;
+                        txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.Text = "";
+                        txtVehicleType.Text = "";
+                        txtSaleID.Text = "0";
+                        textBox6.Text = "0";
+                        txtNotes.Text = "";
+                        label8.Text = "0";
+                        Income.Text = "0";
+                        label55.Text = "";
+                        textg.Text = "";
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //LoadData1(query1);
+                LoadDataShop(Shop);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void addgadmin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBox2.TextLength < 6)
+                {
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string insertQuery = "INSERT INTO ShopAdmin (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs,income , Total, Notes) " +
+                       "VALUES (@CustomerName, @PhoneNumber, GETDATE(),FORMAT(GETDATE(), 'hh:mm:ss'), @CarID, @VehicleType, @Services, @Profit, @Discountp, @Discount, @Costs, @income, @Total, @Notes)";
+
+                    {
+
+                        SqlCommand command = new SqlCommand(insertQuery, connection);
+
+
+
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
+
+                        //FORMAT([Time], 'HH:mm:ss') AS FormattedTime
+
+
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+
+
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text + tsk);
+                        command.Parameters.AddWithValue("@Profit", label8.Text);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
+                        command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        //command.Parameters.AddWithValue("@Time", "fs");
+                       
+
+                        command.Parameters.AddWithValue("@Services", label55.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
+                        //command.Parameters.AddWithValue("@Total", label8.Text);
+                        ;
+
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+                        decimal total = (lol - (lol * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+
+                        command.Parameters.AddWithValue("@income", Income.Text);
+
+                        command.Parameters.AddWithValue("@Total", total);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        txtCustomerID.Text = "";
+                        textBox2.Text = "";
+                        txtCarID.Text = "";
+                        Costs.Text = "0";
+                        for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                        {
+                            checkedListBox1.SetItemChecked(i, false);
+                        }
+                    ;
+                        txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.Text = "";
+                        txtVehicleType.Text = "";
+                        txtSaleID.Text = "0";
+                        textBox6.Text = "0";
+                        txtNotes.Text = "";
+                        label8.Text = "0";
+                        Income.Text = "0";
+                        label55.Text = "";
+                        textg.Text = "";
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //LoadData1(query1);
+                LoadDataShopAdmin(ShopAdmin);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void updateg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    //string updateQuery = @"UPDATE Transactions 
+                    //               SET Total = @Total, Notes = @Notes 
+                    //               WHERE TransactionID = @TransactionID";
+                    string updateQuery = "UPDATE Shop SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,income = @income ,Total = @Total , Notes = @Notes " +
+                       "WHERE ID = @ID";
+
+                    using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                    {
+
+                        //command.Parameters.AddWithValue("@Total", label8.Text);
+                        //command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                        command.Parameters.AddWithValue("@ID", IDg.Text);
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text + tsk);
+                        command.Parameters.AddWithValue("@Profit", label8.Text);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
+                        command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        command.Parameters.AddWithValue("@Time", DateTime.Now.TimeOfDay);
+
+                       
+                        
+                        command.Parameters.AddWithValue("@Services", label55.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+                        decimal total = (lol - (lol * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+                        command.Parameters.AddWithValue("@income", Income.Text);
+                        command.Parameters.AddWithValue("@Total", total);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        txtCustomerID.Text = "";
+                        textBox2.Text = "";
+                        txtCarID.Text = "";
+                        txtVehicleType.Text = "";
+                        for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                        {
+                            checkedListBox1.SetItemChecked(i, false);
+                        }
+                        ;
+                        txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.Text = "";
+                        txtSaleID.Text = "0";
+                        textBox6.Text = "0";
+                        Costs.Text = "0";
+                        Income.Text = "0";
+                        txtNotes.Text = "";
+                        label8.Text = "0";
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //LoadData1(query1);
+                LoadDataShop(Shop);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void updategadmin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBox2.TextLength < 6)
+                {
+
+
+                    MessageBox.Show("ادخل رقم تيليفون صحيح", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    //string updateQuery = @"UPDATE Transactions 
+                    //               SET Total = @Total, Notes = @Notes 
+                    //               WHERE TransactionID = @TransactionID";
+                    string updateQuery = "UPDATE ShopAdmin SET CustomerName = @CustomerName, PhoneNumber = @PhoneNumber, CarID = @CarID, " +
+                       "VehicleType = @VehicleType, Services = @Services, Profit = @Profit, Discountp = @Discountp, Discount = @Discount,Costs = @Costs ,Total = @Total,income = @income, Notes = @Notes " +
+                       "WHERE ID = @ID";
+
+                    using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                    {
+
+                        //command.Parameters.AddWithValue("@Total", label8.Text);
+                        //command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        //command.Parameters.AddWithValue("@TransactionID", txtTransactionID.Text);
+                        command.Parameters.AddWithValue("@ID", IDgadmin.Text);
+                        command.Parameters.AddWithValue("@CustomerName", txtCustomerID.Text);
+                        command.Parameters.AddWithValue("@PhoneNumber", textBox2.Text);
+                        string tsk = new string(txtCarID.Text.Reverse().ToArray());
+                        command.Parameters.AddWithValue("@CarID", textBox1.Text + tsk);
+                        command.Parameters.AddWithValue("@Profit", label8.Text);
+                        command.Parameters.AddWithValue("@VehicleType", txtVehicleType.Text);
+                        command.Parameters.AddWithValue("@CurrentDate", DateTime.Now);
+                        command.Parameters.AddWithValue("@Time", DateTime.Now.TimeOfDay);
+                        //here
+                        string cb = "";
+                        //for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+                        //{
+                        //    cb += checkedListBox1.Items[i];
+                        //}
+               
+                        command.Parameters.AddWithValue("@Services", label55.Text);
+
+                        command.Parameters.AddWithValue("@Discount", textBox6.Text);
+                        command.Parameters.AddWithValue("@Discountp", txtSaleID.Text);
+                        command.Parameters.AddWithValue("@Costs", Costs.Text);
+                        decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+                        decimal total = (lol - (lol * (decimal.Parse(txtSaleID.Text) / 100))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+
+                        command.Parameters.AddWithValue("@income", Income.Text);
+                        command.Parameters.AddWithValue("@Total", total);
+                        command.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                        txtCustomerID.Text = "";
+                        textBox2.Text = "";
+                        txtCarID.Text = "";
+                        txtVehicleType.Text = "";
+                        for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                        {
+                            checkedListBox1.SetItemChecked(i, false);
+                        }
+                        ;
+                        txtCarID.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox2.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.BackColor = System.Drawing.Color.FromArgb(222, 222, 222);
+                        textBox1.Text = "";
+                        txtSaleID.Text = "0";
+                        textBox6.Text = "0";
+                        Costs.Text = "0";
+                        Income.Text = "0";
+                        txtNotes.Text = "";
+                        label8.Text = "0";
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show("Record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //LoadData(query);
+                LoadDataShopAdmin(ShopAdmin);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            CountHelloOccurrences();
+            DisplayMonthlyTotalg();
+        }
+
+        private void deletegadmin_Click(object sender, EventArgs e)
+        {
+
+            {
+                try
+                {
+                    DialogResult result = MessageBox.Show("Are you sure you want to delete this record?",
+                                                          "Confirm Deletion",
+                                                          MessageBoxButtons.YesNo,
+                                                          MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+
+                            // Begin a transaction to ensure data integrity
+                            SqlTransaction transaction = connection.BeginTransaction();
+
+                            try
+                            {
+                                // Delete the selected record
+                                string deleteQuery = "DELETE FROM ShopAdmin WHERE ID = @ID";
+                                using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection, transaction))
+                                {
+                                    deleteCommand.Parameters.AddWithValue("@ID", IDgadmin.Text);
+                                    deleteCommand.ExecuteNonQuery();
+                                }
+
+                                // Enable IDENTITY_INSERT for reordering
+                                string enableIdentityInsert = "SET IDENTITY_INSERT ShopAdmin ON;";
+                                using (SqlCommand enableCommand = new SqlCommand(enableIdentityInsert, connection, transaction))
+                                {
+                                    enableCommand.ExecuteNonQuery();
+                                }
+
+                                // Reorder IDs using a temporary table
+                                string reorderQuery = @"
+                        -- Create a temporary table
+                        CREATE TABLE #TempTable (
+                            ID INT NOT NULL,
+                            CustomerName NVARCHAR(100) NOT NULL,
+                            PhoneNumber NVARCHAR(15) NOT NULL,
+                            CurrentDate DATE DEFAULT GETDATE(),
+                            Time TIME(7) DEFAULT CONVERT(TIME, GETDATE()),
+                            CarID NVARCHAR(50) NOT NULL,
+                            VehicleType NVARCHAR(50) NOT NULL,
+                            Services NVARCHAR(MAX) NOT NULL,
+                            Profit DECIMAL(10, 2) DEFAULT 0.00,
+                            Discountp    DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
+                            Discount DECIMAL(10, 2) DEFAULT 0.00,
+                            Costs DECIMAL(10, 2) DEFAULT 0.00,
+                            income  DECIMAL (10, 2) DEFAULT ((0.00)) NULL,
+                            Total DECIMAL(10, 2) NOT NULL,
+                            Notes NVARCHAR(MAX) NULL
+                        );
+
+                        -- Insert reordered data into the temporary table
+                        INSERT INTO #TempTable (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes)
+                        SELECT ROW_NUMBER() OVER (ORDER BY ID) AS ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp,Discount, Costs, income, Total, Notes
+                        FROM ShopAdmin;
+
+                        -- Truncate the original table
+                        TRUNCATE TABLE ShopAdmin;
+
+                        -- Reinsert data from the temporary table
+                        INSERT INTO ShopAdmin (ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes)
+                        SELECT ID, CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs, income, Total, Notes
+                        FROM #TempTable;
+
+                        -- Drop the temporary table
+                        DROP TABLE #TempTable;
+                    ";
+                                using (SqlCommand reorderCommand = new SqlCommand(reorderQuery, connection, transaction))
+                                {
+                                    reorderCommand.ExecuteNonQuery();
+                                }
+
+                                // Disable IDENTITY_INSERT after reordering
+                                string disableIdentityInsert = "SET IDENTITY_INSERT ShopAdmin OFF;";
+                                using (SqlCommand disableCommand = new SqlCommand(disableIdentityInsert, connection, transaction))
+                                {
+                                    disableCommand.ExecuteNonQuery();
+                                }
+
+                                transaction.Commit(); // Commit the transaction
+                                ID.Text = "";
+
+                                MessageBox.Show("Record deleted and IDs reordered successfully!",
+                                                "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            catch
+                            {
+                                transaction.Rollback(); // Rollback on error
+                                throw;
+                            }
+                        }
+
+                        //LoadData(query); // Reload the updated data
+                        LoadDataShopAdmin(ShopAdmin);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                CountHelloOccurrences();
+                DisplayMonthlyTotalg();
+            }
+        }
+
+        private void IDgadmin_TextChanged(object sender, EventArgs e)
+        {
+            string searchID = IDgadmin.Text; // Get ID from TextBox
+
+            // Loop through DataGridView rows
+            foreach (DataGridViewRow row in dataGridView4.Rows)
+            {
+                if (row.Cells["ID"].Value != null && row.Cells["ID"].Value.ToString() == searchID)
+                {
+                    // Match found, populate the text boxes
+                    txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
+                    textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
+                    //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
+
+
+                    //label8.Text = row.Cells["Profit"].Value?.ToString();
+
+                    string strSalep = row.Cells["Discountp"].Value?.ToString();
+                    txtSaleID.Text = strSalep.Substring(0, strSalep.Length - 2);
+
+                    string strSale = row.Cells["Discount"].Value?.ToString();
+                    textBox6.Text = strSale.Substring(0, strSale.Length - 2);
+
+                    //==========
+                    string numericPart = Regex.Replace(txtSaleID.Text, @"[^0-9.]", "");
+                    if (numericPart.StartsWith("."))
+                        numericPart = numericPart.TrimStart('.');
+                    if (txtSaleID.Text != numericPart)
+                    {
+                        // Format to avoid ".0" issue
+                        txtSaleID.Text = numericPart.Contains(".") ? numericPart : int.Parse(numericPart).ToString();
+
+                        // Reset cursor position
+                        txtSaleID.SelectionStart = textBox1.Text.Length;
+                    }
+
+                    //=========
+
+                    //string strara = row.Cells["CarID"].Value?.ToString();
+                    //textBox1.Text = strara.Substring(0, 5);
+
+                    //string strnum = row.Cells["CarID"].Value?.ToString();
+                    // strnum= strnum.Substring(6, 8);
+                    //txtCarID.Text = strnum;
+
+
+
+                    // Get the CarID value from the row
+                    string carId = row.Cells["CarID"].Value?.ToString();
+
+                    if (!string.IsNullOrEmpty(carId))
+                    {
+
+                        string arabicLetters = Regex.Replace(carId, @"[^\u0600-\u06FF]", "").Trim();
+
+                        textBox1.Text = string.Join(" ", arabicLetters.ToCharArray());
+
+                        string numbers = Regex.Replace(carId, @"[^\d]", "").Trim();
+
+                        string reversedNumbers = string.Join(" ", numbers.Reverse()) + " ";
+                        txtCarID.Text = reversedNumbers;
+
+                        textBox1.BackColor = System.Drawing.Color.LightGreen;
+                    }
+                    else
+                    {
+                        // Handle null or empty CarID case
+                        textBox1.Text = string.Empty;
+                        txtCarID.Text = string.Empty;
+                    }
+
+
+                    string strCost = row.Cells["Costs"].Value?.ToString();
+                    Costs.Text = strCost.Substring(0, strCost.Length - 2);
+
+
+                    string sIncome = row.Cells["income"].Value?.ToString();
+                    Income.Text = sIncome.Substring(0, sIncome.Length - 2);
+
+                    //label14.Text = row.Cells["Total"].Value?.ToString();
+                    txtNotes.Text = row.Cells["Notes"].Value?.ToString();
+
+
+                    string itemsToCheck = row.Cells["Services"].Value?.ToString();
+
+                    //textg.Text = $"{tprofit}" + " = " + itemsToCheck;
+
+
+
+                    string sProfit = row.Cells["Profit"].Value?.ToString();
+                    //Income.Text = sProfit.Substring(0, sProfit.Length - 2
+
+                    //sProfit = sProfit.Replace(",", ".");
+                    sProfit = sProfit.Substring(0, strCost.Length - 3);
+
+
+                    textg.Text = itemsToCheck + " = " + $"{sProfit}";
+
+
+                    //var items = itemsToCheck.Split('/')
+                    //    .Select(item => NormalizeArabicText(item.Trim()))
+                    //    .ToList();
+
+                    //if (items.Count > 0)
+                    //{
+
+                    //    for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    //    {
+
+
+                    //        checkedListBox1.SetItemChecked(i, false);
+
+                    //    }
+                    //}
+
+                    //for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    //{
+                    //    string normalizedItem = NormalizeArabicText(checkedListBox1.Items[i].ToString());
+                    //    if (items.Contains(normalizedItem))
+                    //    {
+                    //        checkedListBox1.SetItemChecked(i, true);
+                    //    }
+                    //}
+
+                    //    foreach (var item in items)
+                    //    {
+                    //        int index = checkedListBox1.Items.IndexOf(item);
+                    //         txtNotes.Text += item.ToString();
+                    //        if (index != -1) // Check if the item exists in the CheckedListBox
+                    //        {
+                    //            checkedListBox1.SetItemChecked(index, true);
+                    //        }
+                    //}
+
+
+                    string fs = row.Cells["VehicleType"].Value?.ToString();
+                    int a = 0;
+                    if (fs == "سيارة")
+                    {
+                        a = 0;
+                    }
+                    if (fs == "سكوتر")
+                    {
+                        a = 1;
+                    }
+                    if (fs == "(أخرى)")
+                    {
+                        a = 2;
+                    }
+                    if (fs == "")
+                    {
+                        a = 3;
+                    }
+                    txtVehicleType.SelectedIndex = a;
+
+
+
+
+
+
+
+                    return; // Exit loop once match is found
+
+
+
+
+
+
+                }
+            }
+        }
+
+        private void IDg_TextChanged(object sender, EventArgs e)
+        {
+            string searchID = IDg.Text; // Get ID from TextBox
+
+            // Loop through DataGridView rows
+            foreach (DataGridViewRow row in dataGridView3.Rows)
+            {
+                if (row.Cells["ID"].Value != null && row.Cells["ID"].Value.ToString() == searchID)
+                {
+                    // Match found, populate the text boxes
+                    txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
+                    textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
+                    //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
+
+
+                    //label8.Text = row.Cells["Profit"].Value?.ToString();
+
+                    string strSalep = row.Cells["Discountp"].Value?.ToString();
+
+                    txtSaleID.Text = strSalep.Substring(0, strSalep.Length - 2);
+
+                    string strSale = row.Cells["Discount"].Value?.ToString();
+
+                    textBox6.Text = strSale.Substring(0, strSale.Length - 2);
+
+                    //==========
+                    string numericPart = Regex.Replace(txtSaleID.Text, @"[^0-9.]", "");
+                    if (numericPart.StartsWith("."))
+                        numericPart = numericPart.TrimStart('.');
+                    if (txtSaleID.Text != numericPart)
+                    {
+                        // Format to avoid ".0" issue
+                        txtSaleID.Text = numericPart.Contains(".") ? numericPart : int.Parse(numericPart).ToString();
+
+                        // Reset cursor position
+                        txtSaleID.SelectionStart = textBox1.Text.Length;
+                    }
+
+                    //=========
+                    //UpdatetxtSaleID(txtSaleID, tyosk);
+
+                    //string strara = row.Cells["CarID"].Value?.ToString();
+                    //textBox1.Text = strara.Substring(0, 5);
+
+                    //string strnum = row.Cells["CarID"].Value?.ToString();
+                    // strnum= strnum.Substring(6, 8);
+                    //txtCarID.Text = strnum;
+
+
+
+                    // Get the CarID value from the row
+                    string carId = row.Cells["CarID"].Value?.ToString();
+
+                    if (!string.IsNullOrEmpty(carId))
+                    {
+
+                        string arabicLetters = Regex.Replace(carId, @"[^\u0600-\u06FF]", "").Trim();
+
+                        textBox1.Text = string.Join(" ", arabicLetters.ToCharArray());
+
+                        string numbers = Regex.Replace(carId, @"[^\d]", "").Trim();
+
+                        string reversedNumbers = string.Join(" ", numbers.Reverse()) + " ";
+                        txtCarID.Text = reversedNumbers;
+
+                        textBox1.BackColor = System.Drawing.Color.LightGreen;
+                    }
+                    else
+                    {
+                        // Handle null or empty CarID case
+                        textBox1.Text = string.Empty;
+                        txtCarID.Text = string.Empty;
+                    }
+
+                    string sIncome = row.Cells["Income"].Value?.ToString();
+                    Income.Text = sIncome.Substring(0, sIncome.Length - 2);
+
+                    string strCost = row.Cells["Costs"].Value?.ToString();
+                    Costs.Text = strCost.Substring(0, strCost.Length - 2);
+
+                    //label14.Text = row.Cells["Total"].Value?.ToString();
+                    txtNotes.Text = row.Cells["Notes"].Value?.ToString();
+
+
+                    string itemsToCheck = row.Cells["Services"].Value?.ToString();
+
+                    string sProfit = row.Cells["Profit"].Value?.ToString();
+
+                     sProfit = sProfit.Substring(0, strCost.Length - 3);
+
+                    //sProfit = sProfit.Replace("," , ".");
+
+                    //Income.Text = sProfit.Substring(0, sProfit.Length - 2);
+
+
+                    //textg.Text = $"{sProfit}" + " = " + itemsToCheck;
+
+                    textg.Text =  itemsToCheck  + " = "+ $"{sProfit}";
+
+
+
+
+
+
+
+                    //var items = itemsToCheck.Split('/')
+                    //    .Select(item => NormalizeArabicText(item.Trim()))
+                    //    .ToList();
+
+                    //if (items.Count > 0)
+                    //{
+
+                    //    for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    //    {
+
+
+                    //        checkedListBox1.SetItemChecked(i, false);
+
+                    //    }
+
+
+                    //}
+
+                    //for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                    //{
+                    //    string normalizedItem = NormalizeArabicText(checkedListBox1.Items[i].ToString());
+                    //    if (items.Contains(normalizedItem))
+                    //    {
+                    //        checkedListBox1.SetItemChecked(i, true);
+                    //    }
+
+                    //}
+
+                    //foreach (var item in items)
+                    //{
+                    //    int index = checkedListBox1.Items.IndexOf(item);
+                    //    txtNotes.Text += item.ToString();
+                    //    if (index != -1) // Check if the item exists in the CheckedListBox
+                    //    {
+                    //        checkedListBox1.SetItemChecked(index, true);
+                    //    }
+                    //}
+
+
+                    string fs = row.Cells["VehicleType"].Value?.ToString();
+                    int a = 0;
+                    if (fs == "سيارة")
+                    {
+                        a = 0;
+                    }
+                    if (fs == "سكوتر")
+                    {
+                        a = 1;
+                    }
+                    if (fs == "(أخرى)")
+                    {
+                        a = 2;
+                    }
+                    if (fs == "")
+                    {
+                        a = 3;
+                    }
+                    txtVehicleType.SelectedIndex = a;
+
+
+
+
+
+
+
+                    return; // Exit loop once match is found
+
+
+
+
+
+
+                }
+            }
+        }
+
+        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button8g_Click(object sender, EventArgs e)
+        {
+
+            // Get date range from DateTimePickers
+            DateTime startDate = dateTimePicker1.Value.Date;
+            DateTime endDate = dateTimePicker2.Value.Date;
+
+            // CurrentDate,Time, Total
+            string query = @"
+        SELECT *
+        FROM ShopAdmin
+        WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+
+            // Create a DataTable to hold the results
+            System.Data.DataTable dataTable = new System.Data.DataTable();
+
+            // Execute the query and fill the DataTable
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            DateForm dateForm = new DateForm();
+            dateForm.SetDataSource(dataTable); // Pass the DataTable to the DateForm
+            query = @"
+            SELECT SUM(Total) AS TotalBetweenDates
+            FROM ShopAdmin
+            WHERE CurrentDate BETWEEN @StartDate AND @EndDate";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                    object result = cmd.ExecuteScalar();
+                    dateForm.SetLabelText("Total : " + $"{result}" + " EGP");
+                    // MessageBox.Show($"{result ?? 0}", "الدخل بين التاريخين", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // label10.Text = $"{result ?? 0} : الدخل بين التاريخين";
+                }
+            }
+
+            dateForm.ShowDialog();
+
+        }
+
+        private void btnSyncg_Click(object sender, EventArgs e)
+        {
+            string filePath = System.IO.Path.Combine("shared", "syncshop.txt");
+
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("The sync file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Read all lines from the file
+                var lines = File.ReadAllLines(filePath).ToList();
+
+                if (lines.Count <= 1) // No data to process after skipping the first line
+                {
+                    MessageBox.Show("Your Server is Up to Date", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Skip the first line (old ID)
+
+
+                List<string[]> rows = new List<string[]>();
+
+                // Process records in chunks of 12 lines (ignore the skipped ID)
+                while (lines.Count >= 15)
+                {
+                    string[] record = lines.Take(15).ToArray();
+                    rows.Add(record);
+                    lines.RemoveRange(0, 15); // Remove the processed lines
+                }
+
+
+
+
+                InsertRecordsIntoDatabaseg(rows);
+
+                // Insert records into the database
+
+                // Overwrite the file with remaining lines
+                File.WriteAllLines(filePath, lines);
+                //LoadData(query);
+                LoadDataShopAdmin(ShopAdmin);
+                MessageBox.Show("Data synced successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while syncing: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        
+        private void InsertRecordsIntoDatabaseg(List<string[]> records)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (var record in records)
+                {
+                    using (SqlCommand cmd = new SqlCommand(
+                        "INSERT INTO ShopAdmin (CustomerName, PhoneNumber, CurrentDate, Time, CarID, VehicleType, Services, Profit, Discountp, Discount, Costs,income, Total, Notes) " +
+                        "VALUES (@CustomerName, @PhoneNumber, @CurrentDate, @Time, @CarID, @VehicleType, @Services, @Profit, @Discountp, @Discount, @Costs, @income, @Total, @Notes)", connection))
+                    {
+                        cmd.Parameters.AddWithValue("@CustomerName", record[1]);
+                        cmd.Parameters.AddWithValue("@PhoneNumber", record[2]);
+
+                        // Extract and parse the date portion
+                        string tsk = record[3].Substring(0, 10);
+
+                        string input = tsk; // Original string
+
+                        string swapped = "";
+
+                        // Split the string by the dot
+
+                        if (input.Contains("/"))
+                        {
+                            string[] parts = input.Split('/');
+                            swapped = $"{parts[1]}/{parts[0]}/{parts[2]}";
+                        }
+
+                        else if (input.Contains("."))
+                        {
+                            string[] parts = input.Split('.');
+
+                            swapped = $"{parts[1]}.{parts[0]}.{parts[2]}";
+                        }
+
+
+
+                        // Swap the first and second parts (day and month)
+
+                        // Swapping
+                        tsk = swapped;
+
+
+
+
+                        cmd.Parameters.AddWithValue("@CurrentDate", tsk);
+
+                        // Keep the time as it is
+                        cmd.Parameters.AddWithValue("@Time", TimeSpan.Parse(record[4]));
+
+                        cmd.Parameters.AddWithValue("@CarID", record[5]);
+                        cmd.Parameters.AddWithValue("@VehicleType", record[6]);
+                        cmd.Parameters.AddWithValue("@Services", record[7]);
+
+                        string strSale = record[8].Replace(",", "");
+                        string fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Profit", decimal.Parse(fs));
+
+
+
+                        strSale = record[9].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Discountp", decimal.Parse(fs));
+
+                        strSale = record[10].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Discount", decimal.Parse(fs));
+
+                        strSale = record[11].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Costs", decimal.Parse(fs));
+
+                        strSale = record[12].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@income", decimal.Parse(fs));
+
+                        strSale = record[13].Replace(",", "");
+                        fs = strSale.Substring(0, strSale.Length - 2);
+
+                        cmd.Parameters.AddWithValue("@Total", decimal.Parse(fs));
+
+
+
+                        cmd.Parameters.AddWithValue("@Notes", record[14]);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private void btnExportToExcelg_OnClick(object sender, EventArgs e)
+        {
+            SaveExcel exporter = new SaveExcel(dataGridView4);
+            exporter.ExportToExcel();
+
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -4646,18 +6412,36 @@ namespace Car_Care_Service__.NET_
             label18.BackColor = System.Drawing.Color.FromArgb(0, 192, 0);
 
 
+            addg.Visible = true;
+            addgadmin.Visible = false;
+
+
+            IDg.Visible = true;
+            ID1.Visible = false;
+
+            updateg.Visible = true;
+
+
             textBox3.Visible = false;
             shopadminpass.Visible = true;
+
+            textg.Visible = true;
+
 
 
             pictureBox2.Visible = true;
             pictureBox1.Visible = false;
+
+
             checkedListBox1.Visible = false;
-            PID.Visible = false;
-            label17.Visible = false;
+            PID.Visible = true;
+            label17.Visible = true;
+            buttong.Visible = true;
             button14.Visible = false;
             button12.Visible = false;
             button13.Visible = false;
+
+
             ID1.Visible = false;
             dataGridView1.Visible = false;
             dataGridView2.Visible = false;
