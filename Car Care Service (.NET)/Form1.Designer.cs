@@ -36,6 +36,10 @@ namespace Car_Care_Service__.NET_
             this.btnExportToExcel = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnExportToExcelg = new System.Windows.Forms.Button();
+            this.btnSyncg = new System.Windows.Forms.Button();
+            this.button8g = new System.Windows.Forms.Button();
+            this.monthg = new System.Windows.Forms.Label();
             this.buttong = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.Income = new System.Windows.Forms.TextBox();
@@ -81,7 +85,6 @@ namespace Car_Care_Service__.NET_
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.ID = new System.Windows.Forms.TextBox();
@@ -116,10 +119,7 @@ namespace Car_Care_Service__.NET_
             this.deletegadmin = new System.Windows.Forms.Button();
             this.IDg = new System.Windows.Forms.TextBox();
             this.IDgadmin = new System.Windows.Forms.TextBox();
-            this.monthg = new System.Windows.Forms.Label();
-            this.button8g = new System.Windows.Forms.Button();
-            this.btnSyncg = new System.Windows.Forms.Button();
-            this.btnExportToExcelg = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -209,6 +209,74 @@ namespace Car_Care_Service__.NET_
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MD);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MME);
             this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MU);
+            // 
+            // btnExportToExcelg
+            // 
+            this.btnExportToExcelg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnExportToExcelg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.btnExportToExcelg.FlatAppearance.BorderSize = 4;
+            this.btnExportToExcelg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportToExcelg.Font = new System.Drawing.Font("Readex Pro Deca Medium", 7F, System.Drawing.FontStyle.Bold);
+            this.btnExportToExcelg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnExportToExcelg.Image = ((System.Drawing.Image)(resources.GetObject("btnExportToExcelg.Image")));
+            this.btnExportToExcelg.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExportToExcelg.Location = new System.Drawing.Point(94, 4);
+            this.btnExportToExcelg.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExportToExcelg.Name = "btnExportToExcelg";
+            this.btnExportToExcelg.Size = new System.Drawing.Size(141, 61);
+            this.btnExportToExcelg.TabIndex = 66;
+            this.btnExportToExcelg.Text = "حفظ الملف";
+            this.btnExportToExcelg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExportToExcelg.UseVisualStyleBackColor = false;
+            this.btnExportToExcelg.Visible = false;
+            this.btnExportToExcelg.Click += new System.EventHandler(this.btnExportToExcelg_OnClick);
+            // 
+            // btnSyncg
+            // 
+            this.btnSyncg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnSyncg.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnSyncg.FlatAppearance.BorderSize = 0;
+            this.btnSyncg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
+            this.btnSyncg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnSyncg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSyncg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.btnSyncg.Image = global::Car_Care_Service__.NET_.Properties.Resources.Media_Playlist_Repeat_icon;
+            this.btnSyncg.Location = new System.Drawing.Point(442, 16);
+            this.btnSyncg.Name = "btnSyncg";
+            this.btnSyncg.Size = new System.Drawing.Size(49, 48);
+            this.btnSyncg.TabIndex = 65;
+            this.btnSyncg.UseVisualStyleBackColor = false;
+            this.btnSyncg.Visible = false;
+            this.btnSyncg.Click += new System.EventHandler(this.btnSyncg_Click);
+            // 
+            // button8g
+            // 
+            this.button8g.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
+            this.button8g.FlatAppearance.BorderSize = 4;
+            this.button8g.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button8g.Font = new System.Drawing.Font("Readex Pro Deca SemiBold", 12F, System.Drawing.FontStyle.Bold);
+            this.button8g.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button8g.Location = new System.Drawing.Point(497, 18);
+            this.button8g.Name = "button8g";
+            this.button8g.Size = new System.Drawing.Size(134, 35);
+            this.button8g.TabIndex = 64;
+            this.button8g.Text = "عرض الفترة";
+            this.button8g.UseVisualStyleBackColor = true;
+            this.button8g.Visible = false;
+            this.button8g.Click += new System.EventHandler(this.button8g_Click);
+            // 
+            // monthg
+            // 
+            this.monthg.AutoSize = true;
+            this.monthg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.monthg.Location = new System.Drawing.Point(1153, 26);
+            this.monthg.Name = "monthg";
+            this.monthg.Size = new System.Drawing.Size(28, 35);
+            this.monthg.TabIndex = 63;
+            this.monthg.Text = "0";
+            this.monthg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.monthg.Visible = false;
+            this.monthg.Click += new System.EventHandler(this.label20_Click);
             // 
             // buttong
             // 
@@ -856,18 +924,6 @@ namespace Car_Care_Service__.NET_
             this.button6.Visible = false;
             this.button6.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
-            this.button7.Location = new System.Drawing.Point(975, 90);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(49, 48);
-            this.button7.TabIndex = 33;
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click_1);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -1329,73 +1385,17 @@ namespace Car_Care_Service__.NET_
             this.IDgadmin.Visible = false;
             this.IDgadmin.TextChanged += new System.EventHandler(this.IDgadmin_TextChanged);
             // 
-            // monthg
+            // button16
             // 
-            this.monthg.AutoSize = true;
-            this.monthg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.monthg.Location = new System.Drawing.Point(1153, 26);
-            this.monthg.Name = "monthg";
-            this.monthg.Size = new System.Drawing.Size(28, 35);
-            this.monthg.TabIndex = 63;
-            this.monthg.Text = "0";
-            this.monthg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.monthg.Visible = false;
-            this.monthg.Click += new System.EventHandler(this.label20_Click);
-            // 
-            // button8g
-            // 
-            this.button8g.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.button8g.FlatAppearance.BorderSize = 4;
-            this.button8g.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button8g.Font = new System.Drawing.Font("Readex Pro Deca SemiBold", 12F, System.Drawing.FontStyle.Bold);
-            this.button8g.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button8g.Location = new System.Drawing.Point(497, 18);
-            this.button8g.Name = "button8g";
-            this.button8g.Size = new System.Drawing.Size(134, 35);
-            this.button8g.TabIndex = 64;
-            this.button8g.Text = "عرض الفترة";
-            this.button8g.UseVisualStyleBackColor = true;
-            this.button8g.Visible = false;
-            this.button8g.Click += new System.EventHandler(this.button8g_Click);
-            // 
-            // btnSyncg
-            // 
-            this.btnSyncg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.btnSyncg.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btnSyncg.FlatAppearance.BorderSize = 0;
-            this.btnSyncg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray;
-            this.btnSyncg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnSyncg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSyncg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.btnSyncg.Image = global::Car_Care_Service__.NET_.Properties.Resources.Media_Playlist_Repeat_icon;
-            this.btnSyncg.Location = new System.Drawing.Point(442, 16);
-            this.btnSyncg.Name = "btnSyncg";
-            this.btnSyncg.Size = new System.Drawing.Size(49, 48);
-            this.btnSyncg.TabIndex = 65;
-            this.btnSyncg.UseVisualStyleBackColor = false;
-            this.btnSyncg.Visible = false;
-            this.btnSyncg.Click += new System.EventHandler(this.btnSyncg_Click);
-            // 
-            // btnExportToExcelg
-            // 
-            this.btnExportToExcelg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
-            this.btnExportToExcelg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
-            this.btnExportToExcelg.FlatAppearance.BorderSize = 4;
-            this.btnExportToExcelg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExportToExcelg.Font = new System.Drawing.Font("Readex Pro Deca Medium", 7F, System.Drawing.FontStyle.Bold);
-            this.btnExportToExcelg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnExportToExcelg.Image = ((System.Drawing.Image)(resources.GetObject("btnExportToExcelg.Image")));
-            this.btnExportToExcelg.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExportToExcelg.Location = new System.Drawing.Point(94, 4);
-            this.btnExportToExcelg.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExportToExcelg.Name = "btnExportToExcelg";
-            this.btnExportToExcelg.Size = new System.Drawing.Size(141, 61);
-            this.btnExportToExcelg.TabIndex = 66;
-            this.btnExportToExcelg.Text = "حفظ الملف";
-            this.btnExportToExcelg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExportToExcelg.UseVisualStyleBackColor = false;
-            this.btnExportToExcelg.Visible = false;
-            this.btnExportToExcelg.Click += new System.EventHandler(this.btnExportToExcelg_OnClick);
+            this.button16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
+            this.button16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button16.Image = ((System.Drawing.Image)(resources.GetObject("button16.Image")));
+            this.button16.Location = new System.Drawing.Point(975, 90);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(49, 48);
+            this.button16.TabIndex = 67;
+            this.button16.UseVisualStyleBackColor = false;
+            this.button16.Visible = false;
             // 
             // Form1
             // 
@@ -1403,6 +1403,7 @@ namespace Car_Care_Service__.NET_
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(188)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.button16);
             this.Controls.Add(this.IDgadmin);
             this.Controls.Add(this.IDg);
             this.Controls.Add(this.deletegadmin);
@@ -1436,7 +1437,6 @@ namespace Car_Care_Service__.NET_
             this.Controls.Add(this.ID);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
@@ -1502,7 +1502,6 @@ namespace Car_Care_Service__.NET_
         private TextBox textBox2;
         private Button button1;
         private Button button6;
-        private Button button7;
         private Label label8;
         private CheckedListBox checkedListBox1;
         private TextBox ID;
@@ -1568,6 +1567,7 @@ namespace Car_Care_Service__.NET_
         private Button button8g;
         private Button btnSyncg;
         private Button btnExportToExcelg;
+        private Button button16;
     }
 
 }

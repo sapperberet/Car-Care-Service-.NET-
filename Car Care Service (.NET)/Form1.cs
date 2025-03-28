@@ -55,7 +55,9 @@ namespace Car_Care_Service__.NET_
         private PrintPreviewDialog printPreviewDialog;
         private PrintPreviewDialog printPreviewDialogg;
         private Bitmap logoImage;
+        private Bitmap logoImageg;
         private Bitmap qrCodeImage;
+        private Bitmap qrCodeImageg;
         //private TextBox PID;
         //private DataGridView dataGridView2;
 
@@ -200,6 +202,17 @@ namespace Car_Care_Service__.NET_
                     throw new InvalidOperationException($"Resource '{resourceName}' not found.");
                 logoImage = new Bitmap(stream);
             }
+
+            resourceName = "Car_Care_Service__.NET_.assets.logo2.jpg";
+
+            // Load the embedded resource as a stream
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new InvalidOperationException($"Resource '{resourceName}' not found.");
+                logoImageg = new Bitmap(stream);
+            }
+
             resourceName = "Car_Care_Service__.NET_.assets.IMG-20241216-WA0005.jpg";
 
             // Load the embedded resource as a stream
@@ -210,10 +223,21 @@ namespace Car_Care_Service__.NET_
                 qrCodeImage = new Bitmap(stream);
             }
 
+            resourceName = "Car_Care_Service__.NET_.assets.MS_for_car_parts.png";
+
+            // Load the embedded resource as a stream
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new InvalidOperationException($"Resource '{resourceName}' not found.");
+                qrCodeImageg = new Bitmap(stream);
+            }
+
+
             normalizedOperationPrices = CreateNormalizedDictionary(operationPrices);
 
 
-            button7.Visible = false;
+        
         }
 
         private bool isPrintedSuccessfully = false;
@@ -301,7 +325,7 @@ namespace Car_Care_Service__.NET_
             if (result == DialogResult.Yes)
             {
                 FetchCarWashDatag(PID.Text);
-                printPreviewDialog.ShowDialog();
+                printPreviewDialogg.ShowDialog();
             }
         }
         // TODO
@@ -661,12 +685,12 @@ namespace Car_Care_Service__.NET_
             System.Drawing.Font b = new System.Drawing.Font("Readex Pro Deca Medium", 7, FontStyle.Bold);
 
             // Drawing Logo and Title
-            if (logoImage != null)
+            if (logoImageg != null)
             {
-                e.Graphics.DrawImage(logoImage, startX + 102, startY, 75, 75);
+                e.Graphics.DrawImage(logoImageg, startX + 102, startY, 75, 75);
             }
             offsetY += 60;
-            e.Graphics.DrawString("ON ROAD CAR CARE", boldFont, Brushes.Black, startX + 65, offsetY);
+            e.Graphics.DrawString("   M & S CAR PARTS", boldFont, Brushes.Black, startX + 65, offsetY);
             offsetY += 20;
 
             // Draw Date and Time
@@ -855,9 +879,9 @@ namespace Car_Care_Service__.NET_
             //{
             //    e.Graphics.DrawImage(qrCodeImage, startX + 102, startY + offsetY - 20, 75, 75);
             //}
-            if (qrCodeImage != null)
+            if (qrCodeImageg != null)
             {
-                e.Graphics.DrawImage(qrCodeImage, startX + 90, startY + offsetY - 20, 100, 100);
+                e.Graphics.DrawImage(qrCodeImageg, startX + 90, startY + offsetY - 20, 100, 100);
             }
 
 
@@ -865,7 +889,7 @@ namespace Car_Care_Service__.NET_
             offsetY += 85;
             e.Graphics.DrawString(": للمقترحات و الشكاوي يرجي التواصل فون-واتساب", regularFont, Brushes.Black, startX + 30, startY + offsetY);
             offsetY += 20;
-            e.Graphics.DrawString("01021536569 / 01010357975", regularFont, Brushes.Black, startX + 60, startY + offsetY);
+            e.Graphics.DrawString("            01010357975", regularFont, Brushes.Black, startX + 60, startY + offsetY);
             //offsetY += 20;
             //e.Graphics.DrawString("01010357975", regularFont, Brushes.Black, startX, startY + offsetY-20);
 
@@ -943,7 +967,7 @@ namespace Car_Care_Service__.NET_
             string enteredID = PID.Text;
 
             // Find the row with the matching ID
-            DataGridViewRow matchingRow = dataGridView2.Rows
+            DataGridViewRow matchingRow = dataGridView3.Rows
                 .Cast<DataGridViewRow>()
                 .FirstOrDefault(row => row.Cells["ID"].Value.ToString() == enteredID);
 
@@ -967,7 +991,7 @@ namespace Car_Care_Service__.NET_
 
             // Define the folder and file paths
             string folderPath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "shared");
-            string filePath = System.IO.Path.Combine(folderPath, "sync.txt");
+            string filePath = System.IO.Path.Combine(folderPath, "syncshop.txt");
 
             // Ensure the folder exists
             if (!Directory.Exists(folderPath))
@@ -1932,6 +1956,187 @@ namespace Car_Care_Service__.NET_
                             }
 
                             foreach (DataGridViewRow row in dataGridView1.Rows)
+                            {
+                                if (!row.IsNewRow)
+                                {
+                                    DataRow dr = dt.NewRow();
+                                    foreach (DataGridViewCell cell in row.Cells)
+                                    {
+                                        dr[cell.ColumnIndex] = cell.Value;
+                                    }
+                                    dt.Rows.Add(dr);
+                                }
+                            }
+
+                            int dateColumnIndex = dt.Columns.IndexOf("CurrentDate");
+                            int totalColumnIndex = dt.Columns.IndexOf("Total");
+                            int costsColumnIndex = dt.Columns.IndexOf("Costs");
+
+                            if (dateColumnIndex == -1 || totalColumnIndex == -1 || costsColumnIndex == -1)
+                            {
+                                MessageBox.Show("Required columns (Date, Total, Costs) not found.",
+                                              "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            var monthlySums = new Dictionary<DateTime, (decimal Total, decimal Costs, decimal MonthlyTotal)>();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                if (DateTime.TryParse(row[dateColumnIndex].ToString(), out DateTime date))
+                                {
+                                    var monthStart = new DateTime(date.Year, date.Month, 1);
+
+                                    decimal total = Convert.ToDecimal(row[totalColumnIndex]);
+                                    decimal costs = Convert.ToDecimal(row[costsColumnIndex]);
+                                    decimal monthlyTotal = total + costs;
+
+                                    if (monthlySums.ContainsKey(monthStart))
+                                    {
+                                        var existing = monthlySums[monthStart];
+                                        monthlySums[monthStart] = (
+                                            existing.Total + total,
+                                            existing.Costs + costs,
+                                            existing.MonthlyTotal + monthlyTotal
+                                        );
+                                    }
+                                    else
+                                    {
+                                        monthlySums[monthStart] = (total, costs, monthlyTotal);
+                                    }
+                                }
+                            }
+
+                            var worksheet = workbook.Worksheets.Add(dt, sheetStrFormat);
+
+                            // Add new column for monthly totals
+
+                            int monthlyTotalColumnIndex = dt.Columns.Count + 1;
+                            worksheet.Cell(1, monthlyTotalColumnIndex).Value = "Monthly Total";
+
+                            int currentRow = dt.Rows.Count + 3;
+                            decimal grandTotal = 0;
+                            decimal grandCosts = 0;
+                            decimal grandMonthlyTotal = 0;
+
+                            // Add summary headers
+                            worksheet.Cell(currentRow - 1, costsColumnIndex - 2).Value = "Monthly Summaries";
+                            worksheet.Cell(currentRow - 1, costsColumnIndex + 1).Value = "Costs";
+                            worksheet.Cell(currentRow - 1, totalColumnIndex + 1).Value = "Total";
+                            worksheet.Cell(currentRow - 1, monthlyTotalColumnIndex).Value = "Grand Totals";
+
+                            worksheet.Range(currentRow - 1, 1, currentRow - 1, monthlyTotalColumnIndex)
+                                   .Merge()
+                                   .Style.Font.SetBold()
+                                   .Fill.SetBackgroundColor(XLColor.LightGray);
+
+                            foreach (var month in monthlySums.OrderBy(m => m.Key))
+                            {
+                                worksheet.Cell(currentRow, costsColumnIndex - 2).Value = $"Month End: {month.Key:MMMM yyyy}";
+                                worksheet.Cell(currentRow, totalColumnIndex + 1).Value = month.Value.Total;
+                                worksheet.Cell(currentRow, costsColumnIndex + 1).Value = month.Value.Costs;
+                                worksheet.Cell(currentRow, monthlyTotalColumnIndex).Value = month.Value.MonthlyTotal;
+
+                                grandTotal += month.Value.Total;
+                                grandCosts += month.Value.Costs;
+                                grandMonthlyTotal += month.Value.MonthlyTotal;
+
+                                currentRow++;
+                            }
+
+                            // Add grand totals
+                            worksheet.Cell(currentRow, costsColumnIndex - 2).Value = "GRAND TOTAL";
+                            worksheet.Cell(currentRow, totalColumnIndex + 1).Value = grandTotal;
+                            worksheet.Cell(currentRow, costsColumnIndex + 1).Value = grandCosts;
+                            worksheet.Cell(currentRow, monthlyTotalColumnIndex).Value = grandMonthlyTotal;
+
+                            // Formatting
+                            var summaryRange = worksheet.Range(
+                                dt.Rows.Count + 3, 1,
+                                currentRow, monthlyTotalColumnIndex
+                            );
+
+                            summaryRange.Style
+                                .Font.SetBold(true)
+                                .Fill.SetBackgroundColor(XLColor.LightGray)
+                                .Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+
+                            // Special formatting for labels
+                            worksheet.Range(dt.Rows.Count + 3, 1, currentRow, 1)
+                                   .Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+
+                            // Format numbers
+                            worksheet.Columns(totalColumnIndex + 1, monthlyTotalColumnIndex)
+                                   .Style.NumberFormat.Format = "#,##0.00";
+
+                            worksheet.Columns().AdjustToContents();
+
+                            workbook.SaveAs(filePath);
+                        }
+
+                        MessageBox.Show("Data exported successfully to Excel.",
+                                      "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error exporting data to Excel: " + ex.Message,
+                                      "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+        public class SaveExcelg
+        {
+            private DataGridView dataGridView4;
+
+            public SaveExcelg(DataGridView dgv)
+            {
+                this.dataGridView4 = dgv;
+            }
+
+            public void ExportToExcel()
+            {
+                DialogResult result = MessageBox.Show("Do you want to export the data to Excel?",
+                                                    "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    if (dataGridView4.Rows.Count == 0)
+                    {
+                        MessageBox.Show("No data to export.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string filePath = string.Empty;
+                    using (SaveFileDialog sfd = new SaveFileDialog())
+                    {
+                        sfd.Filter = "Excel Files|*.xlsx";
+                        sfd.Title = "Save an Excel File";
+                        if (sfd.ShowDialog() == DialogResult.OK)
+                        {
+                            filePath = sfd.FileName;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    DateTime dtNow = DateTime.Now;
+                    string sheetStrFormat = dtNow.ToString("yyyy-MM-dd") + " REPORT";
+
+                    try
+                    {
+                        using (XLWorkbook workbook = new XLWorkbook())
+                        {
+                            System.Data.DataTable dt = new System.Data.DataTable();
+                            foreach (DataGridViewColumn column in dataGridView4.Columns)
+                            {
+                                dt.Columns.Add(column.HeaderText);
+                            }
+
+                            foreach (DataGridViewRow row in dataGridView4.Rows)
                             {
                                 if (!row.IsNewRow)
                                 {
@@ -3106,7 +3311,7 @@ namespace Car_Care_Service__.NET_
                         }
 
                         // Enable IDENTITY_INSERT for reordering
-                        string enableIdentityInsert = "SET IDENTITY_INSERT CarWashServices1 ON;";
+                        string enableIdentityInsert = "SET IDENTITY_INSERT Shop ON;";
                         using (SqlCommand enableCommand = new SqlCommand(enableIdentityInsert, connection, transaction))
                         {
                             enableCommand.ExecuteNonQuery();
@@ -4022,7 +4227,7 @@ namespace Car_Care_Service__.NET_
                 textBox3.Text = "";
                 btnExportToExcel.Visible = true;
                 textBox5.Visible = true;  
-                button7.Visible = true;
+                button16.Visible = true;
                 //button8.Visible = true;
                 //button9.Visible = true;
                 //Date.Visible = true; //fs   
@@ -4057,8 +4262,12 @@ namespace Car_Care_Service__.NET_
                 dataGridView3.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dataGridView3.Columns["CarID"].Width = 130;
 
+                dataGridView4.Columns["CarID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                dataGridView4.Columns["CarID"].Width = 130;
+
                 CountHelloOccurrences();
                 DisplayMonthlyTotal();
+                DisplayMonthlyTotalg();
             }
         }
 
@@ -4679,7 +4888,7 @@ namespace Car_Care_Service__.NET_
             button6.Visible = false;
             btnExportToExcel.Visible = false;
             textBox5.Visible = false;
-            button7.Visible = false;
+            button16.Visible = false;
             //button8.Visible = false;
             //button9.Visible = false;
             Date.Visible = false;
@@ -5043,7 +5252,7 @@ namespace Car_Care_Service__.NET_
             button6.Visible = false;
             btnExportToExcel.Visible = false;
             textBox5.Visible = false;
-            button7.Visible = false;
+            button16.Visible = false;
             //button8.Visible = false;
             //button9.Visible = false;
             Date.Visible = false;
@@ -5132,7 +5341,7 @@ namespace Car_Care_Service__.NET_
                 textBox5.Visible = true;
 
 
-                button7.Visible = true;
+                button16.Visible = true;
 
 
                 //button8.Visible = true;
@@ -5228,7 +5437,7 @@ namespace Car_Care_Service__.NET_
             button6.Visible = false;
             btnExportToExcel.Visible = false;
             textBox5.Visible = false;
-            button7.Visible = false;
+            button16.Visible = false;
             //button8.Visible = false;
             //button9.Visible = false;
             Date.Visible = false;
@@ -5402,6 +5611,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DisplayMonthlyTotalg();
         }
 
         private void addgadmin_Click(object sender, EventArgs e)
@@ -5492,6 +5702,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DisplayMonthlyTotalg();
         }
 
         private void updateg_Click(object sender, EventArgs e)
@@ -5566,6 +5777,7 @@ namespace Car_Care_Service__.NET_
             {
                 MessageBox.Show($"Error updating record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DisplayMonthlyTotalg();
         }
 
         private void updategadmin_Click(object sender, EventArgs e)
@@ -6199,7 +6411,7 @@ namespace Car_Care_Service__.NET_
 
             if (!File.Exists(filePath))
             {
-                MessageBox.Show("The sync file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("The Shop sync file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -6346,7 +6558,7 @@ namespace Car_Care_Service__.NET_
 
         private void btnExportToExcelg_OnClick(object sender, EventArgs e)
         {
-            SaveExcel exporter = new SaveExcel(dataGridView4);
+            SaveExcelg exporter = new SaveExcelg(dataGridView4);
             exporter.ExportToExcel();
 
         }
@@ -6456,7 +6668,7 @@ namespace Car_Care_Service__.NET_
             textBox3.Text = "";
             btnExportToExcel.Visible = false;
             textBox5.Visible = false;
-            button7.Visible = false;
+            button16.Visible = false;
             //button8.Visible = true;
             //button9.Visible = true;
             //Date.Visible = true; //fs   
