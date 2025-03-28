@@ -736,13 +736,25 @@ namespace Car_Care_Service__.NET_
 
             foreach (var service in services)
             {
-                offsetY += 10;
-                string normalizedService = NormalizeArabicText(service.Trim());
-                if (normalizedOperationPrices.TryGetValue(normalizedService, out double price))
-                {
-                    e.Graphics.DrawString($"{price * 2}", regularFont, Brushes.Black, startX + 5, startY + offsetY);
 
-                }
+                offsetY += 10;
+
+                string normalizedService = service;
+
+                string[] parts = normalizedService.Split('=');
+
+             
+                //string leftPart = parts[0].Replace("\t", "\t\t\t\t");
+
+                    
+                //normalizedService = leftPart;
+                
+                string[] rev = parts[0].Split('\t');
+
+                normalizedService = rev[1] + "\t\t\t\t" + rev[0];
+
+
+
 
                 //offsetY += 10;
 
@@ -757,7 +769,7 @@ namespace Car_Care_Service__.NET_
                     string chunk = service.Substring(i, length);
 
                     // Draw the string
-                    e.Graphics.DrawString(chunk, regularFont, Brushes.Black, startX + 180, startY + offsetY);
+                    e.Graphics.DrawString(normalizedService, regularFont, Brushes.Black, startX + 20, startY + offsetY);
 
                     // Move the Y offset for the next line
                     offsetY += 20;
@@ -5473,53 +5485,151 @@ namespace Car_Care_Service__.NET_
         }
         private string totalg = "";
         private string itemsg = "";
+
         private void textg_TextChanged(object sender, EventArgs e)
-            {
-
-
-
+        {
             decimal total = 0;
             StringBuilder items = new StringBuilder();
 
             foreach (string line in textg.Lines)
             {
-                // Normalize Arabic text
                 string normalizedLine = NormalizeArabicText(line);
+                string[] keyRest = normalizedLine.Split(new[] { '\t' }, 2);
 
-                string[] parts = normalizedLine.Split('=');
-                if (parts.Length == 2)
+                if (keyRest.Length == 2)
                 {
-                    string key = parts[0].Trim();
-                    string valueText = parts[1].Trim();
+                    string rest = keyRest[1];
+                    string[] valueParts = rest.Split(new[] { '=' }, 2);
 
-                    // Add the item name to the list
-                    if (!string.IsNullOrEmpty(key))
+                    if (valueParts.Length == 2)
                     {
-                        if (items.Length > 0)
-                            items.Append(" / "); // Add separator
+                        string valueText = valueParts[1].Trim();
 
-                        items.Append(key);
-                    }
+                        // Append the full line (key + rest) to items
+                        if (!string.IsNullOrEmpty(keyRest[0].Trim())) // Check if key is valid
+                {
+                            if (items.Length > 0)
+                                items.Append(" / ");
+                            items.Append(normalizedLine.Trim()); // Key fix: Use the full line
+                        }
 
-                    // Parse the numeric value and add to total
-                    if (decimal.TryParse(valueText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
-                    {
-                        total += price;
+                        // Parse and add value to total
+                        if (decimal.TryParse(valueText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
+                        {
+                            total += price;
+                        }
                     }
                 }
-
-
-
             }
-            label55.Text = items.ToString(); 
+
+            label55.Text = items.ToString();
             label8.Text = total.ToString();
 
             decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
             decimal fs = (lol - (lol * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
 
             label14.Text = fs.ToString();
-
         }
+        private void textg_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+
+                e.Handled = true;
+
+                e.SuppressKeyPress = true;
+
+                int cursorPos = textg.SelectionStart;
+
+                int lineIndex = textg.GetLineFromCharIndex(cursorPos);
+
+                int lineStart = textg.GetFirstCharIndexFromLine(lineIndex);
+
+                int lineLength = textg.Lines[lineIndex].Length;
+
+                int lineEnd = lineStart + lineLength;
+
+                string currentLine = textg.Text.Substring(lineStart, lineLength);
+
+                if (!currentLine.Contains("\t"))
+                {
+                    // Insert tab at current position
+                    textg.SelectedText = "\t";
+                }
+
+                else if (!currentLine.Contains("="))
+                {
+                    int tabIndex = currentLine.IndexOf('\t');
+                    if (tabIndex != -1)
+                    {
+                        string valuePart = currentLine.Substring(tabIndex + 1).Trim();
+                        // Move cursor to end of line and append "=valuePart"
+                        textg.SelectionStart = lineEnd;
+                        textg.SelectionLength = 0;
+                        textg.SelectedText = "=" + valuePart;
+                        // Add new line and move cursor
+                        textg.AppendText(Environment.NewLine);
+                        textg.SelectionStart = textg.Text.Length;
+                    }
+                }
+                else
+                {
+                    // Insert new line if "=" already exists
+                    textg.SelectedText = Environment.NewLine;
+                }
+            }
+        }
+
+
+
+
+        //private void textg_TextChanged(object sender, EventArgs e)
+        //    {
+
+
+
+        //    decimal total = 0;
+        //    StringBuilder items = new StringBuilder();
+
+        //    foreach (string line in textg.Lines)
+        //    {
+        //        // Normalize Arabic text
+        //        string normalizedLine = NormalizeArabicText(line);
+
+        //        string[] parts = normalizedLine.Split('=');
+        //        if (parts.Length == 2)
+        //        {
+        //            string key = parts[0].Trim();
+        //            string valueText = parts[1].Trim();
+
+        //            // Add the item name to the list
+        //            if (!string.IsNullOrEmpty(key))
+        //            {
+        //                if (items.Length > 0)
+        //                    items.Append(" / "); // Add separator
+
+        //                items.Append(key);
+        //            }
+
+        //            // Parse the numeric value and add to total
+        //            if (decimal.TryParse(valueText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
+        //            {
+        //                total += price;
+        //            }
+        //        }
+
+
+
+        //    }
+        //    label55.Text = items.ToString(); 
+        //    label8.Text = total.ToString();
+
+        //    decimal lol = decimal.Parse(label8.Text) + decimal.Parse(Income.Text);
+        //    decimal fs = (lol - (lol * (((decimal.Parse(txtSaleID.Text)) / 100)))) - decimal.Parse(Costs.Text) - decimal.Parse(textBox6.Text);
+
+        //    label14.Text = fs.ToString();
+
+        //}
 
         private void addg_Click(object sender, EventArgs e)
         {
@@ -5992,14 +6102,10 @@ namespace Car_Care_Service__.NET_
             {
                 if (row.Cells["ID"].Value != null && row.Cells["ID"].Value.ToString() == searchID)
                 {
-                    // Match found, populate the text boxes
+      
                     txtCustomerID.Text = row.Cells["CustomerName"].Value?.ToString();
                     textBox2.Text = row.Cells["PhoneNumber"].Value?.ToString();
-                    //txtAddress.Text = row.Cells["CarID"].Value?.ToString();
-
-
-                    //label8.Text = row.Cells["Profit"].Value?.ToString();
-
+ 
                     string strSalep = row.Cells["Discountp"].Value?.ToString();
                     txtSaleID.Text = strSalep.Substring(0, strSalep.Length - 2);
 
@@ -6019,18 +6125,7 @@ namespace Car_Care_Service__.NET_
                         txtSaleID.SelectionStart = textBox1.Text.Length;
                     }
 
-                    //=========
-
-                    //string strara = row.Cells["CarID"].Value?.ToString();
-                    //textBox1.Text = strara.Substring(0, 5);
-
-                    //string strnum = row.Cells["CarID"].Value?.ToString();
-                    // strnum= strnum.Substring(6, 8);
-                    //txtCarID.Text = strnum;
-
-
-
-                    // Get the CarID value from the row
+ 
                     string carId = row.Cells["CarID"].Value?.ToString();
 
                     if (!string.IsNullOrEmpty(carId))
@@ -6062,61 +6157,28 @@ namespace Car_Care_Service__.NET_
                     string sIncome = row.Cells["income"].Value?.ToString();
                     Income.Text = sIncome.Substring(0, sIncome.Length - 2);
 
-                    //label14.Text = row.Cells["Total"].Value?.ToString();
                     txtNotes.Text = row.Cells["Notes"].Value?.ToString();
 
 
                     string itemsToCheck = row.Cells["Services"].Value?.ToString();
 
-                    //textg.Text = $"{tprofit}" + " = " + itemsToCheck;
-
-
 
                     string sProfit = row.Cells["Profit"].Value?.ToString();
-                    //Income.Text = sProfit.Substring(0, sProfit.Length - 2
+       
+                    sProfit = sProfit.Substring(0, sProfit.Length - 3);
 
-                    //sProfit = sProfit.Replace(",", ".");
-                    sProfit = sProfit.Substring(0, strCost.Length - 3);
+                    
+                    //TODO
 
+                    if (!string.IsNullOrEmpty(itemsToCheck))
+                    {
+                        // Split by " / " to reconstruct original lines
+                        string[] lines = itemsToCheck.Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries);
+                        textg.Lines = lines;
+                        textg_TextChanged(textg, EventArgs.Empty);
+                    }
 
-                    textg.Text = itemsToCheck + " = " + $"{sProfit}";
-
-
-                    //var items = itemsToCheck.Split('/')
-                    //    .Select(item => NormalizeArabicText(item.Trim()))
-                    //    .ToList();
-
-                    //if (items.Count > 0)
-                    //{
-
-                    //    for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    //    {
-
-
-                    //        checkedListBox1.SetItemChecked(i, false);
-
-                    //    }
-                    //}
-
-                    //for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    //{
-                    //    string normalizedItem = NormalizeArabicText(checkedListBox1.Items[i].ToString());
-                    //    if (items.Contains(normalizedItem))
-                    //    {
-                    //        checkedListBox1.SetItemChecked(i, true);
-                    //    }
-                    //}
-
-                    //    foreach (var item in items)
-                    //    {
-                    //        int index = checkedListBox1.Items.IndexOf(item);
-                    //         txtNotes.Text += item.ToString();
-                    //        if (index != -1) // Check if the item exists in the CheckedListBox
-                    //        {
-                    //            checkedListBox1.SetItemChecked(index, true);
-                    //        }
-                    //}
-
+               
 
                     string fs = row.Cells["VehicleType"].Value?.ToString();
                     int a = 0;
@@ -6252,10 +6314,17 @@ namespace Car_Care_Service__.NET_
 
                     //textg.Text = $"{sProfit}" + " = " + itemsToCheck;
 
-                    textg.Text =  itemsToCheck  + " = "+ $"{sProfit}";
+                    //textg.Text =  itemsToCheck  + " = "+ $"{sProfit}";
 
 
+                    if (!string.IsNullOrEmpty(itemsToCheck))
+                    {
+                        // Split by " / " to reconstruct original lines
+                        string[] lines = itemsToCheck.Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries);
+                        textg.Lines = lines;
 
+                        textg_TextChanged(textg, EventArgs.Empty);
+                    }
 
 
 

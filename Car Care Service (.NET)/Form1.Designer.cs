@@ -1306,6 +1306,7 @@ namespace Car_Care_Service__.NET_
             this.textg.TabIndex = 60;
             this.textg.Visible = false;
             this.textg.TextChanged += new System.EventHandler(this.textg_TextChanged);
+            this.textg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textg_KeyDown);
             // 
             // label55
             // 
