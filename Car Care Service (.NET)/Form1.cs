@@ -690,7 +690,7 @@ namespace Car_Care_Service__.NET_
                 e.Graphics.DrawImage(logoImageg, startX + 102, startY, 75, 75);
             }
             offsetY += 60;
-            e.Graphics.DrawString("   M & S CAR PARTS", boldFont, Brushes.Black, startX + 65, offsetY);
+            e.Graphics.DrawString(" M&S for CAR PARTS", boldFont, Brushes.Black, startX + 65, offsetY);
             offsetY += 20;
 
             // Draw Date and Time
@@ -883,7 +883,7 @@ namespace Car_Care_Service__.NET_
             // Welcoming Sentence
             e.Graphics.DrawString("              Thank you for choosing", boldFont, Brushes.Black, startX, startY + offsetY);
             offsetY += 15;
-            e.Graphics.DrawString("                On Road Car Care❤", boldFont, Brushes.Black, startX, startY + offsetY);
+            e.Graphics.DrawString("              M&S for CAR PARTS ❤", boldFont, Brushes.Black, startX, startY + offsetY);
 
             offsetY += 40;
 
