@@ -203,7 +203,7 @@ namespace Car_Care_Service__.NET_
                 logoImage = new Bitmap(stream);
             }
 
-            resourceName = "Car_Care_Service__.NET_.assets.logo2.jpg";
+            resourceName = "Car_Care_Service__.NET_.assets.logo3.jpg";
 
             // Load the embedded resource as a stream
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -687,9 +687,9 @@ namespace Car_Care_Service__.NET_
             // Drawing Logo and Title
             if (logoImageg != null)
             {
-                e.Graphics.DrawImage(logoImageg, startX + 102, startY, 75, 75);
+                e.Graphics.DrawImage(logoImageg, startX + 102-13-10, startY, 100+20, 100);
             }
-            offsetY += 60;
+            offsetY += 60+25;
             e.Graphics.DrawString(" M&S for CAR PARTS", boldFont, Brushes.Black, startX + 65, offsetY);
             offsetY += 20;
 
@@ -751,7 +751,7 @@ namespace Car_Care_Service__.NET_
                 
                 string[] rev = parts[0].Split('\t');
 
-                normalizedService = rev[1] + "\t\t\t\t" + rev[0];
+                normalizedService = rev[1]  + "\t\t\t\t" + rev[0];
 
 
 
@@ -759,7 +759,7 @@ namespace Car_Care_Service__.NET_
                 //offsetY += 10;
 
                 //offsetY += 10;
-                int chunkSize = 17;
+                int chunkSize = 200;
                 for (int i = 0; i < service.Length; i += chunkSize)
                 {
                     // Determine the length of the current chunk
@@ -899,6 +899,10 @@ namespace Car_Care_Service__.NET_
 
             //offsetY += 57;
             offsetY += 85;
+            e.Graphics.DrawString("العنوان: ش ٣٠٢ تقسيم القضاة امام مستشفى الاندلسية", regularFont, Brushes.Black, startX + 30, startY + offsetY);
+            offsetY += 20;
+            e.Graphics.DrawString("           سموحة-الاسكندرية", regularFont, Brushes.Black, startX + 60, startY + offsetY);
+            offsetY += 20;
             e.Graphics.DrawString(": للمقترحات و الشكاوي يرجي التواصل فون-واتساب", regularFont, Brushes.Black, startX + 30, startY + offsetY);
             offsetY += 20;
             e.Graphics.DrawString("            01010357975", regularFont, Brushes.Black, startX + 60, startY + offsetY);

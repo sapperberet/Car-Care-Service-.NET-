@@ -247,6 +247,8 @@
     <EmbeddedResource Include="assets\logo2.jpg" />
     <EmbeddedResource Include="assets\MS_for_car_parts.svg" />
     <EmbeddedResource Include="assets\MS_for_car_parts.png" />
+    <EmbeddedResource Include="assets\logo3.png" />
+    <EmbeddedResource Include="assets\logo3.jpg" />
     <Content Include="assets\pngtree-vector-print-icon-png-image_3994913.jpg" />
     <Content Include="assets\print.ico" />
     <Content Include="assets\print.png" />
