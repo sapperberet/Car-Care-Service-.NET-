@@ -1247,7 +1247,7 @@ namespace Car_Care_Service__.NET_
             this.dataGridView4.AllowUserToOrderColumns = true;
             this.dataGridView4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(34)))), ((int)(((byte)(28)))));
             this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView4.Location = new System.Drawing.Point(24, 144);
+            this.dataGridView4.Location = new System.Drawing.Point(24, 122);
             this.dataGridView4.Name = "dataGridView4";
             this.dataGridView4.ReadOnly = true;
             this.dataGridView4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -1377,7 +1377,7 @@ namespace Car_Care_Service__.NET_
             // 
             this.IDgadmin.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.IDgadmin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(222)))), ((int)(((byte)(222)))));
-            this.IDgadmin.Location = new System.Drawing.Point(1303, 58);
+            this.IDgadmin.Location = new System.Drawing.Point(1275, 56);
             this.IDgadmin.Multiline = true;
             this.IDgadmin.Name = "IDgadmin";
             this.IDgadmin.Size = new System.Drawing.Size(63, 32);
